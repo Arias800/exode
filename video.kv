@@ -1,0 +1,695 @@
+#
+#
+#  Copyright 2017 OKAN ACAR <acarokan55@gmail.com>
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+#
+#
+<VideoAlan>:
+
+	video: _video
+	ilerleme: _ilerleme
+	altyazi: _altyazi
+	durumcubugu: _durumcubugu
+	menu: _menu
+	ses: _ses
+	ses_ayari: _ses_ayari
+
+	# ActionBar:
+	# 	pos_hint: {'top':1}
+	# 	ActionView:
+	# 		use_separator: True
+	# 		ActionPrevious:
+	# 			title: 'Example App'
+	# 			with_previous: False
+	# 		ActionButton:
+	# 			text: 'File'
+	# 		ActionButton:
+	# 			text: 'Edit'
+	# 		ActionGroup:
+	# 			text: 'Tools' 
+	# 			mode: 'spinner'
+	# 			ActionButton:
+	# 				text: 'Tool1'
+	# 			ActionButton:
+	# 				text: 'Tool2'
+	# 			ActionButton:
+	# 				text: 'Tool3'
+	# 			ActionButton:
+	# 				text: 'Tool4'
+
+	RelativeLayout:
+
+		size_hint: 1,1
+
+		Video:
+
+			size_hint: 0,0
+			id: _video
+			allow_stretch: True
+			play: True
+			state: "play"
+
+
+		Label:
+
+			id: _altyazi
+			markup: True
+			size_hint: 1,0.3
+			pos:0,56
+			font_size: 40
+			text: u""
+
+		BoxLayout:
+
+			id: _ses
+			size_hint:None,None
+			size: 30,150
+			pos_hint: {"left":2,"top":2}
+
+			canvas.before:
+				Color:
+					rgba: 0.6,0.6,0.6,0.9
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
+			Slider:
+
+				id: _ses_ayari
+				orientation: "vertical"
+				min:0
+				max:2
+				width: 10
+				value:0
+				cursor_size: 0,0
+				value_track: True
+				value_track_color: [0,0.6,0,1]
+
+
+
+		BoxLayout:
+
+			id: _durumcubugu
+
+			pos_hint: {"center_x":0.5,"y":0}
+
+			orientation: "horizontal"
+
+			padding: 3,3
+			size_hint: 0.9,None
+			height: 56
+
+			canvas.before:
+				Color:
+					rgba: 0.6,0.6,0.6,0.9
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
+
+			Button:
+
+				size: 48,48
+				size_hint: None,None
+				pos_hint: {"center_x":0.5,"center_y":0.5}
+				background_normal: "play-icon.png"
+				background_down: "play-icon_dwn.png"
+
+
+				on_release: root.oynat()
+
+			Button:
+
+				size: 48,48
+				size_hint: None,None
+				pos_hint: {"center_x":0.5,"center_y":0.5}
+				background_normal: "pause-icon.png"
+				background_down: "pause-icon_dwn.png"
+
+				on_release: root.duraklat()
+
+			Button:
+				size: 48,48
+				size_hint: None,None
+				pos_hint: {"center_x":0.5,"center_y":0.5}
+				background_normal: "stop-icon.png"
+				background_down: "stop-icon_dwn.png"
+
+				on_release: root.durdur()
+
+			Slider:
+				id: _ilerleme
+				min:0
+				max:1
+				value:0
+				pos_hint: {"center_x":0.5,"center_y":0.5}
+				cursor_size: 0,0
+				value_track: True
+				value_track_color: [0,0.6,0,1]
+
+
+
+		BoxLayout:
+
+			id: _menu
+			orientation: "horizontal"
+			pos_hint: {"x":0,"top":1}
+			size_hint: 1,None
+			padding: 5
+			spacing: 5
+			height: 50
+
+			canvas.before:
+
+				Color:
+					rgba: 0,0,0,0.5
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
+			Button:
+				text: "VIDEO"
+				size_hint: None,1
+				width: 60
+				on_press:
+					root.manager.transition.direction = 'right'
+					root.manager.current = 'main'
+
+			Button:
+				text: "OPEN"
+				size_hint: None,1
+				width: 60
+				on_press:
+					root.manager.transition.direction = 'left'
+					root.manager.current = 'files'
+			
+			Button:
+				text: "LIST"
+				size_hint: None,1
+				width: 60
+				on_press:
+	                root.manager.transition.direction = 'left'
+	                root.manager.current = 'list'
+
+<OpenFolder>:
+
+	menu: _menu
+	BoxLayout:
+
+		orientation: "vertical"
+
+		BoxLayout:
+
+			id: _menu
+
+			orientation: "horizontal"
+			pos_hint: {"x":0,"top":1}
+			size_hint: 1,None
+			padding: 5
+			spacing: 5
+			height: 50
+
+			canvas.before:
+
+				Color:
+					rgba: 0,0,0,0.5
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
+			Button:
+				text: "VIDEO"
+				size_hint: None,1
+				width: 60
+				on_press:
+	                root.manager.transition.direction = 'right'
+	                root.manager.current = 'main'
+
+			Button:
+				text: "OPEN"
+				size_hint: None,1
+				width: 60
+				on_press:
+	                root.manager.transition.direction = 'left'
+	                root.manager.current = 'files'
+			
+			Button:
+				text: "LIST"
+				size_hint: None,1
+				width: 60
+				on_press:
+	                root.manager.transition.direction = 'left'
+	                root.manager.current = 'list'
+
+
+		BoxLayout:
+
+			orientation: "vertical"
+
+			FileChooserIconView:
+				id: filechooser
+				size_hint: 1,0.9
+
+			Button:
+
+				size_hint: None,0.1
+				pos_hint: {"x":0,"right":1}
+				width: 60
+	            text: "SEÇ"
+	            on_release: root.parent.get_screen("main").calistir(filechooser.path,filechooser.selection)
+
+
+#film populaire
+<ListFolder>:
+
+	menu: _menu
+	grid_l: grid_id
+	scroll_l: scroll_id
+
+	background_normal: ''
+    subtext: ''
+
+	BoxLayout:
+
+		orientation: "vertical"
+
+		BoxLayout:
+
+			id: _menu
+
+			orientation: "horizontal"
+			pos_hint: {"x":0,"top":1}
+			size_hint: 1,None
+			padding: 5
+			spacing: 5
+			height: 50
+
+			canvas.before:
+
+				Color:
+					rgba: 0,0,0,0.5
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
+			Spinner:
+				id: spinner_1
+				text: 'Menu' 
+				values: root.pickType 
+				#text: "First thing"
+				#values: ["Films", "Series", "Autres"]
+				#background_color: none
+				#background_down: 'atlas://data/images/defaulttheme/spinner'
+				#color: color_font
+				on_text: root.onChange(self.text)
+				#option_cls: root.onChange(self.text)
+				size_hint: None, 1
+		
+			Spinner:
+				id: spinner_2
+				text: 'sous_menu' 
+				values: root.sousType
+				width:180
+				#text: "First thing"
+				#values: ["Films", "Series", "Autres"]
+				#background_color: none
+				#background_down: 'atlas://data/images/defaulttheme/spinner'
+				#color: color_font
+				on_text: root.on_sub_Change(self.text)
+				#option_cls: root.onChange(self.text)
+				size_hint: None, 1
+
+			# Button:
+
+			# 	text: "Populaire"
+			# 	size_hint: None,1
+			# 	width: 140
+			# 	on_press:
+			# 		root.manager.transition.direction = 'right'
+			# 		root.manager.current = 'main'
+
+			# Button:
+
+			# 	text: "Mieux notés"
+			# 	size_hint: None,1
+			# 	width: 140
+			# 	on_press:
+			# 		root.manager.transition.direction = 'left'
+			# 		root.manager.current = 'files'
+
+			# Button:
+			# 	text: "Prochainement"
+			# 	size_hint: None,1
+			# 	width: 140
+			# 	on_press:
+			# 		root.manager.transition.direction = 'left'
+			# 		root.manager.current = 'list'
+
+			# Button:
+			# 	text: "En salles"
+			# 	size_hint: None,1
+			# 	width: 140
+			# 	on_press:
+			# 		root.manager.transition.direction = 'left'
+			# 		root.manager.current = 'list'
+
+
+
+		ScrollView:
+			id: scroll_id
+			size: self.size
+			do_scroll_y: True
+			do_scroll_x: False
+			bar_width: '8dp'
+
+			GridLayout:
+				id : grid_id
+				# cols:2
+				orientation: "vertical"
+				#pos_hint: {"x":1,"top":1}
+				#size_hint: None,None
+				# padding: 5
+				# spacing: 5
+				size_hint_y: None
+				height: self.minimum_height
+				cols: 2
+				#spacing: 5
+				spacing: dp(4)
+				padding: dp(4), dp(4)
+				#row_default_height:(0.1 * (self.width - self.spacing[0]) - self.padding[0])
+				#row_default_height: (self.width - self.cols*self.spacing[0])/self.cols
+				#row_force_default: True
+				#row_default_width: .50
+
+				canvas: 
+					Color: 
+						rgb: [.5, .5, 136]
+					Rectangle: 
+						pos: self.pos 
+						size: self.size
+
+<ImageButton>:
+	#id: box_share2
+	background_normal: ''
+	#width: .50
+	height: self.texture_size[1] * 0.6666
+	size_hint_y: None
+	source: root.background_normal
+	keep_ratio: False
+	allow_stretch: True
+
+
+#info
+<ListInfo>:
+
+	#box_share2: box_share2
+	backdrop_path:''
+	release_date: ''
+	genres:''
+	title:''
+	vote_average:''
+	vote_circle:''
+
+	BoxLayout:
+		size_hint: 1,1
+		orientation: "vertical"
+		
+		canvas.before:
+
+			Color:
+				rgba: 0,0,0,0.5
+			Rectangle:
+				pos: self.pos
+				size: self.size
+
+		BoxLayout:
+			#id: box_share2
+
+			orientation: "horizontal"
+			pos_hint: {"x":0,"top":1}
+			size_hint: 1,None
+			padding: 5
+			spacing: 5
+			height: 50
+
+			canvas.before:
+
+				Color:
+					rgba: 0,0,0,0.5
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
+			Button:
+				text: 'Back'  
+				size_hint: None, 1
+				on_press:
+					root.onChange(self.text)
+
+			Button:
+				text: 'Recherche source'  
+				size_hint: None, 1
+				width:150
+				on_press:
+					root.manager.transition.direction = 'right'
+					root.manager.current = 'list'
+
+		BoxLayout:
+	
+			AsyncImage:
+				source: root.backdrop_path
+				allow_stretch:True
+				keep_ratio:False
+				size: self.parent.size
+
+				BoxLayout:
+					
+					orientation: "vertical"
+					size: self.parent.size
+			
+					canvas.before:
+
+						Color:
+							rgba: 0,0,0,0.5
+						Rectangle:
+							pos: self.pos
+							size: self.size
+
+					Label:
+						text: root.title
+						text_size: self.size
+						halign: 'center'
+						valign: 'top'
+						font_size:'40sp'
+						size_hint: 1, 1
+					Label:
+						text: root.genres
+						text_size: self.size
+						halign: 'center'
+						valign: 'top'
+						font_size:'40sp'
+						size_hint: 1, 1
+
+					Label:
+						text: root.vote_average
+						text_size: self.size
+						halign: 'center'
+						valign: 'top'
+						font_size:'40sp'
+						size_hint: 1, 1
+
+					# GridLayout:
+					# 	cols: 2
+					# 	Widget:
+					# 		canvas:
+					# 			Line:
+					# 				width: 5
+					# 				circle: self.center_x, self.center_y, min(50, 50) / 2, 210, 360
+
+
+	
+
+
+
+#film populaire
+<ListDiscover>:
+
+	menu: _menu
+	grid_id: grid_id
+
+	scroll_l: scroll_id
+
+	background_normal: ''
+    subtext: ''
+	label_title: ''
+
+	BoxLayout:
+
+		orientation: "vertical"
+
+		BoxLayout:
+
+			id: _menu
+
+			orientation: "horizontal"
+			pos_hint: {"x":0,"top":1}
+			size_hint: 1,None
+			padding: 5
+			spacing: 5
+			height: 50
+
+			canvas.before:
+
+				Color:
+					rgba: 0,0,0,0.5
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
+			Spinner:
+				id: spinner_1
+				text: 'Menu' 
+				values: root.pickType 
+				#text: "First thing"
+				#values: ["Films", "Series", "Autres"]
+				#background_color: none
+				#background_down: 'atlas://data/images/defaulttheme/spinner'
+				#color: color_font
+				on_text: root.onChange(self.text)
+				#option_cls: root.onChange(self.text)
+				size_hint: None, 1
+		
+			Spinner:
+				id: spinner_2
+				text: 'sous_menu' 
+				values: root.sousType
+				width:180
+				#text: "First thing"
+				#values: ["Films", "Series", "Autres"]
+				#background_color: none
+				#background_down: 'atlas://data/images/defaulttheme/spinner'
+				#color: color_font
+				on_text: root.on_sub_Change(self.text)
+				#option_cls: root.onChange(self.text)
+				size_hint: None, 1
+
+
+		ScrollView:
+			id: scroll_id
+			size: self.size
+			do_scroll_y: True
+			do_scroll_x: False
+			bar_width: '8dp'
+
+			GridLayout:
+				id : grid_id
+				# cols:2
+				orientation: "vertical"
+				#pos_hint: {"x":1,"top":1}
+				#size_hint: None,None
+				# padding: 5
+				# spacing: 5
+				size_hint_y: None
+				height: self.minimum_height
+				cols: 1
+				#spacing: 5
+				spacing: dp(4)
+				padding: dp(4), dp(4)
+				#row_default_height:(0.1 * (self.width - self.spacing[0]) - self.padding[0])
+				#row_default_height: (self.width - self.cols*self.spacing[0])/self.cols
+				#row_force_default: True
+				#row_default_width: .50
+
+				canvas: 
+					Color: 
+						rgb: [.5, .5, 136]
+					Rectangle: 
+						pos: self.pos 
+						size: self.size	
+
+
+<discover_layout>
+
+	#label_title:label_title
+	#label_over:label_over
+
+	label_title: ''
+	label_overview:''
+	label_vote_average:''
+
+	BoxLayout:
+		# cols:2
+		orientation: "vertical"
+		#pos_hint: {"x":1,"top":1}
+		#size_hint: None, None
+		size_hint_y: None
+		# padding: 5
+		# spacing: 5
+		height: dp(200)
+		#width:400
+		#spacing: 5
+		spacing: dp(4)
+		padding: dp(20), dp(4)
+
+
+		canvas: 
+			Color: 
+				rgba: 0,0,0,0.5
+			Rectangle: 
+				pos: self.pos 
+				size: self.size	
+
+
+		Label:
+			text: root.label_title
+			text_size: self.size
+			halign: 'left'
+			valign: 'top'
+			font_size:'20sp'
+			size_hint: 1, 1
+			#pos: 10,10
+		
+
+		Label:
+			text: root.label_vote_average
+			text_size: self.size
+			halign: 'left'
+			valign: 'center'
+			size_hint: 1, 1
+
+
+		Label:
+			text: root.label_overview
+			text_size: self.size
+			halign: 'left'
+			valign: 'center'
+			size_hint:1,1
+			size_hint_y: None
+			height:dp(100)
+
+		Label:
+			text: "autre"
+			text_size: self.size
+			halign: 'left'
+			valign: 'center'
+			size_hint: 1, 1
+
+		
+					
+					
+
+			
