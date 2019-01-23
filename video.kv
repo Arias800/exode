@@ -63,7 +63,6 @@
 			play: True
 			state: "play"
 
-
 		Label:
 
 			id: _altyazi
@@ -88,7 +87,6 @@
 					size: self.size
 
 			Slider:
-
 				id: _ses_ayari
 				orientation: "vertical"
 				min:0
@@ -99,10 +97,7 @@
 				value_track: True
 				value_track_color: [0,0.6,0,1]
 
-
-
 		BoxLayout:
-
 			id: _durumcubugu
 
 			pos_hint: {"center_x":0.5,"y":0}
@@ -119,7 +114,6 @@
 				Rectangle:
 					pos: self.pos
 					size: self.size
-
 
 			Button:
 
@@ -161,10 +155,7 @@
 				value_track: True
 				value_track_color: [0,0.6,0,1]
 
-
-
 		BoxLayout:
-
 			id: _menu
 			orientation: "horizontal"
 			pos_hint: {"x":0,"top":1}
@@ -174,7 +165,6 @@
 			height: 50
 
 			canvas.before:
-
 				Color:
 					rgba: 0,0,0,0.5
 				Rectangle:
@@ -255,9 +245,7 @@
 	                root.manager.transition.direction = 'left'
 	                root.manager.current = 'list'
 
-
 		BoxLayout:
-
 			orientation: "vertical"
 
 			FileChooserIconView:
@@ -265,13 +253,11 @@
 				size_hint: 1,0.9
 
 			Button:
-
 				size_hint: None,0.1
 				pos_hint: {"x":0,"right":1}
 				width: 60
 	            text: "SEÇ"
 	            on_release: root.parent.get_screen("main").calistir(filechooser.path,filechooser.selection)
-
 
 #film populaire
 <ListFolder>:
@@ -284,11 +270,9 @@
     subtext: ''
 
 	BoxLayout:
-
 		orientation: "vertical"
 
 		BoxLayout:
-
 			id: _menu
 
 			orientation: "horizontal"
@@ -299,7 +283,6 @@
 			height: 50
 
 			canvas.before:
-
 				Color:
 					rgba: 0,0,0,0.5
 				Rectangle:
@@ -367,8 +350,6 @@
 			# 		root.manager.transition.direction = 'left'
 			# 		root.manager.current = 'list'
 
-
-
 		ScrollView:
 			id: scroll_id
 			size: self.size
@@ -409,9 +390,8 @@
 	height: self.texture_size[1] * 0.6666
 	size_hint_y: None
 	source: root.background_normal
-	keep_ratio: False
+	keep_ratio: True
 	allow_stretch: True
-
 
 #info
 <ListInfo>:
@@ -520,11 +500,6 @@
 					# 				width: 5
 					# 				circle: self.center_x, self.center_y, min(50, 50) / 2, 210, 360
 
-
-	
-
-
-
 #film populaire
 <ListDiscover>:
 
@@ -587,7 +562,6 @@
 				#option_cls: root.onChange(self.text)
 				size_hint: None, 1
 
-
 		ScrollView:
 			id: scroll_id
 			size: self.size
@@ -621,7 +595,6 @@
 						pos: self.pos 
 						size: self.size	
 
-
 <discover_layout>
 
 	#label_title:label_title
@@ -645,14 +618,12 @@
 		spacing: dp(4)
 		padding: dp(20), dp(4)
 
-
 		canvas: 
 			Color: 
 				rgba: 0,0,0,0.5
 			Rectangle: 
 				pos: self.pos 
 				size: self.size	
-
 
 		Label:
 			text: root.label_title
@@ -663,7 +634,6 @@
 			size_hint: 1, 1
 			#pos: 10,10
 		
-
 		Label:
 			text: root.label_vote_average
 			text_size: self.size
@@ -687,9 +657,3 @@
 			halign: 'left'
 			valign: 'center'
 			size_hint: 1, 1
-
-		
-					
-					
-
-			
