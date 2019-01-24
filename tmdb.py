@@ -34,9 +34,12 @@ class tmdb:
         self.poster = 'https://image.tmdb.org/t/p/w342'
         self.fanart = 'https://image.tmdb.org/t/p/original'
 
-    #utilise un json pour le moment 
-    def getPopular(self):
-        in_file = open("popular.json","r")
+    #utilise un json pour le moment
+    def getPopular(self,NextPage):
+        if NextPage == 2:
+            in_file = open("popular2.json","r")
+        else:
+            in_file = open("popular.json","r")
         self.results = json.load(in_file)
         in_file.close()
         if self.results:
@@ -54,7 +57,7 @@ class tmdb:
             return self._format_light()
         return
 
-    def getRated(self):
+    def getRated(self,NextPage):
         in_file = open("rated.json","r")
         self.results = json.load(in_file)
         in_file.close()
@@ -81,17 +84,17 @@ class tmdb:
         videos = []
 
         for i in self.results.get("results", []):
-            tub = {'tmdbid' : i["id"], 
+            tub = {'tmdbid' : i["id"],
             "vote_average" : str(i["vote_average"]) }
 
             if 'poster_path' in i and i.get('poster_path'):
                 tub.update({"poster_path" : self.poster+i["poster_path"]})
-            else : 
+            else :
                 tub.update({"poster_path" : "http://gowatchit.com/assets/movie_imgs/noposter.png"})
 
             if 'backdrop_path' in i and i.get('backdrop_path'):
                 tub.update({"backdrop_path" : self.fanart+i["backdrop_path"]})
-            else : 
+            else :
                 tub.update({"backdrop_path" : "http://gowatchit.com/assets/movie_imgs/noposter.png"})
 
             if 'title' in i:
@@ -126,8 +129,8 @@ class tmdb:
 
         result = []
         for i in self.results.get("results", []):
-            videos.append({'id' : i["id"], 
-            "vote_average" : i["vote_average"], 
+            videos.append({'id' : i["id"],
+            "vote_average" : i["vote_average"],
             "title" : i["title"],
             "poster_path" : self.poster+i["poster_path"],
             "backdrop_path" : self.fanart+i["backdrop_path"],
