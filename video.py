@@ -297,7 +297,7 @@ class ListFolder(Screen):
         print self.menu
         #poster
         self.on_sub_Change()
-        self.add_widget(Button(text="NextPage", on_press=lambda a:self.on_change_Page(text='Populaires'),size_hint=(0.1,0.046),pos_hint={'x': dp(.255), 'y': dp(.947)}))
+        #self.add_widget(Button(text="NextPage", on_press=lambda a:self.on_change_Page(text='Populaires')))
 
         #scroll.add_widget(grid)
         #scroll.add_widget(grid)
@@ -358,7 +358,7 @@ class ListFolder(Screen):
 
         self.ids.grid_id.clear_widgets()
 
-        print "sub_change", text
+        print "change page ", text
 
         #self.remove_widget(self.grid_l)
 
