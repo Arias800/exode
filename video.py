@@ -21,9 +21,9 @@ from kivy.uix.image import Image, AsyncImage
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.animation import Animation
 from kivy.graphics import *
+from kivy.metrics import dp, sp
 
 from tmdb import tmdb
-
 
 #import pysrt
 
@@ -164,7 +164,6 @@ class VideoAlan(Screen):
         else:
             self.video.source = path.decode("utf-8")
 
-
     def on_touch_down(self,touch):
 
         if "button" in touch.profile:
@@ -245,7 +244,6 @@ class VideoAlan(Screen):
 class OpenFolder(Screen):
     pass
 
-
 sous_menu = {
     "movie": {
     "Populaires": "popular",
@@ -264,7 +262,7 @@ sous_menu = {
 menu = {
     "Films": 'movie',
     "Series tv": 'tv',
-    "test2": 'Autre', 
+    "test2": 'Autre',
     'Parametre': 'pref'}
 
 #pk ça utiliser les nom anglais pour apelle au function
@@ -278,8 +276,8 @@ class ListFolder(Screen):
     scroll_l = ObjectProperty(None)
 
     #pickType = ['Movies','Series','Autres']
-    
-    #sousType = {'pop' : 'populaire', 'note' : 'grande note', 'pro' : 'prochainement'} 
+
+    #sousType = {'pop' : 'populaire', 'note' : 'grande note', 'pro' : 'prochainement'}
 
     def __init__(self, **kwargs):
 
@@ -287,7 +285,6 @@ class ListFolder(Screen):
         self.sousType = sous_menu.get(kwargs['type']).viewkeys()
 
         #self.sousType = ['Populaire','Mieux notes','Prochainement', 'latest']
-        
 
         super(ListFolder, self).__init__(**kwargs)
 
@@ -300,6 +297,7 @@ class ListFolder(Screen):
         print self.menu
         #poster
         self.on_sub_Change()
+        self.add_widget(Button(text="NextPage", on_press=lambda a:self.on_change_Page(text='Populaires'),size_hint=(0.1,0.046),pos_hint={'x': dp(.255), 'y': dp(.947)}))
 
         #scroll.add_widget(grid)
         #scroll.add_widget(grid)
@@ -319,11 +317,10 @@ class ListFolder(Screen):
         print 'list folder onchange',  menu.get(text)
 
         discover = menu.get(text)
-        
+
         sm.add_widget(ListDiscover(name = "discover", menu=discover))
         #sm.remove_widget('info')
         sm.current = 'discover'
-
 
 #trouver un moyen de load populaire peux importe les lang utiliser
     def on_sub_Change(self, text='Populaires'):
@@ -337,14 +334,40 @@ class ListFolder(Screen):
         print "sub_change", text
 
         #self.remove_widget(self.grid_l)
-        
 
         menu = sous_menu.get(self.type).get(text)
 
         print "menuuuuu" , menu
 
         try:
-            json = _jsonload(self.type, menu)
+            json = _jsonload(self.type, menu,NextPage=1)
+            for data in json:
+                #btn = AsyncImage(subtext=data['name'], source="https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/eye-24-256.png", size_hint=(None, None), size=(160, 160))
+
+                btn = ImageButton(type=self.type, tmdbid=data['tmdbid'], img=data['poster_path'])
+                #btn = Button(text=data['name'], size_hint=(None, None), size=(220,300), background_normal='image.jpg', subtext=data['name'])
+                self.grid.add_widget(btn)
+            #change(self,text)
+        except: pass
+
+    #Pour afficher plus d'une page
+    def on_change_Page(self, text='Populaires'):
+        try:
+            sm.clear_widgets(screens=[sm.get_screen('discover')])
+        except: pass
+
+        self.ids.grid_id.clear_widgets()
+
+        print "sub_change", text
+
+        #self.remove_widget(self.grid_l)
+
+        menu = sous_menu.get(self.type).get(text)
+
+        print "menuuuuu" , menu
+
+        try:
+            json = _jsonload(self.type, menu,NextPage=2)
             for data in json:
                 #btn = AsyncImage(subtext=data['name'], source="https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/eye-24-256.png", size_hint=(None, None), size=(160, 160))
 
@@ -401,17 +424,14 @@ class ListInfo(Screen):
         #json = _jsonload(self)
         json = tmdb().getByid(kwargs['type'], kwargs['tmdbid'])
 
-        #introduit le dict dans self 
-        #a revoir c'est moche         
+        #introduit le dict dans self
+        #a revoir c'est moche
         for value in json[0]:
             setattr(self, value, json[0][value])
 
         self.ids.cicle_l.add_widget(MyCircle(num = self.vote_average))
 
-
         # self.vote_circle = str(round(float(self.vote_average) * 36, 2))
-
-
 
     def onChange(self, label):
         #self.box_share2.clear_widgets()
@@ -437,14 +457,14 @@ class MyCircle(Widget):
             self.line = Line(circle=pts, width=5)
 
 class ListDiscover(Screen):
-    
+
     def __init__(self, **kwargs):
         self.pickType = menu.viewkeys()
 
         self.sousType = sous_menu.get(kwargs['menu']).viewkeys()
 
         super(ListDiscover, self).__init__(**kwargs)
-        
+
         #self.grid = self.grid_l
 
         self.menu = kwargs['menu']
@@ -464,14 +484,12 @@ class ListDiscover(Screen):
 
         #self.grid_id.add_widget(self.grid_id2)
 
-    
     def onChange(self, text):
 
         sm.clear_widgets(screens=[self])
         #sm.clear_widgets(screens=[sm.get_screen('list')])
         discover = menu.get(text)
 
-        
         sm.add_widget(ListDiscover(name ="discover", menu=discover))
         #sm.remove_widget('info')
         sm.current = "discover"
@@ -484,7 +502,6 @@ class ListDiscover(Screen):
 
         #self.remove_widget(self.grid_l)
         #self.ids.grid_id.clear_widgets()
-
 
         #change(self,text)
 
@@ -519,13 +536,13 @@ class ListParam(Screen):
 #     elif text == "Autres":
 #         self.manager.current = 'files'
 
-def _jsonload(type, menu):
+def _jsonload(type, menu,NextPage):
 
     print "json", type, menu
     if menu == 'popular':
-        return tmdb().getPopular()
+        return tmdb().getPopular(NextPage)
     elif menu == "top_rated":
-        return tmdb().getRated()
+        return tmdb().getRated(NextPage)
 
 class Video(App):
 
