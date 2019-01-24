@@ -21,7 +21,7 @@ BoxLayout:
             canvas:
                 Line:
                     width: 10
-                    circle: self.center_x, self.center_y, min(self.width, 50) / 2, start.value, end.value
+                    circle: self.center_x, self.center_y, min(self.width, 50) / 2, 0, 180
         Widget:
             canvas:
                 Line:

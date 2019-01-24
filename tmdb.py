@@ -32,7 +32,7 @@ class tmdb:
         self.debug = debug
         self.lang = lang
         self.poster = 'https://image.tmdb.org/t/p/w342'
-        self.fanart = 'https://image.tmdb.org/t/p/w780'
+        self.fanart = 'https://image.tmdb.org/t/p/original'
 
     #utilise un json pour le moment 
     def getPopular(self):

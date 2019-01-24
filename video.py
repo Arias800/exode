@@ -20,6 +20,7 @@ from kivy.uix.dropdown import DropDown
 from kivy.uix.image import Image, AsyncImage
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.animation import Animation
+from kivy.graphics import *
 
 from tmdb import tmdb
 
@@ -392,6 +393,7 @@ class ListInfo(Screen):
     #box_share2 = ObjectProperty(None)
     grid_l = ObjectProperty(None)
     scroll_l = ObjectProperty(None)
+    circle_l = ObjectProperty(None)
 
     def __init__(self, **kwargs):
         super(ListInfo, self).__init__(**kwargs)
@@ -403,6 +405,9 @@ class ListInfo(Screen):
         #a revoir c'est moche         
         for value in json[0]:
             setattr(self, value, json[0][value])
+
+        self.ids.cicle_l.add_widget(MyCircle(num = self.vote_average))
+
 
         # self.vote_circle = str(round(float(self.vote_average) * 36, 2))
 
@@ -418,6 +423,18 @@ class ListInfo(Screen):
         print label
 
     pass
+
+class MyCircle(Widget):
+    def __init__(self, **kwargs):
+        #circle: self.center_x, self.center_y, min(50, 50) / 2, 210, 360
+        super(MyCircle, self).__init__(**kwargs)
+
+        num = round(float(kwargs['num']) * 36, 2)
+
+        #self.size_hint = (None, None)
+        with self.canvas:
+            pts = [self.center_x, self.center_y, min(50, 50) / 2, 0, num]
+            self.line = Line(circle=pts, width=5)
 
 class ListDiscover(Screen):
     

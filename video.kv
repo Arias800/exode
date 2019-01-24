@@ -404,6 +404,8 @@
 	vote_average:''
 	vote_circle:''
 
+	cicle_l : cicle_l
+
 	BoxLayout:
 		size_hint: 1,1
 		orientation: "vertical"
@@ -492,13 +494,9 @@
 						font_size:'40sp'
 						size_hint: 1, 1
 
-					# GridLayout:
-					# 	cols: 2
-					# 	Widget:
-					# 		canvas:
-					# 			Line:
-					# 				width: 5
-					# 				circle: self.center_x, self.center_y, min(50, 50) / 2, 210, 360
+					GridLayout:
+						cols: 2
+						id : cicle_l
 
 #film populaire
 <ListDiscover>:
