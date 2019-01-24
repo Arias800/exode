@@ -280,7 +280,7 @@ class ListFolder(Screen):
     #sousType = {'pop' : 'populaire', 'note' : 'grande note', 'pro' : 'prochainement'}
 
     def __init__(self, **kwargs):
-
+        self.pageNumber = 1
         self.pickType = menu.viewkeys()
         self.sousType = sous_menu.get(kwargs['type']).viewkeys()
 
@@ -340,7 +340,7 @@ class ListFolder(Screen):
         print "menuuuuu" , menu
 
         try:
-            json = _jsonload(self.type, menu,NextPage=1)
+            json = _jsonload(self.type, menu,NextPage=self.pageNumber)
             for data in json:
                 #btn = AsyncImage(subtext=data['name'], source="https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/eye-24-256.png", size_hint=(None, None), size=(160, 160))
 
@@ -352,6 +352,9 @@ class ListFolder(Screen):
 
     #Pour afficher plus d'une page
     def on_change_Page(self, text='Populaires'):
+        self.pageNumber = self.pageNumber + 1
+        print 'page number ' ,self.pageNumber
+
         try:
             sm.clear_widgets(screens=[sm.get_screen('discover')])
         except: pass
@@ -367,7 +370,7 @@ class ListFolder(Screen):
         print "menuuuuu" , menu
 
         try:
-            json = _jsonload(self.type, menu,NextPage=2)
+            json = _jsonload(self.type, menu,NextPage=self.pageNumber)
             for data in json:
                 #btn = AsyncImage(subtext=data['name'], source="https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/eye-24-256.png", size_hint=(None, None), size=(160, 160))
 
