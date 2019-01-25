@@ -393,11 +393,12 @@
 <ImageButton>:
 	#id: box_share2
 	background_normal: ''
-	#width: .50
-	height: self.texture_size[1] * 0.6666
+	#width: .100
+	height: self.texture_size[1] * self.image_ratio
+    #size:self.image_ratio*root.height,root.height
 	size_hint_y: None
 	source: root.background_normal
-	keep_ratio: True
+	keep_ratio: False
 	allow_stretch: True
 
 #info
@@ -509,7 +510,7 @@
 <ListDiscover>:
 
 	menu: _menu
-	grid_id: grid_id
+	discover_grid: discover_grid
 
 	scroll_l: scroll_id
 
@@ -575,7 +576,7 @@
 			bar_width: '8dp'
 
 			GridLayout:
-				id : grid_id
+				id : discover_grid
 				# cols:2
 				orientation: "vertical"
 				#pos_hint: {"x":1,"top":1}
@@ -595,7 +596,7 @@
 
 				canvas: 
 					Color: 
-						rgb: [.5, .5, 136]
+						rgb: [.5, 40, 106]
 					Rectangle: 
 						pos: self.pos 
 						size: self.size	

@@ -345,6 +345,7 @@ class ListFolder(Screen):
                 #btn = AsyncImage(subtext=data['name'], source="https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/eye-24-256.png", size_hint=(None, None), size=(160, 160))
 
                 btn = ImageButton(type=self.type, tmdbid=data['tmdbid'], img=data['poster_path'])
+                
                 #btn = Button(text=data['name'], size_hint=(None, None), size=(220,300), background_normal='image.jpg', subtext=data['name'])
                 self.grid.add_widget(btn)
             #change(self,text)
@@ -367,13 +368,10 @@ class ListFolder(Screen):
 
         menu = sous_menu.get(self.type).get(text)
 
-        print "menuuuuu" , menu
-
         try:
             json = _jsonload(self.type, menu,NextPage=self.pageNumber)
             for data in json:
                 #btn = AsyncImage(subtext=data['name'], source="https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/eye-24-256.png", size_hint=(None, None), size=(160, 160))
-
                 btn = ImageButton(type=self.type, tmdbid=data['tmdbid'], img=data['poster_path'])
                 #btn = Button(text=data['name'], size_hint=(None, None), size=(220,300), background_normal='image.jpg', subtext=data['name'])
                 self.grid.add_widget(btn)
@@ -387,6 +385,7 @@ class ImageButton(ButtonBehavior, AsyncImage):
 
         #icon = AsyncImage(source='https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/eye-24-256.png')
         self.background_normal = kwargs['img']
+        #print "ratio", self.root.width
         self.tmdb = kwargs['tmdbid']
         self.type = kwargs['type']
 
@@ -471,8 +470,6 @@ class ListDiscover(Screen):
         #self.grid = self.grid_l
 
         self.menu = kwargs['menu']
-
-        print self.menu
         #auplus simple
 
         #poster
@@ -481,9 +478,9 @@ class ListDiscover(Screen):
         for data in json:
             #btn = ImageButton(data)
             btn = ImageButton(type=self.menu, tmdbid=data['tmdbid'], img=data['backdrop_path'])
-            self.grid_id.add_widget(btn)
+            self.discover_grid.add_widget(btn)
             label = discover_layout(data)
-            self.grid_id.add_widget(label)
+            self.discover_grid.add_widget(label)
 
         #self.grid_id.add_widget(self.grid_id2)
 
