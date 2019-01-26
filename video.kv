@@ -398,7 +398,7 @@
     #size:self.image_ratio*root.height,root.height
 	size_hint_y: None
 	source: root.background_normal
-	keep_ratio: False
+	keep_ratio: True
 	allow_stretch: True
 
 #info
@@ -458,6 +458,12 @@
 					root.manager.transition.direction = 'right'
 					root.manager.current = 'list'
 
+			Button:
+
+				text: "Synopsis"
+				size_hint: None,1
+				width: 140
+				on_press:root.show_synopsis()
 		BoxLayout:
 	
 			AsyncImage:
