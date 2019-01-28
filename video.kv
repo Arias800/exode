@@ -414,17 +414,17 @@
 
 	cicle_l : cicle_l
 
-	BoxLayout:
-		size_hint: 1,1
-		orientation: "vertical"
-		
-		canvas.before:
 
-			Color:
-				rgba: 0,0,0,0.5
-			Rectangle:
-				pos: self.pos
-				size: self.size
+	AsyncImage:
+		size_hint:None, None
+		source: root.backdrop_path
+		allow_stretch:False
+		keep_ratio:True
+		size: self.texture_size
+
+	BoxLayout:
+		orientation: "vertical"
+
 
 		BoxLayout:
 			#id: box_share2
@@ -464,53 +464,45 @@
 				size_hint: None,1
 				width: 140
 				on_press:root.show_synopsis()
-		BoxLayout:
-	
-			AsyncImage:
-				source: root.backdrop_path
-				allow_stretch:True
-				keep_ratio:False
-				size: self.parent.size
+		
 
-				BoxLayout:
-					
-					orientation: "vertical"
-					size: self.parent.size
+
+		FloatLayout:
+
+		#position dans le cadre x, y pos: 100, 100
+        # taille en % width, height size_hint: .2, .4
 			
-					canvas.before:
+			orientation: "vertical"
+	
+			canvas.before:
 
-						Color:
-							rgba: 0,0,0,0.5
-						Rectangle:
-							pos: self.pos
-							size: self.size
+				Color:
+					rgba: 0,0,0,0.5
+				Rectangle:
+					pos: self.pos
+					size: self.size
 
-					Label:
-						text: root.title
-						text_size: self.size
-						halign: 'center'
-						valign: 'top'
-						font_size:'40sp'
-						size_hint: 1, 1
-					Label:
-						text: root.genres
-						text_size: self.size
-						halign: 'center'
-						valign: 'top'
-						font_size:'40sp'
-						size_hint: 1, 1
 
-					Label:
-						text: root.vote_average
-						text_size: self.size
-						halign: 'center'
-						valign: 'top'
-						font_size:'40sp'
-						size_hint: 1, 1
+			Label:
+				text: root.title
+				text_size: self.size
+				font_size:'40sp'
+				pos_hint: {'x': .1, 'y': .5}
+			Label:
+				text: root.genres
+				text_size: self.size
+				font_size:'25sp'
+				pos_hint: {'x': .1, 'y': .45}
 
-					GridLayout:
-						cols: 2
-						id : cicle_l
+			Label:
+				text: root.vote_average
+				text_size: self.size
+				font_size:'40sp'
+				pos_hint: {'x': .8, 'y': .45}
+
+			GridLayout:
+				cols: 2
+				id : cicle_l
 
 #film populaire
 <ListDiscover>:
