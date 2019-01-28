@@ -1,48 +1,61 @@
 from kivy.app import App
 from kivy.lang import Builder
+from kivy.core.image import Image as CoreImage
+from kivy.properties import ListProperty, ObjectProperty, NumericProperty
+from kivy.clock import Clock
+from kivy.core.window import Window
+from math import sin, cos, pi
+
 
 kv = '''
 BoxLayout:
-    Slider:
-        id: start
+    Widget:
+        canvas:
+            Color:
+                rgba: 1, 1, 1, 1
+            Mesh:
+                vertices: app.mesh_points
+                indices: range(len(app.mesh_points) / 4)
+                texture: app.mesh_texture
+                mode: 'triangle_fan'
+    BoxLayout:
         orientation: 'vertical'
         size_hint_x: None
-        width: 20
-        max: 360
-    Slider:
-        id: end
-        orientation: 'vertical'
-        size_hint_x: None
-        width: 20
-        max: 360
-    GridLayout:
-        cols: 2
-        Widget:
-            canvas:
-                Line:
-                    width: 10
-                    circle: self.center_x, self.center_y, min(self.width, 50) / 2, 0, 180
-        Widget:
-            canvas:
-                Line:
-                    width: 2
-                    ellipse: self.x, self.y,\
-                             self.width, self.height,\
-                             start.value, end.value
-        Widget:
-            canvas:
-                Ellipse:
-                    pos: self.x, self.y
-                    size: self.width, self.height
-                    angle_start: start.value
-                    angle_end: end.value
-
+        width: 100
+        Slider:
+            value: app.radius
+            on_value: app.radius = args[1]
+            min: 10
+            max: 1000
 '''
 
 
-class MyApp(App):
+class MeshBallApp(App):
+    mesh_points = ListProperty([])
+    mesh_texture = ObjectProperty(None)
+    radius = NumericProperty(500)
+    offset_x = NumericProperty(.5)
+    offset_y = NumericProperty(.5)
+    sin_wobble = NumericProperty(0)
+    sin_wobble_speed = NumericProperty(0)
+
     def build(self):
+        self.mesh_texture = CoreImage('data/logo/kivy-icon-512.png').texture
+        Clock.schedule_interval(self.update_points, 0)
         return Builder.load_string(kv)
 
+    def update_points(self, *args):
+        points = [Window.width / 2, Window.height / 2, .5, .5]
+        i = 0
+        while i < 2 * pi:
+            i += 0.01 * pi
+            points.extend([
+                Window.width / 2 + cos(i) * (self.radius + self.sin_wobble * sin(i * self.sin_wobble_speed)),
+                Window.height / 2 + sin(i) * (self.radius + self.sin_wobble * sin(i * self.sin_wobble_speed)),
+                self.offset_x + sin(i),
+                self.offset_y + cos(i)])
 
-MyApp().run()
+        self.mesh_points = points
+
+if __name__ == '__main__':
+    MeshBallApp().run()

@@ -432,6 +432,14 @@ class ListInfo(Screen):
         for value in json[0]:
             setattr(self, value, json[0][value])
 
+        # img = AsyncImage(source=self.backdrop_path,
+        # size=(1920, 1280),
+        # keep_ratio=False,
+        # allow_stretch=True,
+        # pos=(-150, 150))
+
+        # self.add_widget(img)
+
         self.ids.cicle_l.add_widget(MyCircle(num = self.vote_average))
 
         # self.vote_circle = str(round(float(self.vote_average) * 36, 2))
