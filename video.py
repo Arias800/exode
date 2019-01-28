@@ -436,6 +436,31 @@ class ListInfo(Screen):
 
         # self.vote_circle = str(round(float(self.vote_average) * 36, 2))
 
+    def show_synopsis(self):
+        self.synopsis = Label(text=self.overview,
+        bold = True,
+        text_size=(self.width,self.height),
+        font_size="20sp",
+        pos_hint={'center_x': 0.5, 'center_y': .50},
+        size_hint_y=None,
+        size = self.size,
+        halign="center",
+        valign = "bottom")
+
+        self.add_widget(self.synopsis)
+        self.synopsis.bind(size=self.setting_function)
+
+    #setting_function et update_rect sont utilise pour bloquer la synopsis en bas de l'ecran
+    def setting_function(self, *args):
+        """FUNCTION TO UPDATE THE LABEL TO ADJUST ITSELF ACCORDING TO SCREEN SIZE CHANGES"""
+        self.synopsis.pos_hint = {'center_x': 0.5, 'center_y': .50}
+        self.synopsis.text_size=self.size
+
+    def update_rect(self, *args):
+        """FUNCTION TO UPDATE THE RECATANGLE OF CANVAS TO FIT THE WHOLE SCREEN OF MAINSCREEN ALWAYS"""
+        self.rect.pos = self.pos
+        self.rect.size = self.size
+
     def onChange(self, label):
         #self.box_share2.clear_widgets()
         sm.clear_widgets(screens=[sm.get_screen('info')])
