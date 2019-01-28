@@ -331,21 +331,22 @@ class ListFolder(Screen):
 
         self.ids.grid_id.clear_widgets()
 
-        print "sub_change", text
-
         #self.remove_widget(self.grid_l)
 
         menu = sous_menu.get(self.type).get(text)
-
-        print "menuuuuu" , menu
 
         try:
             json = _jsonload(self.type, menu,NextPage=self.pageNumber)
             for data in json:
                 #btn = AsyncImage(subtext=data['name'], source="https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/eye-24-256.png", size_hint=(None, None), size=(160, 160))
+                #size = (width, height)
+                #aspect ratio 2/3 = 0.666
 
-                btn = ImageButton(type=self.type, tmdbid=data['tmdbid'], img=data['poster_path'])
-
+                btn = ImageButton(type=self.type, 
+                tmdbid=data['tmdbid'], 
+                img=data['poster_path'],
+                size=(Window.width / 2 , (Window.width / 2) / 0.666 ))
+                
                 #btn = Button(text=data['name'], size_hint=(None, None), size=(220,300), background_normal='image.jpg', subtext=data['name'])
                 self.grid.add_widget(btn)
             #change(self,text)
@@ -434,31 +435,6 @@ class ListInfo(Screen):
         self.ids.cicle_l.add_widget(MyCircle(num = self.vote_average))
 
         # self.vote_circle = str(round(float(self.vote_average) * 36, 2))
-
-    def show_synopsis(self):
-        self.synopsis = Label(text=self.overview,
-                              bold = True,
-                              text_size=(self.width,self.height),
-                              font_size="20sp",
-                              pos_hint={'center_x': 0.5, 'center_y': .50},
-                              size_hint_y=None,
-                              size = self.size,
-                              halign="center",
-                              valign = "bottom")
-
-        self.add_widget(self.synopsis)
-        self.synopsis.bind(size=self.setting_function)
-
-    #setting_function et update_rect sont utilise pour bloquer la synopsis en bas de l'ecran
-    def setting_function(self, *args):
-        """FUNCTION TO UPDATE THE LABEL TO ADJUST ITSELF ACCORDING TO SCREEN SIZE CHANGES"""
-        self.synopsis.pos_hint = {'center_x': 0.5, 'center_y': .50}
-        self.synopsis.text_size=self.size
-
-    def update_rect(self, *args):
-        """FUNCTION TO UPDATE THE RECATANGLE OF CANVAS TO FIT THE WHOLE SCREEN OF MAINSCREEN ALWAYS"""
-        self.rect.pos = self.pos
-        self.rect.size = self.size
 
     def onChange(self, label):
         #self.box_share2.clear_widgets()

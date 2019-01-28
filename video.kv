@@ -394,11 +394,11 @@
 	#id: box_share2
 	background_normal: ''
 	#width: .100
-	height: self.texture_size[1] * self.image_ratio
-    #size:self.image_ratio*root.height,root.height
+	#height: self.texture_size[1] * self.image_ratio
+	#size: root.size[0], root.size[0] / self.image_ratio
 	size_hint_y: None
 	source: root.background_normal
-	keep_ratio: True
+	keep_ratio: False
 	allow_stretch: True
 
 #info
