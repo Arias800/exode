@@ -445,8 +445,9 @@
 					size: self.size
 
 			Button:
-				text: 'Back'  
-				size_hint: None, 1
+				size_hint: None, None 
+				size: 32, 32
+				background_normal:'img/back.png'
 				on_press:
 					root.onChange(self.text)
 
