@@ -511,7 +511,10 @@ class ListDiscover(Screen):
         json = tmdb().getDiscover(kwargs['menu'])
         for data in json:
             #btn = ImageButton(data)
-            btn = ImageButton(type=self.menu, tmdbid=data['tmdbid'], img=data['backdrop_path'])
+            btn = ImageButton(type=self.menu, 
+            tmdbid=data['tmdbid'], 
+            img=data['backdrop_path'],
+            size=(Window.width , Window.width / 1.777))
             self.discover_grid.add_widget(btn)
             label = discover_layout(data)
             self.discover_grid.add_widget(label)
