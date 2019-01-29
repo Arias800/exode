@@ -411,16 +411,10 @@
 	title:''
 	vote_average:''
 	vote_circle:''
+	overview:''
 
 	cicle_l : cicle_l
 
-
-	AsyncImage:
-		size_hint:None, None
-		source: root.backdrop_path
-		allow_stretch:False
-		keep_ratio:True
-		size: self.texture_size
 
 	BoxLayout:
 		orientation: "vertical"
@@ -468,42 +462,101 @@
 		
 
 
-		FloatLayout:
-
-		#position dans le cadre x, y pos: 100, 100
-        # taille en % width, height size_hint: .2, .4
-			
-			orientation: "vertical"
-	
-			canvas.before:
-
-				Color:
-					rgba: 0,0,0,0.5
-				Rectangle:
-					pos: self.pos
-					size: self.size
-
-
-			Label:
-				text: root.title
-				text_size: self.size
-				font_size:'40sp'
-				pos_hint: {'x': .1, 'y': .5}
-			Label:
-				text: root.genres
-				text_size: self.size
-				font_size:'25sp'
-				pos_hint: {'x': .1, 'y': .45}
-
-			Label:
-				text: root.vote_average
-				text_size: self.size
-				font_size:'40sp'
-				pos_hint: {'x': .8, 'y': .45}
+		ScrollView:
+			id: scroll_id
+			size: self.size
+			do_scroll_y: False
+			do_scroll_x: False
+			bar_width: '8dp'
 
 			GridLayout:
-				cols: 2
-				id : cicle_l
+				# cols:2
+				orientation: "vertical"
+				#pos_hint: {"x":1,"top":1}
+				#size_hint: None,None
+				# padding: 5
+				# spacing: 5
+				size_hint_y: None
+				height: self.parent.height
+				cols: 1
+				#spacing: 5
+				spacing: dp(4)
+				padding: dp(4), dp(4)
+
+
+				FloatLayout:
+
+					AsyncImage:
+						size_hint:None, None
+						source: root.backdrop_path
+						allow_stretch:False
+						keep_ratio:True
+						size: self.texture_size
+				
+				
+				FloatLayout:
+
+				#position dans le cadre x, y pos: 100, 100
+				# taille en % width, height size_hint: .2, .4
+					
+					orientation: "vertical"
+					#pos_hint: {"x":1,"top":1}
+					#size_hint: None, None
+					size_hint_y: None
+					# padding: 5
+					# spacing: 5
+					height: dp(400)
+					#width:400
+					#spacing: 5
+					spacing: dp(4)
+					padding: dp(20), dp(4)
+			
+					canvas.before:
+
+						Color:
+							rgba: 0,0,0,0.5
+						Rectangle:
+							pos: self.pos
+							size: self.size
+
+
+					Label:
+						text: root.title
+						text_size: self.size
+						font_size:'40sp'
+						pos_hint: {'x': .1, 'y': .8}
+					Label:
+						text: root.genres
+						text_size: self.size
+						font_size:'25sp'
+						pos_hint: {'x': .1, 'y': .75}
+
+					Label:
+						text: root.vote_average
+						text_size: self.size
+						font_size:'40sp'
+						pos_hint: {'x': .8, 'y': .75}
+
+					GridLayout:
+						cols: 1
+						id : cicle_l
+
+					ScrollView:
+						id: scroll_id
+						do_scroll_y: True
+						do_scroll_x: False
+						bar_width: '8dp'
+						size_hint: .9, .5
+						spacing: dp(4)
+						padding: dp(20), dp(4)
+        				pos_hint: {'x': 0.05, 'y': 0.1}
+
+						TextInput:
+							height: self.minimum_height
+            				size_hint_y: None
+							text: root.overview
+							text_size: self.size
+							font_size:'25sp'
 
 #film populaire
 <ListDiscover>:
@@ -592,13 +645,6 @@
 				#row_default_height: (self.width - self.cols*self.spacing[0])/self.cols
 				#row_force_default: True
 				#row_default_width: .50
-
-				canvas: 
-					Color: 
-						rgb: [.5, 40, 106]
-					Rectangle: 
-						pos: self.pos 
-						size: self.size	
 
 <discover_layout>
 

@@ -480,7 +480,7 @@ class ListInfo(Screen):
 
     pass
 
-class MyCircle(Widget):
+class MyCircle(GridLayout):
     def __init__(self, **kwargs):
         #circle: self.center_x, self.center_y, min(50, 50) / 2, 210, 360
         super(MyCircle, self).__init__(**kwargs)
@@ -489,7 +489,8 @@ class MyCircle(Widget):
 
         #self.size_hint = (None, None)
         with self.canvas:
-            pts = [self.center_x, self.center_y, min(50, 50) / 2, 0, num]
+            #pts = [self.center_x, self.center_y, min(50, 50) / 2, 0, num]
+            pts = [(Window.width/1.17), (Window.height/2.45), min(80, 80) / 2, 0, num] 
             self.line = Line(circle=pts, width=5)
 
 class ListDiscover(Screen):
