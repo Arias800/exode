@@ -33,6 +33,7 @@ class tmdb:
         self.lang = lang
         self.poster = 'https://image.tmdb.org/t/p/w342'
         self.fanart = 'https://image.tmdb.org/t/p/original'
+        self.fanart_780 = 'https://image.tmdb.org/t/p/w780'
 
     #utilise un json pour le moment
     def getPopular(self,NextPage):
@@ -94,6 +95,7 @@ class tmdb:
 
             if 'backdrop_path' in i and i.get('backdrop_path'):
                 tub.update({"backdrop_path" : self.fanart+i["backdrop_path"]})
+                tub.update({"backdrop_path_780" : self.fanart_780+i["backdrop_path"]})
             else :
                 tub.update({"backdrop_path" : "http://gowatchit.com/assets/movie_imgs/noposter.png"})
 

@@ -449,9 +449,7 @@
 				text: 'Recherche source'  
 				size_hint: None, 1
 				width:150
-				on_press:
-					root.manager.transition.direction = 'right'
-					root.manager.current = 'list'
+				on_press: root.show_source()
 
 			Button:
 
@@ -651,11 +649,12 @@
 	#label_title:label_title
 	#label_over:label_over
 
-	label_title: ''
-	label_overview:''
-	label_vote_average:''
+	title: ''
+	overview:''
+	vote_average:''
+	release_date:''
 
-	BoxLayout:
+	FloatLayout:
 		# cols:2
 		orientation: "vertical"
 		#pos_hint: {"x":1,"top":1}
@@ -663,7 +662,7 @@
 		size_hint_y: None
 		# padding: 5
 		# spacing: 5
-		height: dp(200)
+		height: dp(150)
 		#width:400
 		#spacing: 5
 		spacing: dp(4)
@@ -677,34 +676,60 @@
 				size: self.size	
 
 		Label:
-			text: root.label_title
+			text: root.title
 			text_size: self.size
-			halign: 'left'
-			valign: 'top'
-			font_size:'20sp'
-			size_hint: 1, 1
+			font_size:'30sp'
+			pos_hint: {'x': .05, 'y': .7}
 			#pos: 10,10
 		
 		Label:
-			text: root.label_vote_average
+			text: root.vote_average
 			text_size: self.size
-			halign: 'left'
-			valign: 'center'
-			size_hint: 1, 1
-
+			font_size:'30sp'
+			pos_hint: {'x': .85, 'y': .7}
 
 		Label:
-			text: root.label_overview
+			text: root.release_date
 			text_size: self.size
-			halign: 'left'
-			valign: 'center'
-			size_hint:1,1
-			size_hint_y: None
-			height:dp(100)
+			font_size:'15sp'
+			pos_hint: {'x': .05, 'y': .6}
 
 		Label:
-			text: "autre"
+			text: root.overview
 			text_size: self.size
-			halign: 'left'
-			valign: 'center'
-			size_hint: 1, 1
+			size_hint: .9, .5
+			pos_hint: {'x': .05, 'y': .1}
+
+<ListSource>
+
+	BoxLayout:
+		# cols:2
+		orientation: "vertical"
+		#pos_hint: {"x":1,"top":1}
+		# padding: 5
+		# spacing: 5
+		size_hint_y: None
+		height: dp(300)
+		# padding: 5
+		# spacing: 5
+		pos_hint: {'x': 1, 'y': .55}
+
+		spacing: dp(4)
+		padding: dp(20), dp(4)
+		
+		canvas: 
+			Color: 
+				rgba: 0,0,0,0.5
+			Rectangle: 
+				pos: self.pos 
+				size: self.size	
+
+		Label:
+			text: "Message"
+
+		Button:
+			size_hint: 1, 0.2
+			#pos_hint: {'x': .05, 'y': .1}
+			text:"Dismiss"
+			on_release: my_popup.dismiss()
+

@@ -476,8 +476,17 @@ class ListInfo(Screen):
         sm.current = 'list'
         #sm.clear_widgets('info')
 
-        print label
+    def show_source(self):
+        source = ListSource()
+        self.add_widget(source)
+        #self.synopsis.bind(size=self.setting_function)
 
+    pass
+
+class ListSource(BoxLayout):
+
+    def __init__(self, **kwargs):
+        super(ListSource, self).__init__(**kwargs)
     pass
 
 class MyCircle(GridLayout):
@@ -514,7 +523,7 @@ class ListDiscover(Screen):
             #btn = ImageButton(data)
             btn = ImageButton(type=self.menu, 
             tmdbid=data['tmdbid'], 
-            img=data['backdrop_path'],
+            img=data['backdrop_path_780'],
             size=(Window.width , Window.width / 1.777))
             self.discover_grid.add_widget(btn)
             label = discover_layout(data)
@@ -547,9 +556,10 @@ class discover_layout(BoxLayout):
 
     def __init__(self, data, **kwargs):
         super(discover_layout, self).__init__(**kwargs)
-        self.label_title = data['title']
-        self.label_overview = data['overview']
-        self.label_vote_average = str(data['vote_average'])
+        self.title = data['title']
+        self.overview = data['overview'][0:140]
+        self.release_date = data['release_date']
+        self.vote_average = str(data['vote_average'])
     pass
 
 class ListParam(Screen):
