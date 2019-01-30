@@ -477,16 +477,29 @@ class ListInfo(Screen):
         #sm.clear_widgets('info')
 
     def show_source(self):
-        source = ListSource()
-        self.add_widget(source)
-        #self.synopsis.bind(size=self.setting_function)
+        #source = ListSource()
+        #self.add_widget(source)
+        sm.transition.direction = 'left'
+
+        sm.add_widget(ListSource(name = "source"))
+        #sm.remove_widget('info')
+        sm.current = 'source'
 
     pass
 
-class ListSource(BoxLayout):
+class ListSource(Screen):
+
+    grid_id = ObjectProperty(None)
 
     def __init__(self, **kwargs):
         super(ListSource, self).__init__(**kwargs)
+
+    def onChange(self, text):
+        #sm.clear_widgets(screens=[sm.get_screen('discover')])
+        sm.clear_widgets(screens=[self])
+        sm.transition.direction = 'left'
+        #sm.remove_widget('info')
+        sm.current = 'info'
     pass
 
 class MyCircle(GridLayout):

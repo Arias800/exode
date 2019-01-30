@@ -385,10 +385,10 @@
 
 				canvas: 
 					Color: 
-						rgb: [.5, .5, 136]
+						rgba: 0,128,222,0.5
 					Rectangle: 
 						pos: self.pos 
-						size: self.size
+						size: self.size	
 
 <ImageButton>:
 	#id: box_share2
@@ -512,7 +512,7 @@
 					canvas.before:
 
 						Color:
-							rgba: 0,0,0,0.5
+							rgba: 0,128,222,0.5
 						Rectangle:
 							pos: self.pos
 							size: self.size
@@ -644,6 +644,13 @@
 				#row_force_default: True
 				#row_default_width: .50
 
+				canvas: 
+					Color: 
+						rgba: 0,128,222,0.5
+					Rectangle: 
+						pos: self.pos 
+						size: self.size	
+
 <discover_layout>
 
 	#label_title:label_title
@@ -701,35 +708,64 @@
 			pos_hint: {'x': .05, 'y': .1}
 
 <ListSource>
+	grid_id:grid_id
 
 	BoxLayout:
-		# cols:2
 		orientation: "vertical"
-		#pos_hint: {"x":1,"top":1}
-		# padding: 5
-		# spacing: 5
-		size_hint_y: None
-		height: dp(300)
-		# padding: 5
-		# spacing: 5
-		pos_hint: {'x': 1, 'y': .55}
 
-		spacing: dp(4)
-		padding: dp(20), dp(4)
-		
-		canvas: 
-			Color: 
-				rgba: 0,0,0,0.5
-			Rectangle: 
-				pos: self.pos 
-				size: self.size	
 
-		Label:
-			text: "Message"
+		BoxLayout:
+			#id: box_share2
 
-		Button:
-			size_hint: 1, 0.2
-			#pos_hint: {'x': .05, 'y': .1}
-			text:"Dismiss"
-			on_release: my_popup.dismiss()
+			orientation: "horizontal"
+			pos_hint: {"x":0,"top":1}
+			size_hint: 1,None
+			padding: 5
+			spacing: 5
+			height: 50
+
+			canvas.before:
+
+				Color:
+					rgba: 0,0,0,0.5
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
+			Button:
+				size_hint: None, None 
+				size: 32, 32
+				background_normal:'img/back.png'
+				on_press:
+					root.onChange(self.text)		
+
+
+		ScrollView:
+			id: scroll_id
+			size: self.size
+			do_scroll_y: False
+			do_scroll_x: False
+			bar_width: '8dp'
+
+			GridLayout:
+				# cols:2
+				id:grid_id
+				orientation: "vertical"
+				#pos_hint: {"x":1,"top":1}
+				#size_hint: None,None
+				# padding: 5
+				# spacing: 5
+				size_hint_y: None
+				height: self.parent.height
+				cols: 1
+				#spacing: 5
+				spacing: dp(4)
+				padding: dp(4), dp(4)
+
+				canvas: 
+					Color: 
+						rgba: 0,128,222,0.5
+					Rectangle: 
+						pos: self.pos 
+						size: self.size	
 
