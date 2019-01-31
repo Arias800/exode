@@ -1,3 +1,4 @@
 /*.idea
 /*.env
 tmdb.pyc
+.vscode/settings.json

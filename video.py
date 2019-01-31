@@ -494,6 +494,8 @@ class ListSource(Screen):
     def __init__(self, **kwargs):
         super(ListSource, self).__init__(**kwargs)
 
+
+
     def onChange(self, text):
         #sm.clear_widgets(screens=[sm.get_screen('discover')])
         sm.clear_widgets(screens=[self])
@@ -629,4 +631,15 @@ class Video(App):
 
 if __name__ in ('__main__', '__android__'):
     Window.clearcolor = (0,0,0,0)
-    Video().run()
+
+
+    from plugin.disney import disney
+
+    _plugin = disney() 
+
+    print 'param name' , _plugin.getParams()
+
+
+    #print 'nameee', vars(_plugin)
+
+    #Video().run()
