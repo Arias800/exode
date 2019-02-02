@@ -22,7 +22,6 @@ from kivy.uix.behaviors import ButtonBehavior
 from kivy.animation import Animation
 from kivy.graphics import *
 from kivy.metrics import dp, sp
-
 from tmdb import tmdb
 
 #import pysrt
@@ -342,11 +341,11 @@ class ListFolder(Screen):
                 #size = (width, height)
                 #aspect ratio 2/3 = 0.666
 
-                btn = ImageButton(type=self.type, 
-                tmdbid=data['tmdbid'], 
+                btn = ImageButton(type=self.type,
+                tmdbid=data['tmdbid'],
                 img=data['poster_path'],
                 size=(Window.width / 2 , (Window.width / 2) / 0.666 ))
-                
+
                 #btn = Button(text=data['name'], size_hint=(None, None), size=(220,300), background_normal='image.jpg', subtext=data['name'])
                 self.grid.add_widget(btn)
             #change(self,text)
@@ -373,7 +372,11 @@ class ListFolder(Screen):
             json = _jsonload(self.type, menu,NextPage=self.pageNumber)
             for data in json:
                 #btn = AsyncImage(subtext=data['name'], source="https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/eye-24-256.png", size_hint=(None, None), size=(160, 160))
-                btn = ImageButton(type=self.type, tmdbid=data['tmdbid'], img=data['poster_path'])
+                btn = ImageButton(type=self.type,
+                tmdbid=data['tmdbid'],
+                img=data['poster_path'],
+                size=(Window.width / 2 , (Window.width / 2) / 0.666 ))
+
                 #btn = Button(text=data['name'], size_hint=(None, None), size=(220,300), background_normal='image.jpg', subtext=data['name'])
                 self.grid.add_widget(btn)
             #change(self,text)
@@ -494,8 +497,6 @@ class ListSource(Screen):
     def __init__(self, **kwargs):
         super(ListSource, self).__init__(**kwargs)
 
-
-
     def onChange(self, text):
         #sm.clear_widgets(screens=[sm.get_screen('discover')])
         sm.clear_widgets(screens=[self])
@@ -514,7 +515,7 @@ class MyCircle(GridLayout):
         #self.size_hint = (None, None)
         with self.canvas:
             #pts = [self.center_x, self.center_y, min(50, 50) / 2, 0, num]
-            pts = [(Window.width/1.17), (Window.height/2.45), min(80, 80) / 2, 0, num] 
+            pts = [(Window.width/1.17), (Window.height/2.45), min(80, 80) / 2, 0, num]
             self.line = Line(circle=pts, width=5)
 
 class ListDiscover(Screen):
@@ -536,8 +537,8 @@ class ListDiscover(Screen):
         json = tmdb().getDiscover(kwargs['menu'])
         for data in json:
             #btn = ImageButton(data)
-            btn = ImageButton(type=self.menu, 
-            tmdbid=data['tmdbid'], 
+            btn = ImageButton(type=self.menu,
+            tmdbid=data['tmdbid'],
             img=data['backdrop_path_780'],
             size=(Window.width , Window.width / 1.777))
             self.discover_grid.add_widget(btn)
@@ -632,13 +633,11 @@ class Video(App):
 if __name__ in ('__main__', '__android__'):
     Window.clearcolor = (0,0,0,0)
 
-
     from plugin.disney import disney
 
-    _plugin = disney() 
+    _plugin = disney()
 
     print 'param name' , _plugin.getParams()
-
 
     #print 'nameee', vars(_plugin)
 
