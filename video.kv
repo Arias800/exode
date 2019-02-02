@@ -415,10 +415,8 @@
 
 	cicle_l : cicle_l
 
-
 	BoxLayout:
 		orientation: "vertical"
-
 
 		BoxLayout:
 			#id: box_share2
@@ -451,15 +449,13 @@
 				width:150
 				on_press: root.show_source()
 
-			Button:
-
-				text: "Synopsis"
-				size_hint: None,1
-				width: 140
-				on_press:root.show_synopsis()
+			#Button:
+			#
+			#	text: "Synopsis"
+			#	size_hint: None,1
+			#	width: 140
+			#	on_press:root.show_synopsis()
 		
-
-
 		ScrollView:
 			id: scroll_id
 			size: self.size
@@ -481,7 +477,6 @@
 				spacing: dp(4)
 				padding: dp(4), dp(4)
 
-
 				FloatLayout:
 
 					AsyncImage:
@@ -490,7 +485,6 @@
 						allow_stretch:False
 						keep_ratio:True
 						size: self.texture_size
-				
 				
 				FloatLayout:
 
@@ -516,7 +510,6 @@
 						Rectangle:
 							pos: self.pos
 							size: self.size
-
 
 					Label:
 						text: root.title
@@ -713,7 +706,6 @@
 	BoxLayout:
 		orientation: "vertical"
 
-
 		BoxLayout:
 			#id: box_share2
 
@@ -738,7 +730,6 @@
 				background_normal:'img/back.png'
 				on_press:
 					root.onChange(self.text)		
-
 
 		ScrollView:
 			id: scroll_id
@@ -768,4 +759,3 @@
 					Rectangle: 
 						pos: self.pos 
 						size: self.size	
-
