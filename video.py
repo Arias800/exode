@@ -633,11 +633,15 @@ class Video(App):
 if __name__ in ('__main__', '__android__'):
     Window.clearcolor = (0,0,0,0)
 
-    from plugin.disney import disney
+    from iplugin import iplugin
 
-    _plugin = disney()
+    _plugin = iplugin()
 
-    print 'param name' , _plugin.getParams()
+    print 'param name' , _plugin.getFolder()
+
+    print 'list' , _plugin.getList()
+
+    #print 'Name' , _plugin.getPluginName()
 
     #print 'nameee', vars(_plugin)
 
