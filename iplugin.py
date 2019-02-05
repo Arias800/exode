@@ -3,17 +3,30 @@
 import os, sys
 import json
 
-
-class iplugin(object):
+class plugin(object):
 
     def __init__(self):
 
-        self.__list = []
-        self.__Plugin = ''
-        self.__Thumb = ''
-        self.__Json = {}
-        self.__Source = []
+        self.__FullJson = []
 
+    #valid le json evite les erreurs
+    def is_valid(self, json):
+
+        if not json:
+            return False
+
+        if json.get('plugin') is None:
+            return False
+        if json.get('thumb') is None:
+            return False
+        for e in json.get('source'):
+            if e.get('title') is None:
+                return False
+            if e.get('url') is None:
+                return False
+            if e.get('qual') is None:
+                return False
+        return True
 
     def getFolder(self):
 
@@ -34,11 +47,26 @@ class iplugin(object):
 
         #json ou list
             if self.is_valid(plugin.getJson()):
-                return plugin.getJson()
-            elif self.is_valid(plugin.getList()): 
-                return plugin.getList()
+                self.__FullJson.append(plugin.getJson())
+            elif self.is_valid(plugin.getList()):
+                self.__FullJson.append(plugin.getList())
             else:
                 print "erreur Json"
+
+        print self.__FullJson
+
+        return self.__FullJson
+
+
+class iplugin(object):
+
+    def __init__(self):
+
+        self.__list = []
+        self.__Plugin = ''
+        self.__Thumb = ''
+        self.__Json = {}
+        self.__Source = []
             
 
 # {
@@ -50,37 +78,12 @@ class iplugin(object):
 #     }
 # }
 
-    def getTmdbID(self):
-        return self.__Tmdbid
-
-    def setTmdbID(self, tmdbid):
-        self.__Tmdbid = tmdbid
-
-#valid le json evite les erreurs
-    def is_valid(self, json):
-
-        if not json:
-            return False
-
-        if json.get('plugin') is None:
-            return False
-        if json.get('thumb') is None:
-            return False
-        for e in json.get('source'):
-            if e.get('title') is None:
-                return False
-            if e.get('url') is None:
-                return False
-            if e.get('qual') is None:
-                return False
-        return True
-
 #nom du plugin
     def getPlugin(self):
         return self.__Plugin
 
     def setPlugin(self, Plugin):
-        self.__PluginName = Plugin
+        self.__Plugin = Plugin
 
 #image plugin
     def getThumb(self):

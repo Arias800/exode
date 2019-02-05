@@ -633,9 +633,9 @@ class Video(App):
 if __name__ in ('__main__', '__android__'):
     Window.clearcolor = (0,0,0,0)
 
-    from iplugin import iplugin
+    from iplugin import plugin
 
-    _plugin = iplugin()
+    _plugin = plugin()
 
     print 'param name' , _plugin.getFolder()
 

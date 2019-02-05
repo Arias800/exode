@@ -4,19 +4,20 @@ import re
 import base64
 
 from iplugin import iplugin
-
 ##class nom de fichier
-class disney(iplugin):
+class kaydo(iplugin):
 
     def __init__(self, **kwargs):
         #Kwargs get_tmdbid, get_title
         iplugin.__init__(self)
-        print "DIsneyyyyyy"
+
+        print "Kaydo"
+
         print kwargs['get_title']
 
         json = { 
-            "plugin" : "disney",
-            "thumb" : "http://disney",
+            "plugin" : "kaydo",
+            "thumb" : "http://kaydo",
         "source" :[{
             "title" : "Avatar",
             "url" : "http://",
@@ -32,8 +33,8 @@ class disney(iplugin):
         #ou
 
         
-        self.setPlugin("Disney")
-        self.setThumb("http://disney")
+        self.setPlugin("kaydo")
+        self.setThumb("http://kaydo")
         self.setSource("title","http", "1080")
         self.setSource("avatar","http", "1080")
 
