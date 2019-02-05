@@ -53,9 +53,7 @@ class plugin(object):
             else:
                 print "erreur Json"
 
-        print self.__FullJson
-
-        return self.__FullJson
+        return json.dumps(self.__FullJson)
 
 
 class iplugin(object):
@@ -101,9 +99,9 @@ class iplugin(object):
 
     def getList(self):
         json = {}
-        json['plugin'] =  self.getPlugin()
-        json['thumb'] = self.getThumb()
-        json['source'] =  self.getSource()
+        json["plugin"] =  self.getPlugin()
+        json["thumb"] = self.getThumb()
+        json["source"] =  self.getSource()
         return json
     
 #full json
