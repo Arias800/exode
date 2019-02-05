@@ -24,6 +24,8 @@ from kivy.graphics import *
 from kivy.metrics import dp, sp
 from tmdb import tmdb
 
+import json
+
 #import pysrt
 
 sm = ScreenManager()
@@ -480,12 +482,12 @@ class ListInfo(Screen):
         #sm.clear_widgets('info')
 
     def show_source(self):
-        #source = ListSource()
-        #self.add_widget(source)
+
+        #self.ids.spinner_source.values = ['A', 'B'] 
+
         sm.transition.direction = 'left'
 
         sm.add_widget(ListSource(name = "source"))
-        #sm.remove_widget('info')
         sm.current = 'source'
 
     pass
@@ -496,6 +498,15 @@ class ListSource(Screen):
 
     def __init__(self, **kwargs):
         super(ListSource, self).__init__(**kwargs)
+
+        from iplugin import plugin
+
+        _plugin = plugin().getFolder()
+
+        for main in json.loads(_plugin):
+
+            for sub in main.get('source'):
+                self.ids.grid_id.add_widget(Button(text=sub['title'], font_size=14))
 
     def onChange(self, text):
         #sm.clear_widgets(screens=[sm.get_screen('discover')])
@@ -632,17 +643,10 @@ class Video(App):
 
 if __name__ in ('__main__', '__android__'):
     Window.clearcolor = (0,0,0,0)
-
-    from iplugin import plugin
-
-    _plugin = plugin()
-
-    print 'param name' , _plugin.getFolder()
-
     #print 'list' , _plugin.getList()
 
     #print 'Name' , _plugin.getPluginName()
 
     #print 'nameee', vars(_plugin)
 
-    #Video().run()
+    Video().run()

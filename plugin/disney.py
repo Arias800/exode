@@ -11,8 +11,8 @@ class disney(iplugin):
     def __init__(self, **kwargs):
         #Kwargs get_tmdbid, get_title
         iplugin.__init__(self)
-        print "DIsneyyyyyy"
-        print kwargs['get_title']
+        #print "DIsneyyyyyy"
+        #print kwargs['get_title']
 
         json = { 
             "plugin" : "disney",
@@ -34,6 +34,6 @@ class disney(iplugin):
         
         self.setPlugin("Disney")
         self.setThumb("http://disney")
-        self.setSource("title","http", "1080")
-        self.setSource("avatar","http", "1080")
+        self.setSource("1001 pattes","https://disneyhdsource.ml/mp4/1001_pattes.mp4", "1080")
+        self.setSource("Aladdin","https://disneyhdsource.ml/mp4/aladdin.mp4", "1080")
 

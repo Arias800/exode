@@ -11,9 +11,9 @@ class kaydo(iplugin):
         #Kwargs get_tmdbid, get_title
         iplugin.__init__(self)
 
-        print "Kaydo"
+        #print "Kaydo"
 
-        print kwargs['get_title']
+        #print kwargs['get_title']
 
         json = { 
             "plugin" : "kaydo",
@@ -35,6 +35,6 @@ class kaydo(iplugin):
         
         self.setPlugin("kaydo")
         self.setThumb("http://kaydo")
-        self.setSource("title","http", "1080")
-        self.setSource("avatar","http", "1080")
+        self.setSource("Avengers","https://disneyhdsource.ml/mp4/avengers.mp4", "1080")
+        self.setSource("Deadpool","https://disneyhdsource.ml/mp4/deadpool.mp4", "1080")
 
