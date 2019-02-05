@@ -639,7 +639,7 @@ if __name__ in ('__main__', '__android__'):
 
     print 'param name' , _plugin.getFolder()
 
-    print 'list' , _plugin.getList()
+    #print 'list' , _plugin.getList()
 
     #print 'Name' , _plugin.getPluginName()
 

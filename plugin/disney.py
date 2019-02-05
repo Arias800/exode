@@ -26,15 +26,13 @@ class disney(iplugin):
             "qual" : "HD"
             }]
         }
+        #self.setJson(json)
 
-        print "paseeeeeeeeeeeeee"
+        #ou
 
-        self.__json = json
-
-        self.setList(json)
-        self.setPluginName("Disney")
         
-    #obligatoire
-    def getJson(self):
-        return self.__json
+        self.setPlugin("Disney")
+        self.setThumb("http://")
+        self.setSource("title","http", "1080")
+        self.setSource("avatar","http", "1080")
 

@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 
 import os, sys
+import json
 
 
 class iplugin(object):
@@ -8,7 +9,10 @@ class iplugin(object):
     def __init__(self):
 
         self.__list = []
-        self.__PluginName = ''
+        self.__Plugin = ''
+        self.__Thumb = ''
+        self.__Json = {}
+        self.__Source = []
 
 
     def getFolder(self):
@@ -27,10 +31,14 @@ class iplugin(object):
             plugin = __import__('plugin.%s' % name, fromlist=[name])
             _class = getattr(plugin, name)
             plugin = _class(get_tmdbid="testt", get_title="avatar")
-            #self.setList(plugin.getJson())
 
-            print plugin.getPluginName()
-            print "listttttttttt", plugin.getList()
+        #json ou list
+            if self.is_valid(plugin.getJson()):
+                return plugin.getJson()
+            elif self.is_valid(plugin.getList()): 
+                return plugin.getList()
+            else:
+                print "erreur Json"
             
 
 # {
@@ -48,51 +56,62 @@ class iplugin(object):
     def setTmdbID(self, tmdbid):
         self.__Tmdbid = tmdbid
 
+#valid le json evite les erreurs
+    def is_valid(self, json):
 
-    def is_valid(json):
+        if not json:
+            return False
 
         if json.get('plugin') is None:
             return False
         if json.get('thumb') is None:
             return False
-        if json.get('source').get('title') is None:
-            return False
-        if json.get('source').get('url') is None:
-            return False
-        if json.get('source').get('qual') is None:
-            return False
-
+        for e in json.get('source'):
+            if e.get('title') is None:
+                return False
+            if e.get('url') is None:
+                return False
+            if e.get('qual') is None:
+                return False
         return True
 
-    def getPluginName(self):
-        return self.__PluginName
+#nom du plugin
+    def getPlugin(self):
+        return self.__Plugin
 
-    def setPluginName(self, PluginName):
+    def setPlugin(self, Plugin):
+        self.__PluginName = Plugin
 
-        print "plugin name", PluginName
-        self.__PluginName = PluginName
+#image plugin
+    def getThumb(self):
+        return self.__Thumb
+
+    def setThumb(self, Thumb):
+        self.__Thumb = Thumb
     
-    def getTitle(self):
-        return "titleeeeeee"
+#source plugin
+    def getSource(self):
+        return self.__Source
 
-    def addParams(self, Key, Value):
-        test = self.__Params[Key] = Value
-        self.__list.append(test)
+    def setSource(self, Title, Url, Qual):
+        self.__Source.append({"title": Title, "url": Url, "qual": Qual})
 
-    def getParams(self):
-        return self.__Params
-    
     def getList(self):
-        print "list", self.__list
-        return self.__list
+        json = {}
+        json['plugin'] =  self.getPlugin()
+        json['thumb'] = self.getThumb()
+        json['source'] =  self.getSource()
+        return json
+    
+#full json
+    def getJson(self):
+        return self.__Json
 
-#envoie un json full
-    def setList(self, list):
-        self.__list.append(list)
+    def setJson(self, json):
+        self.__Json = json
 
-    def serial(self):
-        import json
-        print json.dumps(self.getParams())
+    # def serial(self):
+    #     print json.dumps(self.getParams())
 
 
 #La fonction json.dumps() permet de transformer mon dictionnaire (type dict) en une chaine de caractères (type str):
