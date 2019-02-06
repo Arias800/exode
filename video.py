@@ -4,6 +4,7 @@ import kivy
 kivy.require("1.9.1")
 
 from kivy.app import App
+from functools import partial
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
@@ -506,7 +507,8 @@ class ListSource(Screen):
         for main in json.loads(_plugin):
 
             for sub in main.get('source'):
-                self.ids.grid_id.add_widget(Button(text=sub['title'], font_size=14))
+                text = ("%s - %s [%s]") % (main['plugin'], sub['title'] ,sub['qual'])
+                self.ids.grid_id.add_widget(Button(text=text, font_size=14, on_press=partial(self.events, url=sub['url'])))
 
     def onChange(self, text):
         #sm.clear_widgets(screens=[sm.get_screen('discover')])
@@ -515,6 +517,18 @@ class ListSource(Screen):
         #sm.remove_widget('info')
         sm.current = 'info'
     pass
+
+    def press(self, instance_banner):
+        if isinstance(instance_banner, str):
+            print(instance_banner)
+        else:
+            print(instance_banner.id)
+            print(instance_banner.text)
+
+    def events(self, *args, **kwargs):
+        '''Обработка событий программы.'''
+        print args
+        print kwargs
 
 class MyCircle(GridLayout):
     def __init__(self, **kwargs):
