@@ -35,6 +35,6 @@ class kaydo(iplugin):
         
         self.setPlugin("kaydo")
         self.setThumb("http://kaydo")
-        self.setSource("Avengers","https://disneyhdsource.ml/mp4/avengers.mp4", "1080")
-        self.setSource("Deadpool","https://disneyhdsource.ml/mp4/deadpool.mp4", "1080")
+        self.setSource("Avengers","http://disneyhdsource.ml/mp4/avengers.mp4", "1080")
+        self.setSource("Deadpool","http://disneyhdsource.ml/mp4/deadpool.mp4", "1080")
 

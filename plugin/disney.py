@@ -34,6 +34,6 @@ class disney(iplugin):
         
         self.setPlugin("Disney")
         self.setThumb("http://disney")
-        self.setSource("1001 pattes","https://disneyhdsource.ml/mp4/1001_pattes.mp4", "1080")
-        self.setSource("Aladdin","https://disneyhdsource.ml/mp4/aladdin.mp4", "1080")
+        self.setSource("1001 pattes","http://disneyhdsource.ml/mp4/1001_pattes.mp4", "1080")
+        self.setSource("Aladdin","http://disneyhdsource.ml/mp4/aladdin.mp4", "1080")
 

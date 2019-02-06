@@ -508,7 +508,7 @@ class ListSource(Screen):
 
             for sub in main.get('source'):
                 text = ("%s - %s [%s]") % (main['plugin'], sub['title'] ,sub['qual'])
-                self.ids.grid_id.add_widget(Button(text=text, font_size=14, on_press=partial(self.events, url=sub['url'])))
+                self.ids.grid_id.add_widget(Button(text=text, font_size=14, on_press=partial(self.plays, url=sub['url'])))
 
     def onChange(self, text):
         #sm.clear_widgets(screens=[sm.get_screen('discover')])
@@ -518,17 +518,13 @@ class ListSource(Screen):
         sm.current = 'info'
     pass
 
-    def press(self, instance_banner):
-        if isinstance(instance_banner, str):
-            print(instance_banner)
-        else:
-            print(instance_banner.id)
-            print(instance_banner.text)
+    def plays(self, *args, **kwargs):
+        print kwargs['url']
+        #VideoAlan().calistir(kwargs['url'],'Nop')
 
-    def events(self, *args, **kwargs):
-        '''Обработка событий программы.'''
-        print args
-        print kwargs
+        #root.parent.get_screen("main").calistir(filechooser.path,filechooser.selection)
+        sm.get_screen("main").calistir(kwargs['url'],kwargs['url'])
+        sm.current = "main"
 
 class MyCircle(GridLayout):
     def __init__(self, **kwargs):
