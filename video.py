@@ -289,7 +289,10 @@ def onChange(self, text):
         sm.add_widget(ListDiscover(name = "discover", menu=text))
         sm.current = 'discover'
     if text == "player":
-        sm.add_widget(VideoAlan(name = "main"))
+        # try:
+        #     sm.clear_widgets(screens=[sm.get_screen('main')])
+        # except:pass
+        #sm.add_widget(VideoAlan(name = "main"))
         sm.current = 'main'
     if text == "pref":
         sm.add_widget(ListParam(name = "param"))
@@ -552,7 +555,7 @@ class ListSource(Screen):
         #VideoAlan().calistir(kwargs['url'],'Nop')
 
         #root.parent.get_screen("main").calistir(filechooser.path,filechooser.selection)
-        sm.add_widget(VideoAlan(name = "main"))
+        #sm.add_widget(VideoAlan(name = "main"))
         sm.get_screen("main").calistir(kwargs['url'],kwargs['url'])
         sm.current = "main"
 
@@ -670,7 +673,7 @@ class Video(App):
         Config.write()
 
 
-        #sm.add_widget(VideoAlan(name = "main"))
+        sm.add_widget(VideoAlan(name = "main"))
         sm.add_widget(OpenFolder(name = "files"))
         #list de film
         #sm.add_widget(ListFolder(name = "list", type="movie", menu='popular'))

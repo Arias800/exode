@@ -18,6 +18,7 @@
 #  MA 02110-1301, USA.
 #
 #
+
 <VideoAlan>:
 
 	video: _video
@@ -422,6 +423,9 @@
 	keep_ratio: False
 	allow_stretch: True
 
+<SpinnerOption>:
+	background_color: (0,0,0,0.8)
+
 #info
 <ListInfo>:
 
@@ -610,21 +614,24 @@
 			Spinner:
 				id: spinner_1
 				text: 'Menu' 
+				font_size:'18sp'
 				values: root.pickType 
 				#text: "First thing"
 				#values: ["Films", "Series", "Autres"]
-				#background_color: none
+				background_color: (0, 0, 0, 1)
 				#background_normal: 'img/menu.png'
+				size_hint: None, 1
 				#color: color_font
 				on_text: root.onChange(self.text)
-				#option_cls: root.onChange(self.text)
-				size_hint: None, 1
+				#option_cls: Factory.get("MySpinnerOption")
 		
 			Spinner:
 				id: spinner_2
 				text: 'sous_menu' 
+				font_size:'18sp'
 				values: root.sousType
-				width:180
+				width:150
+				background_color: (0, 0, 0, 1)
 				#text: "First thing"
 				#values: ["Films", "Series", "Autres"]
 				#background_color: none
