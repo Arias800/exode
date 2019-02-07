@@ -172,6 +172,27 @@
 					size: self.size
 
 			Button:
+				size_hint: None, None 
+				size: 32, 32
+				background_normal:'img/back.png'
+				on_press:
+					root.onChange(self.text)
+
+			Spinner:
+				id: spinner_1
+				text: 'Menu' 
+				values: root.pickType 
+				#text: "First thing"
+				#values: ["Films", "Series", "Autres"]
+				#background_color: none
+				#background_down: 'atlas://data/images/defaulttheme/spinner'
+				#color: color_font
+				on_text: root.onChange(self.text)
+				#option_cls: root.onChange(self.text)
+				size_hint: None, 1
+		
+
+			Button:
 				text: "VIDEO"
 				size_hint: None,1
 				width: 60
@@ -593,7 +614,7 @@
 				#text: "First thing"
 				#values: ["Films", "Series", "Autres"]
 				#background_color: none
-				#background_down: 'atlas://data/images/defaulttheme/spinner'
+				#background_normal: 'img/menu.png'
 				#color: color_font
 				on_text: root.onChange(self.text)
 				#option_cls: root.onChange(self.text)

@@ -31,6 +31,34 @@ import json
 
 sm = ScreenManager()
 
+sous_menu = {
+    "movie": {
+    "Populaires": "popular",
+    "Mieux notes": "top_rated",
+    "En salles": "now_playing",
+    "Recemment" : "latest",
+    "A venir" : "upcoming" },
+    "tv": {
+    "Populaires": "popular",
+    "Mieux notes" : "top_rated",
+    "Diffusees 7 jours" : "on_the_air",
+    "Recemment" : "latest",
+    "Diffusees ce jour": "airing_today" },
+    "player": {
+    "Nop": "Nop" },
+    "pref": {
+    "Nop": "Nop" }
+}
+
+menu = {
+    "Films": 'movie',
+    "Series tv": 'tv',
+    "Lecteur": 'player',
+    'Parametre': 'pref'}
+
+#pk ça utiliser les nom anglais pour apelle au function
+#pouvoir modifier quand y a auras un fichier lang.
+
 class VideoAlan(Screen):
 
     fullscreen = BooleanProperty(False)
@@ -38,6 +66,8 @@ class VideoAlan(Screen):
     Config.set('kivy', 'exit_on_escape', '0')
 
     def __init__(self,**kwargs):
+
+        self.pickType = menu.viewkeys()
 
         Window.bind(on_dropfile=self.calistir)
         super(VideoAlan,self).__init__(**kwargs)
@@ -243,32 +273,29 @@ class VideoAlan(Screen):
     def ses_gizle(self,dt):
         self.ses.pos_hint = {"left":2,"top":2}
 
+    def onChange(self, label):
+        #sm.clear_widgets(screens=[sm.get_screen('main')])
+        #sm.clear_widgets(screens=[self])
+        sm.current = sm.previous()
+
 class OpenFolder(Screen):
     pass
 
-sous_menu = {
-    "movie": {
-    "Populaires": "popular",
-    "Mieux notes": "top_rated",
-    "En salles": "now_playing",
-    "Recemment" : "latest",
-    "A venir" : "upcoming" },
-    "tv": {
-    "Populaires": "popular",
-    "Mieux notes" : "top_rated",
-    "Diffusees 7 jours" : "on_the_air",
-    "Recemment" : "latest",
-    "Diffusees ce jour": "airing_today" }
-}
 
-menu = {
-    "Films": 'movie',
-    "Series tv": 'tv',
-    "test2": 'Autre',
-    'Parametre': 'pref'}
+def onChange(self, text):
+    print 'onchange',  text
+    if text == "movie" or text =="tv":
+        sm.clear_widgets(screens=[self])
+        sm.add_widget(ListDiscover(name = "discover", menu=text))
+        sm.current = 'discover'
+    if text == "player":
+        sm.add_widget(VideoAlan(name = "main"))
+        sm.current = 'main'
+    if text == "pref":
+        sm.add_widget(ListParam(name = "param"))
+        sm.current = 'param'
 
-#pk ça utiliser les nom anglais pour apelle au function
-#pouvoir modifier quand y a auras un fichier lang.
+
 
 class ListFolder(Screen):
     #a = StringProperty('a')
@@ -433,6 +460,10 @@ class ListInfo(Screen):
         #json = _jsonload(self)
         json = tmdb().getByid(kwargs['type'], kwargs['tmdbid'])
 
+
+        print sm.previous()
+        print sm
+
         #introduit le dict dans self
         #a revoir c'est moche
         for value in json[0]:
@@ -476,11 +507,9 @@ class ListInfo(Screen):
         self.rect.size = self.size
 
     def onChange(self, label):
-        #self.box_share2.clear_widgets()
         sm.clear_widgets(screens=[sm.get_screen('info')])
-        #sm.remove_widget('info')
-        sm.current = 'list'
-        #sm.clear_widgets('info')
+        #sm.current = 'list'
+        sm.current = sm.previous()
 
     def show_source(self):
 
@@ -523,6 +552,7 @@ class ListSource(Screen):
         #VideoAlan().calistir(kwargs['url'],'Nop')
 
         #root.parent.get_screen("main").calistir(filechooser.path,filechooser.selection)
+        sm.add_widget(VideoAlan(name = "main"))
         sm.get_screen("main").calistir(kwargs['url'],kwargs['url'])
         sm.current = "main"
 
@@ -570,13 +600,13 @@ class ListDiscover(Screen):
 
     def onChange(self, text):
 
-        sm.clear_widgets(screens=[self])
-        #sm.clear_widgets(screens=[sm.get_screen('list')])
-        discover = menu.get(text)
+        #sm.clear_widgets(screens=[self])
 
-        sm.add_widget(ListDiscover(name ="discover", menu=discover))
-        #sm.remove_widget('info')
-        sm.current = "discover"
+        discover = menu.get(text)
+        onChange(self, discover)
+
+        #sm.add_widget(ListDiscover(name ="discover", menu=discover))
+        #sm.current = "discover"
 
     def on_sub_Change(self, text=None):
         menu = sous_menu.get(self.menu).get(text)
@@ -639,15 +669,17 @@ class Video(App):
         Config.set('graphics', 'resizable', 0)
         Config.write()
 
-        sm.add_widget(VideoAlan(name = "main"))
+
+        #sm.add_widget(VideoAlan(name = "main"))
         sm.add_widget(OpenFolder(name = "files"))
         #list de film
-        sm.add_widget(ListFolder(name = "list", type="movie", menu='popular'))
+        #sm.add_widget(ListFolder(name = "list", type="movie", menu='popular'))
         #decouvrir par default
-        #sm.add_widget(ListDiscover(name = "movie", menu='movie'))
+        sm.add_widget(ListDiscover(name = "discover", menu='movie'))
         #paramettre
-        sm.add_widget(ListParam(name = "param"))
+        #sm.add_widget(ListParam(name = "param"))
         #sm.add_widget(ListInfo(name = "info"))
+        sm.current = 'discover'
 
         return sm
 
