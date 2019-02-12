@@ -678,7 +678,8 @@ class MainScreen(GridLayout):
     def __init__(self, **kwargs):
         print menu.viewkeys()
         self.pickType = menu.viewkeys()
-        super(MainScreen, self).__init__(**kwargs)
+        super(MainScreen, self).__init__(**kwargs)        
+
 
     def onChange(self, text):
         print 'onchange',  text
@@ -701,6 +702,7 @@ class MainScreen(GridLayout):
             sm.add_widget(ListParam(name = "param"))
             sm.current = 'param'
 
+
 class Video(App):
 
     def build(self):
@@ -710,7 +712,6 @@ class Video(App):
         Config.set('graphics', 'height', '800')
         Config.set('graphics', 'resizable', 0)
         Config.write()
-
 
         #sm.add_widget(VideoAlan(name = "main"))
         #sm.add_widget(OpenFolder(name = "files"))

@@ -1,69 +1,63 @@
-sous_menu = {
-    "movie": {
-    "Populaires": "popular",
-    "Mieux notes": "top_rated",
-    "En salles": "now_playing",
-    "Recemment" : "latest",
-    "A venir" : "upcoming" },
-    "tv": {
-    "Populaires": "popular",
-    "Mieux notes" : "top_rated",
-    "Diffusees 7 jours" : "on_the_air",
-    "Recemment" : "latest",
-    "Diffusees ce jour": "airing_today" }
-}
+from kivy.app import App
+from kivy.lang import Builder
 
-menu = {
-    "Films": 'movie',
-    "Series tv": 'tvshow',
-    "test2": 'Autre', 
-    'Parametre': 'pref'}
+from kivymd.navigationdrawer import NavigationDrawerIconButton
+from kivymd.theming import ThemeManager
+from kivymd.toast import toast
+
+main_kv = """
+#:import Toolbar kivymd.toolbar.Toolbar
+#:import MDNavigationDrawer kivymd.navigationdrawer.MDNavigationDrawer
+#:import NavigationDrawerSubheader kivymd.navigationdrawer.NavigationDrawerSubheader
 
 
-#print menu.viewvalues()
-#print menu.viewkeys()
+<ContentNavigationDrawer@MDNavigationDrawer>:
+    drawer_logo: 'img/kivymd_logo.png'
 
-#print menu.get('Films')
-
-#print sous_menu.get('tv').viewkeys()
-
-#print sous_menu.get('tv').get('Populaires')
-
-tube = {
-  "adult": False,
-  "backdrop_path": "/aHcth2AXzZSjhX7JYh7ie73YVNc.jpg",
-  "belongs_to_collection": {
-    "id": 87096,
-    "name": "Avatar - Saga",
-    "poster_path": "/nslJVsO58Etqkk17oXMuVK4gNOF.jpg",
-    "backdrop_path": "/9s4BM48NweGFrIRE6haIul0YJ9f.jpg"
-  },
-  "budget": 237000000,
-  "genres": [
-    {
-      "id": 28,
-      "name": "Action"
-    },
-    {
-      "id": 12,
-      "name": "Aventure"
-    },
-    {
-      "id": 14,
-      "name": "Fantastique"
-    },
-    {
-      "id": 878,
-      "name": "Science-Fiction"
-    }
-  ],
-  "homepage": "http://www.avatarmovie.com/index.html",
-  "id": 19995,
-  "imdb_id": "tt0499549"}
+    NavigationDrawerSubheader:
+        text: "Menu:"
 
 
+NavigationLayout:
+    id: nav_layout
 
-for genre in tube['genres']:
-      genres = genre['name'] + ' '
+    ContentNavigationDrawer:
+        id: nav_drawer
 
-print genres
+    BoxLayout:
+        orientation: 'vertical'
+
+        Toolbar:
+            id: toolbar
+            title: 'KivyMD Kitchen Sink'
+            md_bg_color: app.theme_cls.primary_color
+            background_palette: 'Primary'
+            background_hue: '500'
+            elevation: 10
+            left_action_items:
+                [['dots-vertical', lambda x: app.root.toggle_nav_drawer()]]
+
+        Widget:
+"""
+
+class Example(App):
+    theme_cls = ThemeManager()
+    theme_cls.primary_palette = 'Blue'
+    title = "Navigation Drawer"
+    main_widget = None
+
+    def build(self):
+        self.main_widget = Builder.load_string(main_kv)
+        return self.main_widget
+
+    def callback(self, instance, value):
+        toast("Pressed item menu %d" % value)
+
+    def on_start(self):
+        for i in range(15):
+            self.main_widget.ids.nav_drawer.add_widget(
+                NavigationDrawerIconButton(
+                    icon='checkbox-blank-circle', text="Item menu %d" % i,
+                    on_release=lambda x, y=i: self.callback(x, y)))
+
+Example().run()
