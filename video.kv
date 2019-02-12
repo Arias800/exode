@@ -18,6 +18,56 @@
 #  MA 02110-1301, USA.
 #
 #
+<ToolBar@BoxLayout>:
+    size_hint_y: None
+    height: 35
+    pos_hint: {'top': 1, 'y': 0}
+    padding: 5,2,5,2
+    spacing: 5
+
+    canvas:
+        Color:
+            rgba: .7, 1, .7, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<ToolButton@Button>:
+    color: 0,0,0,1
+    align: 'center'
+
+<MainScreen>:
+    manager: manager
+    rows: 2
+    size_hint: 1, 1
+
+    ToolBar:
+
+		Spinner:
+			id: spinner_1
+			text: 'Menu' 
+			values: root.pickType 
+			#text: "First thing"
+			#values: ["Films", "Series", "Autres"]
+			#background_color: none
+			#background_down: 'atlas://data/images/defaulttheme/spinner'
+			#color: color_font
+			on_text: root.onChange(self.text)
+			#option_cls: root.onChange(self.text)
+			size_hint: None, 1
+			
+        ToolButton:
+            text: 'Screen one'
+            on_press:
+                root.manager.current = 'sone'
+
+        ToolButton:
+            text: 'Screen two'
+            on_press:
+                root.manager.current = 'stwo'
+
+    ScreenSwitcher:
+        id: manager
 
 <VideoAlan>:
 

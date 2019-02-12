@@ -98,6 +98,7 @@ class tmdb:
                 tub.update({"backdrop_path_780" : self.fanart_780+i["backdrop_path"]})
             else :
                 tub.update({"backdrop_path" : "http://gowatchit.com/assets/movie_imgs/noposter.png"})
+                tub.update({"backdrop_path_780" : "http://gowatchit.com/assets/movie_imgs/noposter.png"})
 
             if 'title' in i:
                 tub.update({"title" : i["title"]})

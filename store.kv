@@ -1,0 +1,53 @@
+#:kivy 1.10.1
+
+<ToolBar@BoxLayout>:
+    size_hint_y: None
+    height: 35
+    pos_hint: {'top': 1, 'y': 0}
+    padding: 5,2,5,2
+    spacing: 5
+
+    canvas:
+        Color:
+            rgba: .7, 1, .7, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<ToolButton@Button>:
+    color: 0,0,0,1
+    align: 'center'
+
+<ScreenOne>:
+    Label:
+        text: 'SCREEN ONE'
+        font_size:50
+
+<ScreenTwo>:
+    Label:
+        text: 'SCREEN TWO'
+        font_size:50
+
+<ScreenTest>:
+    id: test
+    Label:
+        text: 'SCREEN TEST'
+        font_size:50
+
+<MainScreen>:
+    manager: manager
+    rows: 2
+    size_hint: 1, 1
+
+    ToolBar:
+        ToolButton:
+            text: 'Screen one'
+            on_press: root.onChange()
+
+        ToolButton:
+            text: 'Screen two'
+            on_press:
+                root.manager.current = 'stwo'
+
+    ScreenSwitcher:
+        id: manager

@@ -577,6 +577,8 @@ class ListDiscover(Screen):
     def __init__(self, **kwargs):
         self.pickType = menu.viewkeys()
 
+        print "pasessssssssss"
+
         self.sousType = sous_menu.get(kwargs['menu']).viewkeys()
 
         super(ListDiscover, self).__init__(**kwargs)
@@ -662,6 +664,43 @@ def _jsonload(type, menu,NextPage):
     elif menu == "top_rated":
         return tmdb().getRated(NextPage)
 
+class ScreenSwitcher(ScreenManager):
+     #The screens can be added on the __init__ method like this or on the .kv file
+    def __init__(self, **kwargs):
+        super(ScreenSwitcher, self).__init__(**kwargs)
+        #self.add_widget(ScreenOne(name='sone'))
+        self.add_widget(ListDiscover(name = "discover", menu='movie'))
+        self.add_widget(ListFolder(name = "list", type="movie", menu='popular'))
+
+class MainScreen(GridLayout):
+    manager = ObjectProperty(None)
+    
+    def __init__(self, **kwargs):
+        print menu.viewkeys()
+        self.pickType = menu.viewkeys()
+        super(MainScreen, self).__init__(**kwargs)
+
+    def onChange(self, text):
+        print 'onchange',  text
+        change = menu.get(text)
+        print change
+        if change == "movie" or change =="tv":
+            #sm.clear_widgets(screens=[self])
+            self.manager.clear_widgets(screens=[self.manager.get_screen('discover')])
+            self.manager.add_widget(ListDiscover(name = "discover", menu=change))
+            #sm.current = 'discover'
+            self.manager.current = 'discover'
+        if change == "player":
+            # try:
+            #     sm.clear_widgets(screens=[sm.get_screen('main')])
+            # except:pass
+            #sm.add_widget(VideoAlan(name = "main"))
+            #sm.current = 'main'
+            self.manager.current = 'main'
+        if change == "pref":
+            sm.add_widget(ListParam(name = "param"))
+            sm.current = 'param'
+
 class Video(App):
 
     def build(self):
@@ -673,18 +712,19 @@ class Video(App):
         Config.write()
 
 
-        sm.add_widget(VideoAlan(name = "main"))
-        sm.add_widget(OpenFolder(name = "files"))
+        #sm.add_widget(VideoAlan(name = "main"))
+        #sm.add_widget(OpenFolder(name = "files"))
         #list de film
         #sm.add_widget(ListFolder(name = "list", type="movie", menu='popular'))
         #decouvrir par default
-        sm.add_widget(ListDiscover(name = "discover", menu='movie'))
+        #sm.add_widget(ListDiscover(name = "discover", menu='movie'))
         #paramettre
         #sm.add_widget(ListParam(name = "param"))
         #sm.add_widget(ListInfo(name = "info"))
-        sm.current = 'discover'
+        #sm.current = 'discover'
 
-        return sm
+        #return sm
+        return MainScreen()
 
 if __name__ in ('__main__', '__android__'):
     Window.clearcolor = (0,0,0,0)
