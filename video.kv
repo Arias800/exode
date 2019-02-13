@@ -18,58 +18,53 @@
 #  MA 02110-1301, USA.
 #
 #
-<ToolBar@BoxLayout>:
-    size_hint_y: None
-    height: 35
-    pos_hint: {'top': 1, 'y': 0}
-    padding: 5,2,5,2
-    spacing: 5
+#:import os os
+#:import NavigationLayout kivymd.navigationdrawer.NavigationLayout
+#:import MDNavigationDrawer kivymd.navigationdrawer.MDNavigationDrawer
+#:import NavigationLayout kivymd.navigationdrawer.NavigationLayout
+#:import NavigationDrawerDivider kivymd.navigationdrawer.NavigationDrawerDivider
+#:import NavigationDrawerToolbar kivymd.navigationdrawer.NavigationDrawerToolbar
+#:import MDSeparator kivymd.card.MDSeparator
 
-    canvas:
-        Color:
-            rgba: .16, .71, .96, 1
-        Rectangle:
-            pos: self.pos
-            size: self.size
-
-<ToolButton@Button>:
-    color: 0,0,0,1
-    align: 'center'
-	
 
 <MainScreen>:
     manager: manager
     rows: 2
     size_hint: 1, 1
+	nav_drawer: nav_drawer
 
-    ToolBar:
+    NavigationLayout:
+        id: nav_layout
+        MDNavigationDrawer:
+            id: nav_drawer
+            NavigationDrawerToolbar:
+                title: "eXode"
+            NavigationDrawerIconButton:
+                icon: 'checkbox-blank-circle'
+                text: "Films"
+                #on_release: app.root.ids.scr_mngr.current = 'default'
+				on_release:root.onChange(self.text)
+            NavigationDrawerIconButton:
+                icon: 'checkbox-blank-circle'
+                text: "Series tv"
+                #on_release: app.root.ids.scr_mngr.current = 'modify_table'
+				on_release:root.onChange(self.text)
 
-		Spinner:
-			id: spinner_1
-			text: 'Menu' 
-			values: root.pickType 
-			background_color: (.16, .71, .96, 1)
-			#text: "First thing"
-			#values: ["Films", "Series", "Autres"]
-			#background_color: none
-			#background_down: 'atlas://data/images/defaulttheme/spinner'
-			#color: color_font
-			on_text: root.onChange(self.text)
-			#option_cls: root.onChange(self.text)
-			size_hint: None, 1
-			
-        ToolButton:
-            text: 'Screen one'
-            on_press:
-                root.manager.current = 'sone'
+		BoxLayout:
+            orientation: 'vertical'
+            Toolbar:
+                id: toolbar
+                title: 'eXode'
+                md_bg_color: app.theme_cls.primary_color
+                background_palette: 'Primary'
+                background_hue: '500'
+                left_action_items: [['menu', lambda x: nav_layout.toggle_nav_drawer()]]
+                right_action_items: []
+				elevation: 10
+				#right_action_items: [['dots-vertical', lambda x: app.root.toggle_nav_drawer()]]
 
-        ToolButton:
-            text: 'Screen two'
-            on_press:
-                root.manager.current = 'stwo'
-
-    ScreenSwitcher:
-        id: manager
+			ScreenSwitcher:
+				id: manager
 
 <VideoAlan>:
 
@@ -640,9 +635,23 @@
     subtext: ''
 	label_title: ''
 
-	BoxLayout:
 
-		orientation: "vertical"
+	BoxLayout:
+		orientation: 'vertical'
+        padding: dp(10), dp(10)
+        spacing: dp(10)
+
+		Label:
+			id:discover_label
+            size_hint: None, None
+            height: dp(20)
+            width: self.texture_size[0]
+            halign: 'left'
+            color: app.theme_cls.primary_color
+            font_size: '18sp'
+            text: 
+
+        MDSeparator:
 
 		BoxLayout:
 
@@ -662,6 +671,14 @@
 				Rectangle:
 					pos: self.pos
 					size: self.size
+
+			Button:
+				text: "Populaire"
+				size_hint: None,1
+				width: 60
+				on_press:
+					root.manager.transition.direction = 'right'
+					root.manager.current = 'main'
 
 			Spinner:
 				id: spinner_1

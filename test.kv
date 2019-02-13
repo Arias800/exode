@@ -1,65 +1,62 @@
-#:kivy 1.10.0
+<NavDrawer>:
+    
+    One:
+<SidePanel>:
+    orientation: 'vertical'
+    Label:
+        size: (1, .4)
+        text: 'Name'
+    Button:
+        text: 'One'
+        on_release: app.root.current = 'hold'
+    Button:
+        text: 'Lock'
+        on_release:
+            root.lock_bike()
+    Button:
+        text: 'Three'
+        on_release: root.change_current('gen_info')
+    Button:
+        text: 'Active threads'
+        on_release: root.thread_count()
 
-<ScreenManagement>:
-    MainScreen:
-        id: main
-    HomePage:
+<MainPanel>:
+    StackLayout:
+        MenuBar:
+        AsyncImage:
+            size_hint: 1, 1
+            pos: 0, root.y
+            source: 'https://scontent.fhel1-1.fna.fbcdn.net/v/t1.0-9/18581920_10209336925155440_4663164082887279042_n.jpg?oh=ebd2dd333fdab1e4af06b594f5b4fc5e&oe=59B5CAA2'
+<MenuBar>:
+    pos_hint: {'top':1}
+    background_color: 0, 128, 128, .4
+        #Set labes and parameters
+    ActionView:
+        use_separator: True
+        spacing: 30
+        padding: (0, 0, 30, 0)
+        ActionMenu:
+            with_previous: False
+            app_icon: 'images/icons/menu_icon.png'
+            on_release:
+                app.root.ids.navdrawer.toggle_state()
+        ActionLabel:
+            text: 'Name'
+            font_size: 25
+        ActionLabel:
+            text: 'Time'
+            font_size: 25
+        ActionLabel:
+            text: 'Date'
+            font_size: 25
 
-<MainScreen>:
-    name: "main_screen"
-    GridLayout:
-        size_hint: (0.5, 0.5)
-        pos_hint: {"center_x": 0.5, "center_y": 0.6}
-        cols: 2
-        padding: 20
 
-        Label:
-            size_hint: (0.2, 0.2)
-            text: "User Name"
-            font_size: 30
-            text_size: self.size
-            valign: "middle"
-
-        TextInput:
-            id: username
-            size_hint: (0.2, 0.06)
-            cursor_blink: True
-            font_size: 20
-            multiline: False
-
-        Label:
-            size_hint: (0.2, 0.2)
-            text:"Pin:"
-            font_size: 30
-            text_size: self.size
-            valign: "middle"
-
-        TextInput:
-            id: pin
-            size_hint: (0.2, 0.06)
-            cursor_blink: True
-            font_size: 20
-            multiline: False
-            password: True
-
-        Button:
-            size_hint_y: None
-            height: 90
-            text: 'Logged users'
-
-        Button:
-            size_hint_y: None
-            height: 90
-            text:'Create user'
-            on_press: root.manager.ids.main.login(username.text, pin.text)
-
-<HomePage>:
-    name: "homepage"
+<One>
+    NavDrawer:
+        # Main panel
     BoxLayout:
         orientation: "vertical"
-        Label:
-            text: "Home Page"
         Button:
-            text: "Go to main screen"
-            size_hint_y: 0.1
-            on_press: root.manager.current = "main_screen"
+            text: "Show Side Panel"
+            #on_press: root.toggle_state()
+            on_press: app.root.ids.navdrawer.toggle_state()

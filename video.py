@@ -25,6 +25,13 @@ from kivy.graphics import *
 from kivy.metrics import dp, sp
 from tmdb import tmdb
 
+from kivymd.theming import ThemeManager
+from kivymd.accordion import MDAccordionSubItem, MDAccordionItem
+from kivymd.button import MDRaisedButton
+from kivymd.label import MDLabel
+from kivymd.list import TwoLineListItem
+from kivymd.textfields import MDTextField
+
 import json
 
 #import pysrt
@@ -590,6 +597,8 @@ class ListDiscover(Screen):
 
         #poster
 
+        self.ids.discover_label.text = self.menu
+
         json = tmdb().getDiscover(kwargs['menu'])
         for data in json:
             #btn = ImageButton(data)
@@ -674,6 +683,7 @@ class ScreenSwitcher(ScreenManager):
 
 class MainScreen(GridLayout):
     manager = ObjectProperty(None)
+    nav_drawer = ObjectProperty(None, allownone=True)
     
     def __init__(self, **kwargs):
         print menu.viewkeys()
@@ -682,9 +692,9 @@ class MainScreen(GridLayout):
 
 
     def onChange(self, text):
-        print 'onchange',  text
+        print 'reall name onchange',  text
         change = menu.get(text)
-        print change
+        print "get name", change
         if change == "movie" or change =="tv":
             #sm.clear_widgets(screens=[self])
             self.manager.clear_widgets(screens=[self.manager.get_screen('discover')])
@@ -705,6 +715,8 @@ class MainScreen(GridLayout):
 
 class Video(App):
 
+    theme_cls = ThemeManager()
+
     def build(self):
 
         Config.set('kivy', 'keyboard_mode', 'system')
@@ -712,6 +724,9 @@ class Video(App):
         Config.set('graphics', 'height', '800')
         Config.set('graphics', 'resizable', 0)
         Config.write()
+
+        self.theme_cls.theme_style = 'Light'
+        self.theme_cls.primary_palette = 'Blue'
 
         #sm.add_widget(VideoAlan(name = "main"))
         #sm.add_widget(OpenFolder(name = "files"))

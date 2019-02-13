@@ -1,61 +1,45 @@
 from kivy.app import App
-from kivy.lang import Builder
-from kivy.core.image import Image as CoreImage
-from kivy.properties import ListProperty, ObjectProperty, NumericProperty
-from kivy.clock import Clock
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.label import Label
+from kivy.uix.button import Button
+from kivy.uix.image import Image
+from kivy.uix.widget import Widget
 from kivy.core.window import Window
-from math import sin, cos, pi
 
+from kivy.garden.navigationdrawer import NavigationDrawer
 
-kv = '''
-BoxLayout:
-    Widget:
-        canvas:
-            Color:
-                rgba: 1, 1, 1, 1
-            Mesh:
-                vertices: app.mesh_points
-                indices: range(len(app.mesh_points) / 4)
-                texture: app.mesh_texture
-                mode: 'triangle_fan'
-    BoxLayout:
-        orientation: 'vertical'
-        size_hint_x: None
-        width: 100
-        Slider:
-            value: app.radius
-            on_value: app.radius = args[1]
-            min: 10
-            max: 1000
-'''
-
-
-class MeshBallApp(App):
-    mesh_points = ListProperty([])
-    mesh_texture = ObjectProperty(None)
-    radius = NumericProperty(500)
-    offset_x = NumericProperty(.5)
-    offset_y = NumericProperty(.5)
-    sin_wobble = NumericProperty(0)
-    sin_wobble_speed = NumericProperty(0)
+class ExampleApp(App):
 
     def build(self):
-        self.mesh_texture = CoreImage('data/logo/kivy-icon-512.png').texture
-        Clock.schedule_interval(self.update_points, 0)
-        return Builder.load_string(kv)
+        navigationdrawer = NavigationDrawer()
 
-    def update_points(self, *args):
-        points = [Window.width / 2, Window.height / 2, .5, .5]
-        i = 0
-        while i < 2 * pi:
-            i += 0.01 * pi
-            points.extend([
-                Window.width / 2 + cos(i) * (self.radius + self.sin_wobble * sin(i * self.sin_wobble_speed)),
-                Window.height / 2 + sin(i) * (self.radius + self.sin_wobble * sin(i * self.sin_wobble_speed)),
-                self.offset_x + sin(i),
-                self.offset_y + cos(i)])
+        side_panel = BoxLayout(orientation='vertical')
+        
+        side_panel.add_widget(Label(text='XCHANGE'))
+        side_panel.add_widget(Button(text='Files'))
+        side_panel.add_widget(Button(text='About'))
+        
+        navigationdrawer.add_widget(side_panel)
+        
+        main_panel = BoxLayout(orientation='vertical')
+        
+        #
+        #
+        #
+        # MAIN PANEL WIDGETS ARE HERE
+        #
+        #
+        #
+        
+        navigationdrawer.add_widget(main_panel)
 
-        self.mesh_points = points
+        button = Button(text='toggle NavigationDrawer state (animate)',size_hint_y=0.2)
+        button.bind(on_press=lambda j: navigationdrawer.toggle_state())
+        
+        main_panel.add_widget(button)
 
-if __name__ == '__main__':
-    MeshBallApp().run()
+        return navigationdrawer
+
+
+if __name__ == "__main__":
+    ExampleApp().run()
