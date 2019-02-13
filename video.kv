@@ -21,11 +21,21 @@
 #:import os os
 #:import NavigationLayout kivymd.navigationdrawer.NavigationLayout
 #:import MDNavigationDrawer kivymd.navigationdrawer.MDNavigationDrawer
-#:import NavigationLayout kivymd.navigationdrawer.NavigationLayout
 #:import NavigationDrawerDivider kivymd.navigationdrawer.NavigationDrawerDivider
 #:import NavigationDrawerToolbar kivymd.navigationdrawer.NavigationDrawerToolbar
+#:import NavigationDrawerSubheader kivymd.navigationdrawer.NavigationDrawerSubheader
 #:import MDSeparator kivymd.card.MDSeparator
 
+#:import MDTabbedPanel kivymd.tabs.MDTabbedPanel
+#:import MDSpinner kivymd.spinner.MDSpinner
+#:import MDTab kivymd.tabs.MDTab
+
+<MDNavigationDrawer>:
+    drawer_logo: 'img/icon.png'
+
+    NavigationDrawerSubheader:
+        text: "eXode 0.0.1"
+	NavigationDrawerDivider:
 
 <MainScreen>:
     manager: manager
@@ -37,6 +47,8 @@
         id: nav_layout
         MDNavigationDrawer:
             id: nav_drawer
+			NavigationDrawerSubheader:
+				text: "Menu:"
             NavigationDrawerToolbar:
                 title: "eXode"
             NavigationDrawerIconButton:
@@ -65,6 +77,51 @@
 
 			ScreenSwitcher:
 				id: manager
+
+
+<MDTabbedPanel>:
+	id: tabs
+	tab_display_mode: 'text'
+	tab_width_mode: 'fixed'
+	#tab_color: app.data.alpha
+	tab_text_color: (1,1,1,1)
+	tab_indicator_color: (0,0,0,0)
+
+	MDTab:
+		name: 'contacts'
+		text: "Populaires"
+		on_tab_press: app.on_tab_press(self.name)
+		shorten: True
+		ScreenManager:
+			id: screen_manager_tab_contacts
+		
+
+	MDTab:
+		name: 'groups'
+		text: "Mieux notes"
+		on_tab_press: app.on_tab_press(self.name)
+		ScreenManager:
+			id: screen_manager_tab_groups
+	MDTab:
+		name: 'contacts'
+		text: "En salles"
+		on_tab_press: app.on_tab_press(self.name)
+		ScreenManager:
+			id: screen_manager_tab_contacts
+
+	MDTab:
+		name: 'groups'
+		text: "Recemment"
+		on_tab_press: app.on_tab_press(self.name)
+		ScreenManager:
+			id: screen_manager_tab_groups
+
+	MDTab:
+		name: 'contacts'
+		text: "A venir"
+		on_tab_press: app.on_tab_press(self.name)
+		ScreenManager:
+			id: screen_manager_tab_contacts
 
 <VideoAlan>:
 
@@ -650,6 +707,8 @@
             color: app.theme_cls.primary_color
             font_size: '18sp'
             text: 
+		
+		MDTabbedPanel:
 
         MDSeparator:
 
