@@ -30,12 +30,10 @@
 #:import MDSpinner kivymd.spinner.MDSpinner
 #:import MDTab kivymd.tabs.MDTab
 
-<MDNavigationDrawer>:
-    drawer_logo: 'img/icon.png'
+#:import MDAccordion kivymd.accordion.MDAccordion
+#:import MDAccordionItem kivymd.accordion.MDAccordionItem
+#:import MDAccordionSubItem kivymd.accordion.MDAccordionSubItem
 
-    NavigationDrawerSubheader:
-        text: "eXode 0.0.1"
-	NavigationDrawerDivider:
 
 <MainScreen>:
     manager: manager
@@ -45,22 +43,90 @@
 
     NavigationLayout:
         id: nav_layout
+
         MDNavigationDrawer:
             id: nav_drawer
+			#drawer_logo: 'img/icon.png'
+
 			NavigationDrawerSubheader:
-				text: "Menu:"
-            NavigationDrawerToolbar:
-                title: "eXode"
-            NavigationDrawerIconButton:
-                icon: 'checkbox-blank-circle'
-                text: "Films"
-                #on_release: app.root.ids.scr_mngr.current = 'default'
-				on_release:root.onChange(self.text)
-            NavigationDrawerIconButton:
-                icon: 'checkbox-blank-circle'
-                text: "Series tv"
-                #on_release: app.root.ids.scr_mngr.current = 'modify_table'
-				on_release:root.onChange(self.text)
+				text: "eXode 0.0.1"
+
+			NavigationDrawerDivider:
+
+			MDAccordion:
+				orientation: 'vertical'
+				size_hint_y: None
+				height: dp(700)
+
+				MDAccordionItem:
+					title:'Films'
+					icon: 'movie'
+					MDAccordionSubItem:
+						text: "Découvrir"
+						on_press: root.onChange('movie', 'discover', 'discover')
+					MDAccordionSubItem:
+						text: "Populaires"
+						on_press: root.onChange('movie', 'list', 'popular')
+						#on_press: root.onChange(self.text)
+					MDAccordionSubItem:
+						text: "Mieux notes"
+						on_press: root.onChange('movie',  'list', 'top_rated')
+					MDAccordionSubItem:
+						text: "En salles"
+						on_press: root.onChange('movie', 'list', 'now_playing')
+					MDAccordionSubItem:
+						text: "Recemment"
+						on_press: root.onChange('movie', 'list', 'latest')
+					MDAccordionSubItem:
+						text: "A venir"
+						on_press: root.onChange('movie', 'list', 'upcoming')
+				MDAccordionItem:
+					title:'Séries'
+					icon: 'video'
+					MDAccordionSubItem:
+						text: "Découvrir"
+						on_press: root.onChange('tv', 'discover', 'discover')
+					MDAccordionSubItem:
+						text: "Populaires"
+						on_press: root.onChange('tv', 'list', 'popular')
+					MDAccordionSubItem:
+						text: "Mieux notes"
+						on_press: root.onChange('tv', 'list', 'top_rated')
+					MDAccordionSubItem:
+						text: "Diffusees 7 jours"
+						on_press: root.onChange('tv', 'list', 'on_the_air')
+					MDAccordionSubItem:
+						text: "Recemment"
+						on_press: root.onChange('tv', 'list', 'latest')
+					MDAccordionSubItem:
+						text: "Diffusees ce jour"
+						on_press: root.onChange('tv', 'list', 'airing_today')
+				MDAccordionItem:
+					title:'Lecteur'
+					icon: 'play'
+					#on_press: root.onChange('player', 'autre')
+				MDAccordionItem:
+					title:'Paramètres'
+					icon: 'settings'
+					#on_press: root.onChange('setting', 'autre')
+					MDAccordionSubItem:
+						text: "Application"
+						on_press: root.onChange('tv', 'app', 'airing_today')
+					MDAccordionSubItem:
+						text: "Couleur"
+						on_press: root.onChange('tv', 'app', 'airing_today')
+
+            # NavigationDrawerToolbar:
+            #     title: "eXode"
+            # NavigationDrawerIconButton:
+            #     icon: 'settings'
+            #     text: "settings"
+			# 	on_release:root.onChange(self.text)
+            # NavigationDrawerIconButton:
+            #     icon: 'checkbox-blank-circle'
+            #     text: "Series tv"
+			# 	on_release:root.onChange(self.text)
+
 
 		BoxLayout:
             orientation: 'vertical'
@@ -77,51 +143,6 @@
 
 			ScreenSwitcher:
 				id: manager
-
-
-<MDTabbedPanel>:
-	id: tabs
-	tab_display_mode: 'text'
-	tab_width_mode: 'fixed'
-	#tab_color: app.data.alpha
-	tab_text_color: (1,1,1,1)
-	tab_indicator_color: (0,0,0,0)
-
-	MDTab:
-		name: 'contacts'
-		text: "Populaires"
-		on_tab_press: app.on_tab_press(self.name)
-		shorten: True
-		ScreenManager:
-			id: screen_manager_tab_contacts
-		
-
-	MDTab:
-		name: 'groups'
-		text: "Mieux notes"
-		on_tab_press: app.on_tab_press(self.name)
-		ScreenManager:
-			id: screen_manager_tab_groups
-	MDTab:
-		name: 'contacts'
-		text: "En salles"
-		on_tab_press: app.on_tab_press(self.name)
-		ScreenManager:
-			id: screen_manager_tab_contacts
-
-	MDTab:
-		name: 'groups'
-		text: "Recemment"
-		on_tab_press: app.on_tab_press(self.name)
-		ScreenManager:
-			id: screen_manager_tab_groups
-
-	MDTab:
-		name: 'contacts'
-		text: "A venir"
-		on_tab_press: app.on_tab_press(self.name)
-		ScreenManager:
-			id: screen_manager_tab_contacts
 
 <VideoAlan>:
 
@@ -683,7 +704,7 @@
 #film populaire
 <ListDiscover>:
 
-	menu: _menu
+	#menu: _menu
 	discover_grid: discover_grid
 
 	scroll_l: scroll_id
@@ -707,67 +728,57 @@
             color: app.theme_cls.primary_color
             font_size: '18sp'
             text: 
-		
-		MDTabbedPanel:
 
         MDSeparator:
 
-		BoxLayout:
+		# BoxLayout:
 
-			id: _menu
+		# 	id: _menu
 
-			orientation: "horizontal"
-			pos_hint: {"x":0,"top":1}
-			size_hint: 1,None
-			padding: 5
-			spacing: 5
-			height: 50
+		# 	orientation: "horizontal"
+		# 	pos_hint: {"x":0,"top":1}
+		# 	size_hint: 1,None
+		# 	padding: 5
+		# 	spacing: 5
+		# 	height: 50
 
-			canvas.before:
+		# 	canvas.before:
 
-				Color:
-					rgba: 0,0,0,0.5
-				Rectangle:
-					pos: self.pos
-					size: self.size
+		# 		Color:
+		# 			rgba: 0,0,0,0.5
+		# 		Rectangle:
+		# 			pos: self.pos
+		# 			size: self.size
 
-			Button:
-				text: "Populaire"
-				size_hint: None,1
-				width: 60
-				on_press:
-					root.manager.transition.direction = 'right'
-					root.manager.current = 'main'
-
-			Spinner:
-				id: spinner_1
-				text: 'Menu' 
-				font_size:'18sp'
-				values: root.pickType 
-				#text: "First thing"
-				#values: ["Films", "Series", "Autres"]
-				background_color: (0, 0, 0, 1)
-				#background_normal: 'img/menu.png'
-				size_hint: None, 1
-				#color: color_font
-				on_text: root.onChange(self.text)
-				#option_cls: Factory.get("MySpinnerOption")
+		# 	Spinner:
+		# 		id: spinner_1
+		# 		text: 'Menu' 
+		# 		font_size:'18sp'
+		# 		values: root.pickType 
+		# 		#text: "First thing"
+		# 		#values: ["Films", "Series", "Autres"]
+		# 		background_color: (0, 0, 0, 1)
+		# 		#background_normal: 'img/menu.png'
+		# 		size_hint: None, 1
+		# 		#color: color_font
+		# 		on_text: root.onChange(self.text)
+		# 		#option_cls: Factory.get("MySpinnerOption")
 		
-			Spinner:
-				id: spinner_2
-				text: 'sous_menu' 
-				font_size:'18sp'
-				values: root.sousType
-				width:150
-				background_color: (0, 0, 0, 1)
-				#text: "First thing"
-				#values: ["Films", "Series", "Autres"]
-				#background_color: none
-				#background_down: 'atlas://data/images/defaulttheme/spinner'
-				#color: color_font
-				on_text: root.on_sub_Change(self.text)
-				#option_cls: root.onChange(self.text)
-				size_hint: None, 1
+		# 	Spinner:
+		# 		id: spinner_2
+		# 		text: 'sous_menu' 
+		# 		font_size:'18sp'
+		# 		values: root.sousType
+		# 		width:150
+		# 		background_color: (0, 0, 0, 1)
+		# 		#text: "First thing"
+		# 		#values: ["Films", "Series", "Autres"]
+		# 		#background_color: none
+		# 		#background_down: 'atlas://data/images/defaulttheme/spinner'
+		# 		#color: color_font
+		# 		on_text: root.on_sub_Change(self.text)
+		# 		#option_cls: root.onChange(self.text)
+		# 		size_hint: None, 1
 
 		ScrollView:
 			id: scroll_id
@@ -915,5 +926,5 @@
 					Color: 
 						rgba: 0,128,222,0.5
 					Rectangle: 
-						pos: self.pos 
-						size: self.size	
+						pos: self.pos
+						size: self.size

@@ -584,7 +584,7 @@ class ListDiscover(Screen):
     def __init__(self, **kwargs):
         self.pickType = menu.viewkeys()
 
-        print "pasessssssssss"
+        print "Discover inittt"
 
         self.sousType = sous_menu.get(kwargs['menu']).viewkeys()
 
@@ -691,7 +691,56 @@ class MainScreen(GridLayout):
         super(MainScreen, self).__init__(**kwargs)        
 
 
-    def onChange(self, text):
+    def onChange(self, type, menu, text):
+        print 'type %s / menu %s / Text %s'% (type, menu, text)
+        #change = menu.get(text)
+        if menu == "discover":
+            #sm.clear_widgets(screens=[self])
+            self.manager.clear_widgets(screens=[self.manager.get_screen('discover')])
+            self.manager.add_widget(ListDiscover(name = "discover", menu=type))
+            #sm.current = 'discover'
+            self.manager.current = 'discover'
+
+        if menu == "list":
+            self.manager.clear_widgets(screens=[self.manager.get_screen('list')])
+            self.manager.add_widget(ListFolder(name ="list", type=type, menu=text))
+            self.manager.current = "list"
+
+        if menu == "player":
+            # try:
+            #     sm.clear_widgets(screens=[sm.get_screen('main')])
+            # except:pass
+            #sm.add_widget(VideoAlan(name = "main"))
+            #sm.current = 'main'
+            self.manager.current = 'main'
+        if menu == "pref":
+            sm.add_widget(ListParam(name = "param"))
+            sm.current = 'param'
+
+        self.ids.nav_layout.toggle_nav_drawer()
+    
+    def onMovieChange(self, text):
+        print 'reall name onchange',  text
+        change = menu.get(text)
+        print "get name", change
+        if change == "movie" or change =="tv":
+            #sm.clear_widgets(screens=[self])
+            self.manager.clear_widgets(screens=[self.manager.get_screen('discover')])
+            self.manager.add_widget(ListDiscover(name = "discover", menu=change))
+            #sm.current = 'discover'
+            self.manager.current = 'discover'
+        if change == "player":
+            # try:
+            #     sm.clear_widgets(screens=[sm.get_screen('main')])
+            # except:pass
+            #sm.add_widget(VideoAlan(name = "main"))
+            #sm.current = 'main'
+            self.manager.current = 'main'
+        if change == "pref":
+            sm.add_widget(ListParam(name = "param"))
+            sm.current = 'param'
+    
+    def onTvChange(self, text):
         print 'reall name onchange',  text
         change = menu.get(text)
         print "get name", change
