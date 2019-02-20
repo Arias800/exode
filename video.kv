@@ -33,6 +33,7 @@
 #:import MDAccordion kivymd.accordion.MDAccordion
 #:import MDAccordionItem kivymd.accordion.MDAccordionItem
 #:import MDAccordionSubItem kivymd.accordion.MDAccordionSubItem
+#:import MDRaisedButton kivymd.button.MDRaisedButton
 
 
 <MainScreen>:
@@ -409,102 +410,31 @@
 #film populaire
 <ListFolder>:
 
-	menu: _menu
-	grid_l: grid_id
+	#menu: _menu
 	scroll_l: scroll_id
 
 	background_normal: ''
     subtext: ''
 
 	BoxLayout:
-		orientation: "vertical"
+		orientation: 'vertical'
+        padding: dp(10), dp(10)
+        spacing: dp(10)
 
-		BoxLayout:
-			id: _menu
+		Label:
+			id:list_label
+            size_hint: None, None
+            height: dp(20)
+            width: self.texture_size[0]
+            halign: 'left'
+            color: app.theme_cls.primary_color
+            font_size: '18sp'
+            text: 
 
-			orientation: "horizontal"
-			pos_hint: {"x":0,"top":1}
-			size_hint: 1,None
-			padding: 5
-			spacing: 5
-			height: 50
-
-			canvas.before:
-				Color:
-					rgba: 0,0,0,0.5
-				Rectangle:
-					pos: self.pos
-					size: self.size
-
-			Spinner:
-				id: spinner_1
-				text: 'Menu' 
-				values: root.pickType 
-				#text: "First thing"
-				#values: ["Films", "Series", "Autres"]
-				#background_color: none
-				#background_down: 'atlas://data/images/defaulttheme/spinner'
-				#color: color_font
-				on_text: root.onChange(self.text)
-				#option_cls: root.onChange(self.text)
-				size_hint: None, 1
-		
-			Spinner:
-				id: spinner_2
-				text: 'sous_menu' 
-				values: root.sousType
-				width:180
-				#text: "First thing"
-				#values: ["Films", "Series", "Autres"]
-				#background_color: none
-				#background_down: 'atlas://data/images/defaulttheme/spinner'
-				#color: color_font
-				on_text: root.on_sub_Change(self.text)
-				#option_cls: root.onChange(self.text)
-				size_hint: None, 1
-
-			Button:
-
-				text: "Next Page"
-				size_hint: None,1
-				width: 140
-				on_press:root.on_change_Page('Populaires')
-				
-			# Button:
-
-			# 	text: "Populaire"
-			# 	size_hint: None,1
-			# 	width: 140
-			# 	on_press:
-			# 		root.manager.transition.direction = 'right'
-			# 		root.manager.current = 'main'
-
-			# Button:
-
-			# 	text: "Mieux notés"
-			# 	size_hint: None,1
-			# 	width: 140
-			# 	on_press:
-			# 		root.manager.transition.direction = 'left'
-			# 		root.manager.current = 'files'
-
-			# Button:
-			# 	text: "Prochainement"
-			# 	size_hint: None,1
-			# 	width: 140
-			# 	on_press:
-			# 		root.manager.transition.direction = 'left'
-			# 		root.manager.current = 'list'
-
-			# Button:
-			# 	text: "En salles"
-			# 	size_hint: None,1
-			# 	width: 140
-			# 	on_press:
-			# 		root.manager.transition.direction = 'left'
-			# 		root.manager.current = 'list'
+        MDSeparator:
 
 		ScrollView:
+			on_scroll_move: root.scroll_direction(self.scroll_y)
 			id: scroll_id
 			size: self.size
 			do_scroll_y: True
@@ -538,7 +468,7 @@
 						size: self.size	
 
 <ImageButton>:
-	#id: box_share2
+	#id: box_share2	
 	background_normal: ''
 	#width: .100
 	#height: self.texture_size[1] * self.image_ratio
@@ -567,38 +497,56 @@
 	cicle_l : cicle_l
 
 	BoxLayout:
-		orientation: "vertical"
+		orientation: 'vertical'
+        padding: dp(10), dp(10)
+        spacing: dp(10)
 
-		BoxLayout:
-			#id: box_share2
+		Label:
+			id:list_label
+            size_hint: None, None
+            height: dp(20)
+            width: self.texture_size[0]
+            halign: 'left'
+            color: app.theme_cls.primary_color
+            font_size: '18sp'
+            text: 
 
-			orientation: "horizontal"
-			pos_hint: {"x":0,"top":1}
-			size_hint: 1,None
-			padding: 5
-			spacing: 5
-			height: 50
+        MDSeparator:
 
-			canvas.before:
 
-				Color:
-					rgba: 0,0,0,0.5
-				Rectangle:
-					pos: self.pos
-					size: self.size
+	# BoxLayout:
+	# 	orientation: "vertical"
 
-			Button:
-				size_hint: None, None 
-				size: 32, 32
-				background_normal:'img/back.png'
-				on_press:
-					root.onChange(self.text)
+	# 	BoxLayout:
+	# 		#id: box_share2
 
-			Button:
-				text: 'Recherche source'  
-				size_hint: None, 1
-				width:150
-				on_press: root.show_source()
+	# 		orientation: "horizontal"
+	# 		pos_hint: {"x":0,"top":1}
+	# 		size_hint: 1,None
+	# 		padding: 5
+	# 		spacing: 5
+	# 		height: 50
+
+	# 		canvas.before:
+
+	# 			Color:
+	# 				rgba: 0,0,0,0.5
+	# 			Rectangle:
+	# 				pos: self.pos
+	# 				size: self.size
+
+	# 		Button:
+	# 			size_hint: None, None 
+	# 			size: 32, 32
+	# 			background_normal:'img/back.png'
+	# 			on_press:
+	# 				root.onChange(self.text)
+
+	# 		Button:
+	# 			text: 'Recherche source'  
+	# 			size_hint: None, 1
+	# 			width:150
+	# 			on_press: root.show_source()
 			
 
 			#Button:
@@ -607,7 +555,14 @@
 			#	size_hint: None,1
 			#	width: 140
 			#	on_press:root.show_synopsis()
-		
+		MDRaisedButton:
+			text: "Recherche source"
+			elevation_normal: 2
+			opposite_colors: True
+			size_hint:1,None
+			pos_hint: {'center_x': 0.5, 'center_y': .65}
+			on_press: root.show_source()
+
 		ScrollView:
 			id: scroll_id
 			size: self.size
@@ -706,6 +661,7 @@
 
 	#menu: _menu
 	discover_grid: discover_grid
+
 
 	scroll_l: scroll_id
 
@@ -873,32 +829,21 @@
 	grid_id:grid_id
 
 	BoxLayout:
-		orientation: "vertical"
+		orientation: 'vertical'
+        padding: dp(10), dp(10)
+        spacing: dp(10)
 
-		BoxLayout:
-			#id: box_share2
+		Label:
+			id:bar_label
+            size_hint: None, None
+            height: dp(20)
+            width: self.texture_size[0]
+            halign: 'left'
+            color: app.theme_cls.primary_color
+            font_size: '18sp'
+            text:
 
-			orientation: "horizontal"
-			pos_hint: {"x":0,"top":1}
-			size_hint: 1,None
-			padding: 5
-			spacing: 5
-			height: 50
-
-			canvas.before:
-
-				Color:
-					rgba: 0,0,0,0.5
-				Rectangle:
-					pos: self.pos
-					size: self.size
-
-			Button:
-				size_hint: None, None 
-				size: 32, 32
-				background_normal:'img/back.png'
-				on_press:
-					root.onChange(self.text)		
+        MDSeparator:	
 
 		ScrollView:
 			id: scroll_id

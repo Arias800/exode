@@ -32,11 +32,13 @@ from kivymd.label import MDLabel
 from kivymd.list import TwoLineListItem
 from kivymd.textfields import MDTextField
 
+from kivy.uix.scrollview import ScrollView
+
 import json
 
 #import pysrt
 
-sm = ScreenManager()
+#sm = ScreenManager()
 
 sous_menu = {
     "movie": {
@@ -333,10 +335,14 @@ class ListFolder(Screen):
         self.menu = kwargs['menu']
         self.type = kwargs['type']
 
-        print self.menu
+        print self.menu, self.type
+
         #poster
-        self.on_sub_Change()
+        #self.on_sub_Change()
         #self.add_widget(Button(text="NextPage", on_press=lambda a:self.on_change_Page(text='Populaires')))
+        #poster
+        self.ids.grid_id.clear_widgets()
+        self.add()
 
         #scroll.add_widget(grid)
         #scroll.add_widget(grid)
@@ -347,82 +353,29 @@ class ListFolder(Screen):
         #self.ids.boxlayout_id.add_widget(newLabel)
         #self.add_widget(_item2(self))
         #return ListScreen()
-    pass
 
-    def onChange(self, text):
-        #sm.clear_widgets(screens=[sm.get_screen('discover')])
-        sm.clear_widgets(screens=[self])
 
-        print 'list folder onchange',  menu.get(text)
+    def add(self):
+        json = _jsonload(self.type, self.menu,NextPage=self.pageNumber)
+        for data in json:
 
-        discover = menu.get(text)
+            btn = ImageButton(type=self.type,
+            tmdbid=data['tmdbid'],
+            img=data['poster_path'],
+            size=(Window.width / 2 , (Window.width / 2) / 0.666 ))
 
-        sm.add_widget(ListDiscover(name = "discover", menu=discover))
-        #sm.remove_widget('info')
-        sm.current = 'discover'
+            self.ids.grid_id.add_widget(btn)
 
-#trouver un moyen de load populaire peux importe les lang utiliser
-    def on_sub_Change(self, text='Populaires'):
-        #pas trouver d'autre solution
-        try:
-            sm.clear_widgets(screens=[sm.get_screen('discover')])
-        except: pass
 
-        self.ids.grid_id.clear_widgets()
+    def scroll_direction(self, scroll_y):
+        if scroll_y < 0:
+            self.pageNumber = self.pageNumber + 1
+            self.add()
+            self.ids.scroll_id.scroll_y = float(1) / (self.pageNumber)
 
-        #self.remove_widget(self.grid_l)
-
-        menu = sous_menu.get(self.type).get(text)
-
-        try:
-            json = _jsonload(self.type, menu,NextPage=self.pageNumber)
-            for data in json:
-                #btn = AsyncImage(subtext=data['name'], source="https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/eye-24-256.png", size_hint=(None, None), size=(160, 160))
-                #size = (width, height)
-                #aspect ratio 2/3 = 0.666
-
-                btn = ImageButton(type=self.type,
-                tmdbid=data['tmdbid'],
-                img=data['poster_path'],
-                size=(Window.width / 2 , (Window.width / 2) / 0.666 ))
-
-                #btn = Button(text=data['name'], size_hint=(None, None), size=(220,300), background_normal='image.jpg', subtext=data['name'])
-                self.grid.add_widget(btn)
-            #change(self,text)
-        except: pass
-
-    #Pour afficher plus d'une page
-    def on_change_Page(self, text='Populaires'):
-        self.pageNumber = self.pageNumber + 1
-        print 'page number ' ,self.pageNumber
-
-        try:
-            sm.clear_widgets(screens=[sm.get_screen('discover')])
-        except: pass
-
-        self.ids.grid_id.clear_widgets()
-
-        print "change page ", text
-
-        #self.remove_widget(self.grid_l)
-
-        menu = sous_menu.get(self.type).get(text)
-
-        try:
-            json = _jsonload(self.type, menu,NextPage=self.pageNumber)
-            for data in json:
-                #btn = AsyncImage(subtext=data['name'], source="https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/eye-24-256.png", size_hint=(None, None), size=(160, 160))
-                btn = ImageButton(type=self.type,
-                tmdbid=data['tmdbid'],
-                img=data['poster_path'],
-                size=(Window.width / 2 , (Window.width / 2) / 0.666 ))
-
-                #btn = Button(text=data['name'], size_hint=(None, None), size=(220,300), background_normal='image.jpg', subtext=data['name'])
-                self.grid.add_widget(btn)
-            #change(self,text)
-        except: pass
 
 class ImageButton(ButtonBehavior, AsyncImage):
+   
 
     def __init__(self, **kwargs):
         super(ImageButton, self).__init__(**kwargs)
@@ -433,7 +386,10 @@ class ImageButton(ButtonBehavior, AsyncImage):
         self.tmdb = kwargs['tmdbid']
         self.type = kwargs['type']
 
+
     def on_press(self):
+
+
         def on_stop(*l):
             self.animation = Animation(size =(self.size[0] - 10, self.size[1] - 10), t='in_quad', duration=0.5)
             self.animation.start(self)
@@ -446,11 +402,19 @@ class ImageButton(ButtonBehavior, AsyncImage):
         # screen_manager = App.get_running_app().root
         # screen_manager.transition.direction = 'left'
         # screen_manager.current = 'info'
-        sm.transition.direction = 'left'
-
-        sm.add_widget(ListInfo(name = "info", type=self.type, tmdbid=self.tmdb))
-        #sm.remove_widget('info')
-        sm.current = 'info'
+        #sm.transition.direction = 'left'
+        #self.manager.transition.direction = 'left'
+    
+        #sm.add_widget(ListInfo(name = "info", type=self.type, tmdbid=self.tmdb))
+        #self.manager.clear_widgets(screens=[self.manager.get_screen('discover')])
+        app = App.get_running_app() 
+        print self.parent.parent.parent.parent.manager
+        
+        app.root.manager.add_widget(ListInfo(name = "info", type=self.type, tmdbid=self.tmdb))
+        #self.parent.parent.parent.parent.manager.add_widget(ListInfo(name = "info", type=self.type, tmdbid=self.tmdb))
+        #sm.current = 'info'
+        #self.parent.parent.parent.parent.manager.current = "info"
+        app.root.manager.current = "info"
 
         #self.box_share2.clear_widgets()
 
@@ -471,8 +435,8 @@ class ListInfo(Screen):
         json = tmdb().getByid(kwargs['type'], kwargs['tmdbid'])
 
 
-        print sm.previous()
-        print sm
+        #print sm.previous()
+        #print sm
 
         #introduit le dict dans self
         #a revoir c'est moche
@@ -488,6 +452,10 @@ class ListInfo(Screen):
         # self.add_widget(img)
 
         self.ids.cicle_l.add_widget(MyCircle(num = self.vote_average))
+        self.ids.list_label.text = self.title
+
+        App.get_running_app().root.ids.toolbar.left_action_items = \
+            [['chevron-left', lambda x: self.onChange()]]
 
         # self.vote_circle = str(round(float(self.vote_average) * 36, 2))
 
@@ -516,19 +484,34 @@ class ListInfo(Screen):
         self.rect.pos = self.pos
         self.rect.size = self.size
 
-    def onChange(self, label):
-        sm.clear_widgets(screens=[sm.get_screen('info')])
+    def onChange(self):
+        app = App.get_running_app()
+        if app.root.manager.current == "source":
+            print "paseeeeeeeeeee"
+            app.root.manager.current = 'info'
+            app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('source')])
+        elif app.root.manager.current == "info":
+            app.root.manager.current = app.root.manager.previous()
+            app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('info')])
+
+
+        #self.manager.clear_widgets(screens=[self.manager.get_screen('info')])
         #sm.current = 'list'
-        sm.current = sm.previous()
+        #self.manager.current = self.manager.previous()
+
+        #self.parent.parent.parent.parent.parent.manager.current = "discover"
 
     def show_source(self):
+        app = App.get_running_app() 
+        app.root.manager.add_widget(ListSource(name = "source", title=self.title))
+        app.root.manager.current =  "source"
 
         #self.ids.spinner_source.values = ['A', 'B'] 
 
-        sm.transition.direction = 'left'
+        #sm.transition.direction = 'left'
 
-        sm.add_widget(ListSource(name = "source"))
-        sm.current = 'source'
+        #sm.add_widget(ListSource(name = "source"))
+        #sm.current = 'source'
 
     pass
 
@@ -538,6 +521,10 @@ class ListSource(Screen):
 
     def __init__(self, **kwargs):
         super(ListSource, self).__init__(**kwargs)
+
+
+        print kwargs
+        self.ids.bar_label.text = kwargs['title']
 
         from iplugin import plugin
 
@@ -549,22 +536,17 @@ class ListSource(Screen):
                 text = ("%s - %s [%s]") % (main['plugin'], sub['title'] ,sub['qual'])
                 self.ids.grid_id.add_widget(Button(text=text, font_size=14, on_press=partial(self.plays, url=sub['url'])))
 
-    def onChange(self, text):
-        #sm.clear_widgets(screens=[sm.get_screen('discover')])
-        sm.clear_widgets(screens=[self])
-        sm.transition.direction = 'left'
-        #sm.remove_widget('info')
-        sm.current = 'info'
-    pass
-
     def plays(self, *args, **kwargs):
         print kwargs['url']
+        app = App.get_running_app()
         #VideoAlan().calistir(kwargs['url'],'Nop')
 
         #root.parent.get_screen("main").calistir(filechooser.path,filechooser.selection)
         #sm.add_widget(VideoAlan(name = "main"))
-        sm.get_screen("main").calistir(kwargs['url'],kwargs['url'])
-        sm.current = "main"
+        #sm.get_screen("main").calistir(kwargs['url'],kwargs['url'])
+        app.root.manager.get_screen("main").calistir(kwargs['url'],kwargs['url'])
+        #sm.current = "main"
+        app.root.manager.current =  "main"
 
 class MyCircle(GridLayout):
     def __init__(self, **kwargs):
@@ -581,10 +563,12 @@ class MyCircle(GridLayout):
 
 class ListDiscover(Screen):
 
+
     def __init__(self, **kwargs):
         self.pickType = menu.viewkeys()
 
         print "Discover inittt"
+        print "discover manager", self.manager
 
         self.sousType = sous_menu.get(kwargs['menu']).viewkeys()
 
@@ -679,7 +663,8 @@ class ScreenSwitcher(ScreenManager):
         super(ScreenSwitcher, self).__init__(**kwargs)
         #self.add_widget(ScreenOne(name='sone'))
         self.add_widget(ListDiscover(name = "discover", menu='movie'))
-        self.add_widget(ListFolder(name = "list", type="movie", menu='popular'))
+        self.add_widget(VideoAlan(name = "main"))
+        #self.add_widget(ListFolder(name = "list", type="movie", menu='popular'))
 
 class MainScreen(GridLayout):
     manager = ObjectProperty(None)
@@ -696,13 +681,17 @@ class MainScreen(GridLayout):
         #change = menu.get(text)
         if menu == "discover":
             #sm.clear_widgets(screens=[self])
-            self.manager.clear_widgets(screens=[self.manager.get_screen('discover')])
+            try:
+                self.manager.clear_widgets(screens=[self.manager.get_screen('discover')])
+            except: pass
             self.manager.add_widget(ListDiscover(name = "discover", menu=type))
             #sm.current = 'discover'
             self.manager.current = 'discover'
 
         if menu == "list":
-            self.manager.clear_widgets(screens=[self.manager.get_screen('list')])
+            try:
+                self.manager.clear_widgets(screens=[self.manager.get_screen('list')])
+            except:pass
             self.manager.add_widget(ListFolder(name ="list", type=type, menu=text))
             self.manager.current = "list"
 
@@ -718,48 +707,6 @@ class MainScreen(GridLayout):
             sm.current = 'param'
 
         self.ids.nav_layout.toggle_nav_drawer()
-    
-    def onMovieChange(self, text):
-        print 'reall name onchange',  text
-        change = menu.get(text)
-        print "get name", change
-        if change == "movie" or change =="tv":
-            #sm.clear_widgets(screens=[self])
-            self.manager.clear_widgets(screens=[self.manager.get_screen('discover')])
-            self.manager.add_widget(ListDiscover(name = "discover", menu=change))
-            #sm.current = 'discover'
-            self.manager.current = 'discover'
-        if change == "player":
-            # try:
-            #     sm.clear_widgets(screens=[sm.get_screen('main')])
-            # except:pass
-            #sm.add_widget(VideoAlan(name = "main"))
-            #sm.current = 'main'
-            self.manager.current = 'main'
-        if change == "pref":
-            sm.add_widget(ListParam(name = "param"))
-            sm.current = 'param'
-    
-    def onTvChange(self, text):
-        print 'reall name onchange',  text
-        change = menu.get(text)
-        print "get name", change
-        if change == "movie" or change =="tv":
-            #sm.clear_widgets(screens=[self])
-            self.manager.clear_widgets(screens=[self.manager.get_screen('discover')])
-            self.manager.add_widget(ListDiscover(name = "discover", menu=change))
-            #sm.current = 'discover'
-            self.manager.current = 'discover'
-        if change == "player":
-            # try:
-            #     sm.clear_widgets(screens=[sm.get_screen('main')])
-            # except:pass
-            #sm.add_widget(VideoAlan(name = "main"))
-            #sm.current = 'main'
-            self.manager.current = 'main'
-        if change == "pref":
-            sm.add_widget(ListParam(name = "param"))
-            sm.current = 'param'
 
 
 class Video(App):
@@ -776,6 +723,8 @@ class Video(App):
 
         self.theme_cls.theme_style = 'Light'
         self.theme_cls.primary_palette = 'Blue'
+        self.screen = MainScreen()
+        #self.manager = self.screen.ids.manager
 
         #sm.add_widget(VideoAlan(name = "main"))
         #sm.add_widget(OpenFolder(name = "files"))
@@ -789,7 +738,8 @@ class Video(App):
         #sm.current = 'discover'
 
         #return sm
-        return MainScreen()
+        return self.screen
+
 
 if __name__ in ('__main__', '__android__'):
     Window.clearcolor = (0,0,0,0)
@@ -798,5 +748,4 @@ if __name__ in ('__main__', '__android__'):
     #print 'Name' , _plugin.getPluginName()
 
     #print 'nameee', vars(_plugin)
-
     Video().run()
