@@ -285,7 +285,8 @@ class VideoAlan(Screen):
     def onChange(self, label):
         #sm.clear_widgets(screens=[sm.get_screen('main')])
         #sm.clear_widgets(screens=[self])
-        sm.current = sm.previous()
+        app = App.get_running_app()
+        app.root.manager.current = app.root.manager.previous()
 
 class OpenFolder(Screen):
     pass
