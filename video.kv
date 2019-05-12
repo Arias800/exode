@@ -138,9 +138,8 @@
                 background_palette: 'Primary'
                 background_hue: '500'
                 left_action_items: [['menu', lambda x: nav_layout.toggle_nav_drawer()]]
-                right_action_items: []
+				right_action_items: [['arrow-left', lambda x: manager.set_previous_screen()]]				
 				elevation: 10
-				#right_action_items: [['dots-vertical', lambda x: app.root.toggle_nav_drawer()]]
 
 			ScreenSwitcher:
 				id: manager
@@ -298,13 +297,6 @@
 					pos: self.pos
 					size: self.size
 
-			Button:
-				size_hint: None, None 
-				size: 32, 32
-				background_normal:'img/back.png'
-				on_press:
-					root.onChange(self.text)
-
 			Spinner:
 				id: spinner_1
 				text: 'Menu' 
@@ -342,7 +334,7 @@
 				on_press:
 	                root.manager.transition.direction = 'left'
 	                root.manager.current = 'list'
-
+	                
 <OpenFolder>:
 
 	menu: _menu
