@@ -3,37 +3,57 @@
 import kivy
 kivy.require("1.9.1")
 
-from kivy.app import App
-from functools import partial
-from kivy.uix.relativelayout import RelativeLayout
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
+#Reste des import kivy
 from kivy.core.window import Window
-from kivy.uix.widget import Widget
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.button import Button
 from kivy.properties import StringProperty, BooleanProperty,ObjectProperty, ListProperty
-from kivy.uix.label import Label
 from kivy.modules import inspector
 from kivy.config import Config
 from kivy.clock import Clock
-from kivy.uix.dropdown import DropDown
-from kivy.uix.image import Image, AsyncImage
-from kivy.uix.behaviors import ButtonBehavior
 from kivy.animation import Animation
 from kivy.graphics import *
 from kivy.metrics import dp, sp
-from tmdb import tmdb
+from kivy.app import App
 
+#Uix import
+from kivy.uix.relativelayout import RelativeLayout
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
+from kivy.uix.widget import Widget
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.scrollview import ScrollView
+from kivy.uix.videoplayer import VideoPlayer
+from kivy.uix.dropdown import DropDown
+from kivy.uix.image import Image, AsyncImage
+from kivy.uix.behaviors import ButtonBehavior
+
+#Button import
+from kivy.uix.button import Button
+from kivymd.button import MDRaisedButton
+
+#Label import
+from kivy.uix.label import Label
+from kivymd.label import MDLabel
+
+#Reste des import kivy
+from kivy.core.window import Window
+from kivy.properties import StringProperty, BooleanProperty,ObjectProperty, ListProperty
+from kivy.modules import inspector
+from kivy.config import Config
+from kivy.clock import Clock
+from kivy.animation import Animation
+from kivy.graphics import *
+from kivy.metrics import dp, sp
+
+#Reste des import kivymd
 from kivymd.theming import ThemeManager
 from kivymd.accordion import MDAccordionSubItem, MDAccordionItem
 from kivymd.button import MDRaisedButton
-from kivymd.label import MDLabel
 from kivymd.list import TwoLineListItem
 from kivymd.textfields import MDTextField
 
-from kivy.uix.scrollview import ScrollView
-
+#Autre import
+from functools import partial
+from tmdb import tmdb
 import json
 
 #import pysrt
@@ -282,12 +302,6 @@ class VideoAlan(Screen):
     def ses_gizle(self,dt):
         self.ses.pos_hint = {"left":2,"top":2}
 
-    def onChange(self, label):
-        #sm.clear_widgets(screens=[sm.get_screen('main')])
-        #sm.clear_widgets(screens=[self])
-        app = App.get_running_app()
-        app.root.manager.current = app.root.manager.previous()
-
 class OpenFolder(Screen):
     pass
 
@@ -302,7 +316,7 @@ def onChange(self, text):
         #     sm.clear_widgets(screens=[sm.get_screen('main')])
         # except:pass
         #sm.add_widget(VideoAlan(name = "main"))
-        sm.current = 'main'
+        sm.current = 'player'
     if text == "pref":
         sm.add_widget(ListParam(name = "param"))
         sm.current = 'param'
@@ -445,9 +459,6 @@ class ListInfo(Screen):
         self.ids.cicle_l.add_widget(MyCircle(num = self.vote_average))
         self.ids.list_label.text = self.title
 
-        App.get_running_app().root.ids.toolbar.left_action_items = \
-            [['chevron-left', lambda x: self.onChange()]]
-
         # self.vote_circle = str(round(float(self.vote_average) * 36, 2))
 
     def show_synopsis(self):
@@ -533,9 +544,9 @@ class ListSource(Screen):
         #root.parent.get_screen("main").calistir(filechooser.path,filechooser.selection)
         #sm.add_widget(VideoAlan(name = "main"))
         #sm.get_screen("main").calistir(kwargs['url'],kwargs['url'])
-        app.root.manager.get_screen("main").calistir(kwargs['url'],kwargs['url'])
+        app.root.manager.get_screen("player").calistir(kwargs['url'],kwargs['url'])
         #sm.current = "main"
-        app.root.manager.current =  "main"
+        app.root.manager.current =  "player"
 
 class MyCircle(GridLayout):
     def __init__(self, **kwargs):
@@ -651,8 +662,15 @@ class ScreenSwitcher(ScreenManager):
         super(ScreenSwitcher, self).__init__(**kwargs)
         #self.add_widget(ScreenOne(name='sone'))
         self.add_widget(ListDiscover(name = "discover", menu='movie'))
-        self.add_widget(VideoAlan(name = "main"))
+        self.add_widget(VideoAlan(name = "player"))
         #self.add_widget(ListFolder(name = "list", type="movie", menu='popular'))
+
+    #Fonction pour retourner a l'ecran precedent
+    def set_previous_screen(self):
+        app = App.get_running_app()
+        previousName = app.root.manager.previous()
+        app.root.manager.clear_widgets()
+        app.root.manager.current = previousName
 
 class MainScreen(GridLayout):
     manager = ObjectProperty(None)
@@ -688,7 +706,7 @@ class MainScreen(GridLayout):
             # except:pass
             #sm.add_widget(VideoAlan(name = "main"))
             #sm.current = 'main'
-            self.manager.current = 'main'
+            self.manager.current = 'player'
         if menu == "pref":
             sm.add_widget(ListParam(name = "param"))
             sm.current = 'param'
@@ -705,6 +723,7 @@ class Video(App):
         Config.set('graphics', 'width', '480')
         Config.set('graphics', 'height', '800')
         Config.set('graphics', 'resizable', 0)
+        Config.set('graphics', 'fullscreen', 0)
         Config.write()
 
         self.theme_cls.theme_style = 'Light'
