@@ -59,6 +59,7 @@ import json
 #import pysrt
 
 #sm = ScreenManager()
+app = App.get_running_app()
 
 sous_menu = {
     "movie": {
@@ -311,12 +312,12 @@ def onChange(self, text):
         sm.clear_widgets(screens=[self])
         sm.add_widget(ListDiscover(name = "discover", menu=text))
         sm.current = 'discover'
-    if text == "player":
+    if text == "main":
         # try:
         #     sm.clear_widgets(screens=[sm.get_screen('main')])
         # except:pass
         #sm.add_widget(VideoAlan(name = "main"))
-        sm.current = 'player'
+        sm.current = 'main'
     if text == "pref":
         sm.add_widget(ListParam(name = "param"))
         sm.current = 'param'
@@ -544,9 +545,9 @@ class ListSource(Screen):
         #root.parent.get_screen("main").calistir(filechooser.path,filechooser.selection)
         #sm.add_widget(VideoAlan(name = "main"))
         #sm.get_screen("main").calistir(kwargs['url'],kwargs['url'])
-        app.root.manager.get_screen("player").calistir(kwargs['url'],kwargs['url'])
+        app.root.manager.get_screen("main").calistir(kwargs['url'],kwargs['url'])
         #sm.current = "main"
-        app.root.manager.current =  "player"
+        app.root.manager.current =  "main"
 
 class MyCircle(GridLayout):
     def __init__(self, **kwargs):
@@ -662,14 +663,19 @@ class ScreenSwitcher(ScreenManager):
         super(ScreenSwitcher, self).__init__(**kwargs)
         #self.add_widget(ScreenOne(name='sone'))
         self.add_widget(ListDiscover(name = "discover", menu='movie'))
-        self.add_widget(VideoAlan(name = "player"))
+        self.add_widget(VideoAlan(name = "main"))
         #self.add_widget(ListFolder(name = "list", type="movie", menu='popular'))
 
     #Fonction pour retourner a l'ecran precedent
     def set_previous_screen(self):
         app = App.get_running_app()
         previousName = app.root.manager.previous()
-        app.root.manager.clear_widgets()
+        print(app.root.manager.current)
+        if app.root.manager.current == "source":
+            app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('source')])
+        elif app.root.manager.current == "info":
+            app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('info')])
+        else: pass
         app.root.manager.current = previousName
 
 class MainScreen(GridLayout):
@@ -700,13 +706,13 @@ class MainScreen(GridLayout):
             self.manager.add_widget(ListFolder(name ="list", type=type, menu=text))
             self.manager.current = "list"
 
-        if menu == "player":
+        if menu == "main":
             # try:
             #     sm.clear_widgets(screens=[sm.get_screen('main')])
             # except:pass
             #sm.add_widget(VideoAlan(name = "main"))
             #sm.current = 'main'
-            self.manager.current = 'player'
+            self.manager.current = 'main'
         if menu == "pref":
             sm.add_widget(ListParam(name = "param"))
             sm.current = 'param'
