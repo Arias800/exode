@@ -692,17 +692,23 @@ class MainScreen(GridLayout):
         #change = menu.get(text)
         if menu == "discover":
             #sm.clear_widgets(screens=[self])
-            try:
+
+            if "discover" in self.manager.screen_names:
                 self.manager.clear_widgets(screens=[self.manager.get_screen('discover')])
-            except: pass
+            # try:
+            #     self.manager.clear_widgets(screens=[self.manager.get_screen('discover')])
+            # except: pass
             self.manager.add_widget(ListDiscover(name = "discover", menu=type))
             #sm.current = 'discover'
             self.manager.current = 'discover'
 
         if menu == "list":
-            try:
+
+            if "list" in self.manager.screen_names:
                 self.manager.clear_widgets(screens=[self.manager.get_screen('list')])
-            except:pass
+            # try:
+            #     self.manager.clear_widgets(screens=[self.manager.get_screen('list')])
+            # except:pass
             self.manager.add_widget(ListFolder(name ="list", type=type, menu=text))
             self.manager.current = "list"
 
