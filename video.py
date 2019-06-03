@@ -1,7 +1,7 @@
 #! usr/bin/env python
 #! -*- coding:utf-8 -*-
 import kivy
-kivy.require("1.9.1")
+kivy.require("1.10.1")
 
 #Reste des import kivy
 from kivy.core.window import Window
@@ -89,7 +89,13 @@ menu = {
 #pk ça utiliser les nom anglais pour apelle au function
 #pouvoir modifier quand y a auras un fichier lang.
 
-class VideoAlan(Screen):
+#Evite l'erreur :
+# __init__ don't take arguments
+class BlackHole(object):
+    def __init__(self, **kw):
+        super(BlackHole, self).__init__()
+
+class VideoAlan(Screen, BlackHole):
 
     fullscreen = BooleanProperty(False)
     f = ObjectProperty()
@@ -97,7 +103,7 @@ class VideoAlan(Screen):
 
     def __init__(self,**kwargs):
 
-        self.pickType = menu.viewkeys()
+        self.pickType = menu.keys()
 
         Window.bind(on_dropfile=self.calistir)
         super(VideoAlan,self).__init__(**kwargs)
@@ -181,7 +187,7 @@ class VideoAlan(Screen):
 
         if self.f:
 
-            if self.zaman in self.sub_list.keys():
+            if self.zaman in list(self.sub_list.keys()):
                 self.altyazi.text = self.sub_list[self.zaman]
 
             if self.zaman in self.sub_list_e:
@@ -210,11 +216,11 @@ class VideoAlan(Screen):
 
         if isinstance(path, list):
             if len(path) > 0:
-                path = path[0].encode("utf-8")
+                path = path[0]
             else:
                 return
 
-        if path.decode("utf-8").endswith(".srt"):
+        if path.endswith(".srt"):
             #self.f = pysrt.open(path,encoding='iso-8859-9')
 
             for i in self.f:
@@ -224,7 +230,7 @@ class VideoAlan(Screen):
                 if str(i.end.hours) + ":" + str(i.end.minutes) +":" + str(i.end.seconds) not in self.sub_list:
                     self.sub_list_e.append(str(i.end.hours) + ":" + str(i.end.minutes) +":" + str(i.end.seconds))
         else:
-            self.video.source = path.decode("utf-8")
+            self.video.source = path
 
     def on_touch_down(self,touch):
 
@@ -303,11 +309,11 @@ class VideoAlan(Screen):
     def ses_gizle(self,dt):
         self.ses.pos_hint = {"left":2,"top":2}
 
-class OpenFolder(Screen):
+class OpenFolder(Screen, BlackHole):
     pass
 
 def onChange(self, text):
-    print('onchange',  text)
+    print(('onchange',  text))
     if text == "movie" or text =="tv":
         sm.clear_widgets(screens=[self])
         sm.add_widget(ListDiscover(name = "discover", menu=text))
@@ -322,7 +328,7 @@ def onChange(self, text):
         sm.add_widget(ListParam(name = "param"))
         sm.current = 'param'
 
-class ListFolder(Screen):
+class ListFolder(Screen, BlackHole):
     #a = StringProperty('a')
     #b = StringProperty('b')
     #init les object du fichier KV
@@ -335,8 +341,8 @@ class ListFolder(Screen):
 
     def __init__(self, **kwargs):
         self.pageNumber = 1
-        self.pickType = menu.viewkeys()
-        self.sousType = sous_menu.get(kwargs['type']).viewkeys()
+        self.pickType = menu.keys()
+        self.sousType = sous_menu.get(kwargs['type']).keys()
 
         #self.sousType = ['Populaire','Mieux notes','Prochainement', 'latest']
 
@@ -348,7 +354,7 @@ class ListFolder(Screen):
         self.menu = kwargs['menu']
         self.type = kwargs['type']
 
-        print(self.menu, self.type)
+        print((self.menu, self.type))
 
         #poster
         #self.on_sub_Change()
@@ -384,7 +390,7 @@ class ListFolder(Screen):
             self.add()
             self.ids.scroll_id.scroll_y = float(1) / (self.pageNumber)
 
-class ImageButton(ButtonBehavior, AsyncImage):
+class ImageButton(ButtonBehavior, AsyncImage, BlackHole):
 
     def __init__(self, **kwargs):
         super(ImageButton, self).__init__(**kwargs)
@@ -415,7 +421,7 @@ class ImageButton(ButtonBehavior, AsyncImage):
         #sm.add_widget(ListInfo(name = "info", type=self.type, tmdbid=self.tmdb))
         #self.manager.clear_widgets(screens=[self.manager.get_screen('discover')])
         app = App.get_running_app()
-        print(self.parent.parent.parent.parent.manager)
+        print((self.parent.parent.parent.parent.manager))
 
         app.root.manager.add_widget(ListInfo(name = "info", type=self.type, tmdbid=self.tmdb))
         #self.parent.parent.parent.parent.manager.add_widget(ListInfo(name = "info", type=self.type, tmdbid=self.tmdb))
@@ -428,7 +434,7 @@ class ImageButton(ButtonBehavior, AsyncImage):
         #sm.get_screen('first_screen').first_screen.text = "Hi I'm The Fifth Screen"
 
 #screen information
-class ListInfo(Screen):
+class ListInfo(Screen, BlackHole):
 
     #box_share2 = ObjectProperty(None)
     grid_l = ObjectProperty(None)
@@ -517,7 +523,7 @@ class ListInfo(Screen):
 
     pass
 
-class ListSource(Screen):
+class ListSource(Screen, BlackHole):
 
     grid_id = ObjectProperty(None)
 
@@ -538,7 +544,7 @@ class ListSource(Screen):
                 self.ids.grid_id.add_widget(Button(text=text, font_size=14, on_press=partial(self.plays, url=sub['url'])))
 
     def plays(self, *args, **kwargs):
-        print(kwargs['url'])
+        print((kwargs['url']))
         app = App.get_running_app()
         #VideoAlan().calistir(kwargs['url'],'Nop')
 
@@ -549,7 +555,7 @@ class ListSource(Screen):
         #sm.current = "main"
         app.root.manager.current =  "main"
 
-class MyCircle(GridLayout):
+class MyCircle(GridLayout, BlackHole):
     def __init__(self, **kwargs):
         #circle: self.center_x, self.center_y, min(50, 50) / 2, 210, 360
         super(MyCircle, self).__init__(**kwargs)
@@ -562,15 +568,15 @@ class MyCircle(GridLayout):
             pts = [(Window.width/1.17), (Window.height/2.45), min(80, 80) / 2, 0, num]
             self.line = Line(circle=pts, width=5)
 
-class ListDiscover(Screen):
+class ListDiscover(Screen, BlackHole):
 
     def __init__(self, **kwargs):
-        self.pickType = menu.viewkeys()
+        self.pickType = menu.keys()
 
         print("Discover inittt")
-        print("discover manager", self.manager)
+        print(("discover manager", self.manager))
 
-        self.sousType = sous_menu.get(kwargs['menu']).viewkeys()
+        self.sousType = sous_menu.get(kwargs['menu']).keys()
 
         super(ListDiscover, self).__init__(**kwargs)
 
@@ -627,7 +633,7 @@ class discover_layout(BoxLayout):
         self.vote_average = str(data['vote_average'])
     pass
 
-class ListParam(Screen):
+class ListParam(Screen, BlackHole):
     pass
 
 #change screen
@@ -651,13 +657,13 @@ class ListParam(Screen):
 
 def _jsonload(type, menu,NextPage):
 
-    print("json", type, menu)
+    print(("json", type, menu))
     if menu == 'popular':
         return tmdb().getPopular(NextPage)
     elif menu == "top_rated":
         return tmdb().getRated(NextPage)
 
-class ScreenSwitcher(ScreenManager):
+class ScreenSwitcher(ScreenManager, BlackHole):
      #The screens can be added on the __init__ method like this or on the .kv file
     def __init__(self, **kwargs):
         super(ScreenSwitcher, self).__init__(**kwargs)
@@ -670,7 +676,7 @@ class ScreenSwitcher(ScreenManager):
     def set_previous_screen(self):
         app = App.get_running_app()
         previousName = app.root.manager.previous()
-        print(app.root.manager.current)
+        print((app.root.manager.current))
         if app.root.manager.current == "source":
             app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('source')])
         elif app.root.manager.current == "info":
@@ -678,17 +684,17 @@ class ScreenSwitcher(ScreenManager):
         else: pass
         app.root.manager.current = previousName
 
-class MainScreen(GridLayout):
+class MainScreen(GridLayout,BlackHole):
     manager = ObjectProperty(None)
     nav_drawer = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
-        print(menu.viewkeys())
-        self.pickType = menu.viewkeys()
+        print((menu.keys()))
+        self.pickType = menu.keys()
         super(MainScreen, self).__init__(**kwargs)
 
     def onChange(self, type, menu, text):
-        print('type %s / menu %s / Text %s'% (type, menu, text))
+        print(('type %s / menu %s / Text %s'% (type, menu, text)))
         #change = menu.get(text)
         if menu == "discover":
             #sm.clear_widgets(screens=[self])
