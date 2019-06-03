@@ -51,7 +51,7 @@ class plugin(object):
             elif self.is_valid(plugin.getList()):
                 self.__FullJson.append(plugin.getList())
             else:
-                print "erreur Json"
+                print("erreur Json")
 
         return json.dumps(self.__FullJson)
 
