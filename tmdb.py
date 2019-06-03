@@ -38,9 +38,9 @@ class tmdb:
     #utilise un json pour le moment
     def getPopular(self,NextPage):
         if NextPage == 2:
-            in_file = open("popular2.json","r")
+            in_file = open("popular2.json","r",encoding="utf-8")
         else:
-            in_file = open("popular.json","r")
+            in_file = open("popular.json","r",encoding="utf-8")
         self.results = json.load(in_file)
         in_file.close()
         if self.results:
@@ -49,8 +49,8 @@ class tmdb:
 
     def getByid(self, type, id):
 
-        print "get id", type , id
-        in_file = open("film.json","r")
+        print(("get id", type , id))
+        in_file = open("film.json","r",encoding="utf-8")
         results = json.load(in_file)
         in_file.close()
         if results:
@@ -59,7 +59,7 @@ class tmdb:
         return
 
     def getRated(self,NextPage):
-        in_file = open("rated.json","r")
+        in_file = open("rated.json","r",encoding="utf-8")
         self.results = json.load(in_file)
         in_file.close()
         if self.results:
@@ -72,7 +72,7 @@ class tmdb:
         elif type == "tv":
             file = "discover_tv.json"
 
-        in_file = open(file,"r")
+        in_file = open(file,"r",encoding="utf-8")
         self.results = json.load(in_file)
         in_file.close()
         if self.results:
