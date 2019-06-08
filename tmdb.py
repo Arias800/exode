@@ -47,9 +47,9 @@ class tmdb:
             return self._format_light()
         return
 
-    def getByid(self, type, id):
+    def getByid(self, types, id):
 
-        print(("get id", type , id))
+        print(("get id", types , id))
         in_file = open("film.json","r",encoding="utf-8")
         results = json.load(in_file)
         in_file.close()
@@ -66,13 +66,17 @@ class tmdb:
             return self._format_light()
         return
 
-    def getDiscover(self, type="movie"):
-        if type == "movie":
-            file = "discover_movie.json"
-        elif type == "tv":
-            file = "discover_tv.json"
+    def getDiscover(self, types,NextPage):
+        #Ca ouvre popular2 juste pour pas avoir un autre json pour rien
+        if NextPage == 2:
+            in_file = open("popular2.json","r",encoding="utf-8")
+        else:
+            if types == "movie":
+                file = "discover_movie.json"
+            elif types == "tv":
+                file = "discover_tv.json"
+            in_file = open(file,"r",encoding="utf-8")
 
-        in_file = open(file,"r",encoding="utf-8")
         self.results = json.load(in_file)
         in_file.close()
         if self.results:
