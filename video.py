@@ -580,11 +580,12 @@ class Video(App):
 
     def build(self):
 
-        Config.set('kivy', 'keyboard_mode', 'system')
-        Config.set('graphics', 'width', '480')
-        Config.set('graphics', 'height', '800')
-        Config.set('graphics', 'resizable', 0)
-        Config.set('graphics', 'fullscreen', 0)
+        Config.read('config.ini')
+        Config.get('kivy', 'keyboard_mode')
+        Config.get('graphics', 'width')
+        Config.get('graphics', 'height')
+        Config.get('graphics', 'resizable')
+        Config.get('graphics', 'fullscreen')
         Config.write()
 
         self.theme_cls.theme_style = 'Light'
