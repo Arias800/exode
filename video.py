@@ -56,9 +56,6 @@ from functools import partial
 from tmdb import tmdb
 import json
 
-#import pysrt
-
-#sm = ScreenManager()
 app = App.get_running_app()
 
 sous_menu = {
@@ -103,7 +100,7 @@ class VideoAlan(Screen, BlackHole):
 
     def __init__(self,**kwargs):
 
-        self.pickType = menu.keys()
+        self.picktypes = menu.keys()
 
         Window.bind(on_dropfile=self.calistir)
         super(VideoAlan,self).__init__(**kwargs)
@@ -221,7 +218,6 @@ class VideoAlan(Screen, BlackHole):
                 return
 
         if path.endswith(".srt"):
-            #self.f = pysrt.open(path,encoding='iso-8859-9')
 
             for i in self.f:
                 self.sub_list[str(i.start.hours) + ":" + str(i.start.minutes) +":" + str(i.start.seconds)] = "[b]" + (i.text.replace("<","[")).replace(">","]") + "[/b]"
@@ -319,76 +315,10 @@ def onChange(self, text):
         sm.add_widget(ListDiscover(name = "discover", menu=text))
         sm.current = 'discover'
     if text == "main":
-        # try:
-        #     sm.clear_widgets(screens=[sm.get_screen('main')])
-        # except:pass
-        #sm.add_widget(VideoAlan(name = "main"))
         sm.current = 'main'
     if text == "pref":
         sm.add_widget(ListParam(name = "param"))
         sm.current = 'param'
-
-class ListFolder(Screen, BlackHole):
-    #a = StringProperty('a')
-    #b = StringProperty('b')
-    #init les object du fichier KV
-    grid_l = ObjectProperty(None)
-    scroll_l = ObjectProperty(None)
-
-    #pickType = ['Movies','Series','Autres']
-
-    #sousType = {'pop' : 'populaire', 'note' : 'grande note', 'pro' : 'prochainement'}
-
-    def __init__(self, **kwargs):
-        self.pageNumber = 1
-        self.pickType = menu.keys()
-        self.sousType = sous_menu.get(kwargs['type']).keys()
-
-        #self.sousType = ['Populaire','Mieux notes','Prochainement', 'latest']
-
-        super(ListFolder, self).__init__(**kwargs)
-
-        #grille de poster
-        self.grid = self.grid_l
-
-        self.menu = kwargs['menu']
-        self.type = kwargs['type']
-
-        print((self.menu, self.type))
-
-        #poster
-        #self.on_sub_Change()
-        #self.add_widget(Button(text="NextPage", on_press=lambda a:self.on_change_Page(text='Populaires')))
-        #poster
-        self.ids.grid_id.clear_widgets()
-        self.add()
-
-        #scroll.add_widget(grid)
-        #scroll.add_widget(grid)
-
-        #self.root_widget = DataLayout(orientation='vertical')
-        #self.ids.box_id.add_widget(self.root_widget)
-
-        #self.ids.boxlayout_id.add_widget(newLabel)
-        #self.add_widget(_item2(self))
-        #return ListScreen()
-
-    def add(self):
-        json = _jsonload(self.type, self.menu,NextPage=self.pageNumber)
-        for data in json:
-
-            btn = ImageButton(type=self.type,
-            tmdbid=data['tmdbid'],
-            img=data['poster_path'],
-            size=(Window.width / 2 , (Window.width / 2) / 0.666 ))
-
-            self.ids.grid_id.add_widget(btn)
-
-    def scroll_direction(self, scroll_y):
-        if scroll_y < 0:
-            self.pageNumber = self.pageNumber + 1
-            self.add()
-            self.ids.scroll_id.scroll_y = float(1) / (self.pageNumber)
 
 class ImageButton(ButtonBehavior, AsyncImage, BlackHole):
 
@@ -397,9 +327,9 @@ class ImageButton(ButtonBehavior, AsyncImage, BlackHole):
 
         #icon = AsyncImage(source='https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/eye-24-256.png')
         self.background_normal = kwargs['img']
-        #print("ratio", self.root.width)
+        self.types = kwargs['types']
         self.tmdb = kwargs['tmdbid']
-        self.type = kwargs['type']
+        #print("ratio", self.root.width)
 
     def on_press(self):
 
@@ -411,32 +341,15 @@ class ImageButton(ButtonBehavior, AsyncImage, BlackHole):
         self.animation.bind(on_complete=on_stop)
         self.animation.start(self)
 
-        #App.get_running_app().root.manager.current = 'menu'
-        # screen_manager = App.get_running_app().root
-        # screen_manager.transition.direction = 'left'
-        # screen_manager.current = 'info'
-        #sm.transition.direction = 'left'
-        #self.manager.transition.direction = 'left'
-
-        #sm.add_widget(ListInfo(name = "info", type=self.type, tmdbid=self.tmdb))
-        #self.manager.clear_widgets(screens=[self.manager.get_screen('discover')])
         app = App.get_running_app()
         print((self.parent.parent.parent.parent.manager))
 
-        app.root.manager.add_widget(ListInfo(name = "info", type=self.type, tmdbid=self.tmdb))
-        #self.parent.parent.parent.parent.manager.add_widget(ListInfo(name = "info", type=self.type, tmdbid=self.tmdb))
-        #sm.current = 'info'
-        #self.parent.parent.parent.parent.manager.current = "info"
+        app.root.manager.add_widget(ListInfo(name = "info", types=self.types, tmdbid=self.tmdb))
         app.root.manager.current = "info"
-
-        #self.box_share2.clear_widgets()
-
-        #sm.get_screen('first_screen').first_screen.text = "Hi I'm The Fifth Screen"
 
 #screen information
 class ListInfo(Screen, BlackHole):
 
-    #box_share2 = ObjectProperty(None)
     grid_l = ObjectProperty(None)
     scroll_l = ObjectProperty(None)
     circle_l = ObjectProperty(None)
@@ -444,29 +357,15 @@ class ListInfo(Screen, BlackHole):
     def __init__(self, **kwargs):
         super(ListInfo, self).__init__(**kwargs)
 
-        #json = _jsonload(self)
-        json = tmdb().getByid(kwargs['type'], kwargs['tmdbid'])
-
-        #print(sm.previous())
-        #print(sm)
+        json = tmdb().getByid(kwargs['types'], kwargs['tmdbid'])
 
         #introduit le dict dans self
         #a revoir c'est moche
         for value in json[0]:
             setattr(self, value, json[0][value])
 
-        # img = AsyncImage(source=self.backdrop_path,
-        # size=(1920, 1280),
-        # keep_ratio=False,
-        # allow_stretch=True,
-        # pos=(-150, 150))
-
-        # self.add_widget(img)
-
         self.ids.cicle_l.add_widget(MyCircle(num = self.vote_average))
         self.ids.list_label.text = self.title
-
-        # self.vote_circle = str(round(float(self.vote_average) * 36, 2))
 
     def show_synopsis(self):
         self.synopsis = Label(text=self.overview,
@@ -503,23 +402,10 @@ class ListInfo(Screen, BlackHole):
             app.root.manager.current = app.root.manager.previous()
             app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('info')])
 
-        #self.manager.clear_widgets(screens=[self.manager.get_screen('info')])
-        #sm.current = 'list'
-        #self.manager.current = self.manager.previous()
-
-        #self.parent.parent.parent.parent.parent.manager.current = "discover"
-
     def show_source(self):
         app = App.get_running_app()
         app.root.manager.add_widget(ListSource(name = "source", title=self.title))
         app.root.manager.current =  "source"
-
-        #self.ids.spinner_source.values = ['A', 'B']
-
-        #sm.transition.direction = 'left'
-
-        #sm.add_widget(ListSource(name = "source"))
-        #sm.current = 'source'
 
     pass
 
@@ -546,82 +432,70 @@ class ListSource(Screen, BlackHole):
     def plays(self, *args, **kwargs):
         print((kwargs['url']))
         app = App.get_running_app()
-        #VideoAlan().calistir(kwargs['url'],'Nop')
 
-        #root.parent.get_screen("main").calistir(filechooser.path,filechooser.selection)
-        #sm.add_widget(VideoAlan(name = "main"))
-        #sm.get_screen("main").calistir(kwargs['url'],kwargs['url'])
         app.root.manager.get_screen("main").calistir(kwargs['url'],kwargs['url'])
-        #sm.current = "main"
         app.root.manager.current =  "main"
 
 class MyCircle(GridLayout, BlackHole):
     def __init__(self, **kwargs):
-        #circle: self.center_x, self.center_y, min(50, 50) / 2, 210, 360
         super(MyCircle, self).__init__(**kwargs)
 
         num = round(float(kwargs['num']) * 36, 2)
 
-        #self.size_hint = (None, None)
         with self.canvas:
-            #pts = [self.center_x, self.center_y, min(50, 50) / 2, 0, num]
             pts = [(Window.width/1.17), (Window.height/2.45), min(80, 80) / 2, 0, num]
             self.line = Line(circle=pts, width=5)
 
 class ListDiscover(Screen, BlackHole):
+    #init les object du fichier KV
+    grid_l = ObjectProperty(None)
+    scroll_l = ObjectProperty(None)
 
     def __init__(self, **kwargs):
-        self.pickType = menu.keys()
-
-        print("Discover inittt")
-        print(("discover manager", self.manager))
-
-        self.sousType = sous_menu.get(kwargs['menu']).keys()
+        self.pageNumber = 1
+        self.picktypes = menu.keys()
+        self.soustypes = sous_menu.get(kwargs['types']).keys()
 
         super(ListDiscover, self).__init__(**kwargs)
 
-        #self.grid = self.grid_l
+        #grille de poster
+        self.grid = self.grid_l
 
         self.menu = kwargs['menu']
-        #auplus simple
+        self.types = kwargs['types']
+
+        print((self.menu, self.types))
 
         #poster
+        self.ids.grid_id.clear_widgets()
+        self.add()
 
-        self.ids.discover_label.text = self.menu
-
-        json = tmdb().getDiscover(kwargs['menu'])
+    def add(self):
+        json = _jsonload(self.types, self.menu,NextPage=self.pageNumber)
         for data in json:
-            #btn = ImageButton(data)
-            btn = ImageButton(type=self.menu,
+            btn = ImageButton(types=self.menu,
             tmdbid=data['tmdbid'],
             img=data['backdrop_path_780'],
             size=(Window.width , Window.width / 1.777))
-            self.discover_grid.add_widget(btn)
-            label = discover_layout(data)
-            self.discover_grid.add_widget(label)
 
-        #self.grid_id.add_widget(self.grid_id2)
+            self.ids.grid_id.add_widget(btn)
+            label = discover_layout(data)
+            self.ids.grid_id.add_widget(label)
+
+    def scroll_direction(self, scroll_y):
+        if scroll_y < 0:
+            self.pageNumber = self.pageNumber + 1
+            self.add()
+            self.ids.scroll_id.scroll_y = float(1) / (self.pageNumber)
 
     def onChange(self, text):
-
-        #sm.clear_widgets(screens=[self])
-
         discover = menu.get(text)
         onChange(self, discover)
 
-        #sm.add_widget(ListDiscover(name ="discover", menu=discover))
-        #sm.current = "discover"
-
     def on_sub_Change(self, text=None):
         menu = sous_menu.get(self.menu).get(text)
-
-        sm.add_widget(ListFolder(name ="list", type=self.menu, menu=menu))
+        sm.add_widget(ListDiscover(name ="list", types=self.menu, menu=menu))
         sm.current = "list"
-
-        #self.remove_widget(self.grid_l)
-        #self.ids.grid_id.clear_widgets()
-
-        #change(self,text)
 
 class discover_layout(BoxLayout):
 
@@ -636,41 +510,25 @@ class discover_layout(BoxLayout):
 class ListParam(Screen, BlackHole):
     pass
 
-#change screen
-# def change(self, text):
-#     print(text)
-#     if text == "popular":
-#         print("passe popular")
-#         sm.add_widget(ListFolder(name = "list", menu='movie', sous_menu='popular'))
-#         sm.current = 'list'
-#     if text == "Mieux notes":
-#         print("passe notes")
-#         sm.add_widget(ListFolder(name = "list", menu='movie', sous_menu='rated'))
-#         sm.current = 'list'
+def _jsonload(types, menu,NextPage):
 
-#     if text == "Movies":
-#         self.manager.current = 'files'
-#     elif text == "Series":
-#         self.manager.current = 'files'
-#     elif text == "Autres":
-#         self.manager.current = 'files'
-
-def _jsonload(type, menu,NextPage):
-
-    print(("json", type, menu))
+    print(("json", types, menu))
     if menu == 'popular':
         return tmdb().getPopular(NextPage)
     elif menu == "top_rated":
         return tmdb().getRated(NextPage)
+    elif menu == "discover":
+        return tmdb().getDiscover(types,NextPage)
 
 class ScreenSwitcher(ScreenManager, BlackHole):
      #The screens can be added on the __init__ method like this or on the .kv file
     def __init__(self, **kwargs):
         super(ScreenSwitcher, self).__init__(**kwargs)
-        #self.add_widget(ScreenOne(name='sone'))
-        self.add_widget(ListDiscover(name = "discover", menu='movie'))
+        try:
+            self.add_widget(ListDiscover(name = "discover", types=types, menu=text))
+        except NameError:
+            self.add_widget(ListDiscover(name = "discover", types="movie", menu='discover'))
         self.add_widget(VideoAlan(name = "main"))
-        #self.add_widget(ListFolder(name = "list", type="movie", menu='popular'))
 
     #Fonction pour retourner a l'ecran precedent
     def set_previous_screen(self):
@@ -690,40 +548,25 @@ class MainScreen(GridLayout,BlackHole):
 
     def __init__(self, **kwargs):
         print((menu.keys()))
-        self.pickType = menu.keys()
+        self.picktypes = menu.keys()
         super(MainScreen, self).__init__(**kwargs)
 
-    def onChange(self, type, menu, text):
-        print(('type %s / menu %s / Text %s'% (type, menu, text)))
-        #change = menu.get(text)
-        if menu == "discover":
-            #sm.clear_widgets(screens=[self])
+    def onChange(self, types, menu, text):
+        print(('types %s / menu %s / Text %s'% (types, menu, text)))
 
+        if menu == "discover":
             if "discover" in self.manager.screen_names:
                 self.manager.clear_widgets(screens=[self.manager.get_screen('discover')])
-            # try:
-            #     self.manager.clear_widgets(screens=[self.manager.get_screen('discover')])
-            # except: pass
-            self.manager.add_widget(ListDiscover(name = "discover", menu=type))
-            #sm.current = 'discover'
+            self.manager.add_widget(ListDiscover(name = "discover", types=types, menu=text))
             self.manager.current = 'discover'
 
         if menu == "list":
-
             if "list" in self.manager.screen_names:
                 self.manager.clear_widgets(screens=[self.manager.get_screen('list')])
-            # try:
-            #     self.manager.clear_widgets(screens=[self.manager.get_screen('list')])
-            # except:pass
-            self.manager.add_widget(ListFolder(name ="list", type=type, menu=text))
+            self.manager.add_widget(ListDiscover(name ="list", types=types, menu=text))
             self.manager.current = "list"
 
         if menu == "main":
-            # try:
-            #     sm.clear_widgets(screens=[sm.get_screen('main')])
-            # except:pass
-            #sm.add_widget(VideoAlan(name = "main"))
-            #sm.current = 'main'
             self.manager.current = 'main'
         if menu == "pref":
             sm.add_widget(ListParam(name = "param"))
@@ -737,37 +580,20 @@ class Video(App):
 
     def build(self):
 
-        Config.set('kivy', 'keyboard_mode', 'system')
-        Config.set('graphics', 'width', '480')
-        Config.set('graphics', 'height', '800')
-        Config.set('graphics', 'resizable', 0)
-        Config.set('graphics', 'fullscreen', 0)
+        Config.read('config.ini')
+        Config.get('kivy', 'keyboard_mode')
+        Config.get('graphics', 'width')
+        Config.get('graphics', 'height')
+        Config.get('graphics', 'resizable')
+        Config.get('graphics', 'fullscreen')
         Config.write()
 
         self.theme_cls.theme_style = 'Light'
         self.theme_cls.primary_palette = 'Blue'
         self.screen = MainScreen()
-        #self.manager = self.screen.ids.manager
 
-        #sm.add_widget(VideoAlan(name = "main"))
-        #sm.add_widget(OpenFolder(name = "files"))
-        #list de film
-        #sm.add_widget(ListFolder(name = "list", type="movie", menu='popular'))
-        #decouvrir par default
-        #sm.add_widget(ListDiscover(name = "discover", menu='movie'))
-        #paramettre
-        #sm.add_widget(ListParam(name = "param"))
-        #sm.add_widget(ListInfo(name = "info"))
-        #sm.current = 'discover'
-
-        #return sm
         return self.screen
 
 if __name__ in ('__main__', '__android__'):
     Window.clearcolor = (0,0,0,0)
-    #print('list' , _plugin.getList())
-
-    #print('Name' , _plugin.getPluginName())
-
-    #print('nameee', vars(_plugin))
     Video().run()
