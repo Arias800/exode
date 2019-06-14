@@ -1,39 +1,21 @@
-#coding: utf-8
+#-*- coding: utf-8 -*-
+from lib.comaddon import EXlog
 
-import re
-import base64
+SITE_IDENTIFIER = 'disneyhd_tk'
+SITE_NAME = 'Disney HD'
+SITE_DESC = 'Disney HD: Tous les films Disney en streaming'
 
-from iplugin import iplugin
+URL_MAIN = 'https://disneyhd.tk/'
+URL_LISTE = URL_MAIN + '?page=liste.php'
+ANIM_ENFANTS = ('http://', 'load')
 
-##class nom de fichier
-class disney(iplugin):
+#URL_SEARCH = ('', 'sHowResultSearch')
+#URL_SEARCH_MOVIES = ('', 'sHowResultSearch')
+FUNCTION_SEARCH = 'sHowResultSearch'
 
-    def __init__(self, **kwargs):
-        #Kwargs get_tmdbid, get_title
-        iplugin.__init__(self)
-        #print "DIsneyyyyyy"
-        #print kwargs['get_title']
+sPattern1 = '<a href="([^"]+)".+?src="([^"]+)" alt.*?="(.+?)".*?>'
 
-        json = { 
-            "plugin" : "disney",
-            "thumb" : "http://disney",
-        "source" :[{
-            "title" : "Avatar",
-            "url" : "http://",
-            "qual" : "HD"
-            },
-            {"title" : "Avatar",
-            "url" : "http://",
-            "qual" : "HD"
-            }]
-        }
-        #self.setJson(json)
+UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:56.0) Gecko/20100101 Firefox/56.0'
 
-        #ou
-
-        
-        self.setPlugin("Disney")
-        self.setThumb("http://disney")
-        self.setSource("1001 pattes","http://disneyhdsource.ml/mp4/1001_pattes.mp4", "1080")
-        self.setSource("Aladdin","http://disneyhdsource.ml/mp4/aladdin.mp4", "1080")
-
+def ShowPlugin():
+    EXlog('Disney Load')

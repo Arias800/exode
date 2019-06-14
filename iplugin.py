@@ -1,126 +1,94 @@
 #-*- coding: utf-8 -*-
+#from resources.lib.config import cConfig
+from lib.comaddon import EXlog
+from lib.xbmcvfs import exists, translatePath
 
-import os, sys
-import json
+import sys, os, importlib
 
-class plugin(object):
+def getPluginHandle():
+    try:
+        return int( sys.argv[ 1 ] )
+    except:
+        return 0
 
-    def __init__(self):
+def getPluginPath():
+    try:
+        return sys.argv[0]
+    except:
+        return ''
 
-        self.__FullJson = []
+def __getFileNamesFromFolder(sFolder):
+    aNameList = []
+    sFolder = translatePath(sFolder)
+    items = os.listdir(sFolder)
+    items.sort()
+    for sItemName in items:
+        if not sItemName.endswith(".py"):
+            continue
 
-    #valid le json evite les erreurs
-    def is_valid(self, json):
+        sFilePath = "/".join([sFolder, sItemName])
 
-        if not json:
-            return False
+        # xbox hack
+        sFilePath = sFilePath.replace('\\', '/')
 
-        if json.get('plugin') is None:
-            return False
-        if json.get('thumb') is None:
-            return False
-        for e in json.get('source'):
-            if e.get('title') is None:
-                return False
-            if e.get('url') is None:
-                return False
-            if e.get('qual') is None:
-                return False
-        return True
+        EXlog("Load Plugin %s" % (sItemName))
 
-    def getFolder(self):
+        if (sFilePath.lower().endswith('py')):
+            sItemName = sItemName.replace('.py', '')
+            aNameList.append(sItemName)
+    return aNameList
 
-        app_path = os.path.dirname(os.path.abspath(__file__))
-        plugin_path = os.path.join(app_path, 'plugin')
+def __importPlugin(sName):
+    module = importlib.import_module("plugin."+sName, package=None)
+    sSiteName = module.SITE_NAME
+    sSiteDesc = module.SITE_DESC
+    sSiteIdentifer = sName
+    return sSiteName, sSiteIdentifer, sSiteDesc
 
-        for name in os.listdir(plugin_path):
-            if name.startswith('__init__.'):
-                continue
-            if not name.endswith(".py"):
-                continue
+def getAvailablePlugins(force = False):
+    sFolder = "special://plugin"
 
-            name = name.replace('.py', '')
+    # xbox hack
+    sFolder = sFolder.replace('\\', '/')
+    EXlog("Sites Folder " + sFolder)
 
-            plugin = __import__('plugin.%s' % name, fromlist=[name])
-            _class = getattr(plugin, name)
-            plugin = _class(get_tmdbid="testt", get_title="avatar")
+    aFileNames = __getFileNamesFromFolder(sFolder)
 
-        #json ou list
-            if self.is_valid(plugin.getJson()):
-                self.__FullJson.append(plugin.getJson())
-            elif self.is_valid(plugin.getList()):
-                self.__FullJson.append(plugin.getList())
-            else:
-                print("erreur Json")
+    aPlugins = []
+    for sFileName in aFileNames:
+        aPlugin = __importPlugin(sFileName)
+        if (aPlugin[0] != False):
+            sSiteName = aPlugin[0]
+            sPluginSettingsName = aPlugin[1]
+            sSiteDesc = aPlugin[2]
 
-        return json.dumps(self.__FullJson)
+    return aPlugins
 
+def getAllPlugins():
+    sFolder = "special://plugin"
 
-class iplugin(object):
+    # xbox hack
+    sFolder = sFolder.replace('\\', '/')
+    EXlog("Sites Folder " + sFolder)
 
-    def __init__(self):
+    aFileNames = __getFileNamesFromFolder(sFolder)
 
-        self.__list = []
-        self.__Plugin = ''
-        self.__Thumb = ''
-        self.__Json = {}
-        self.__Source = []
-            
+    aPlugins = []
+    for sFileName in aFileNames:
+        if not '__init__' in sFileName:
+            aPlugin = __importPlugin(sFileName)
+            if (aPlugin[0] != False):
+                sSiteName = aPlugin[0]
+                sPluginSettingsName = aPlugin[1]
+                sSiteDesc = aPlugin[2]
 
-# {
-#     "plugin" : "disney",
-#     "source" : {
-#         "title" : "Avatar",
-#         "url" : "http://",
-#         "qual" : "HD"
-#     }
-# }
+                aPlugins.append(__createAvailablePluginsItem(sSiteName, sFileName, sSiteDesc))
 
-#nom du plugin
-    def getPlugin(self):
-        return self.__Plugin
+    return aPlugins
 
-    def setPlugin(self, Plugin):
-        self.__Plugin = Plugin
-
-#image plugin
-    def getThumb(self):
-        return self.__Thumb
-
-    def setThumb(self, Thumb):
-        self.__Thumb = Thumb
-    
-#source plugin
-    def getSource(self):
-        return self.__Source
-
-    def setSource(self, Title, Url, Qual):
-        self.__Source.append({"title": Title, "url": Url, "qual": Qual})
-
-    def getList(self):
-        json = {}
-        json["plugin"] =  self.getPlugin()
-        json["thumb"] = self.getThumb()
-        json["source"] =  self.getSource()
-        return json
-    
-#full json
-    def getJson(self):
-        return self.__Json
-
-    def setJson(self, json):
-        self.__Json = json
-
-    # def serial(self):
-    #     print json.dumps(self.getParams())
-
-
-#La fonction json.dumps() permet de transformer mon dictionnaire (type dict) en une chaine de caractères (type str):
-#La fonction json.loads() permet de reconvertir ma str en dict:
-
-
-# playlist = {}
-# playlist["nom"] = "MeshowRandom"
-# playlist["musiques"] = []
-# playlist["musiques"].append("Best Improvisation Ever 2")
-# playlist["musiques"].append("My Theory (Bonus)")
+def __createAvailablePluginsItem(sPluginName, sPluginIdentifier, sPluginDesc):
+    aPluginEntry = []
+    aPluginEntry.append(sPluginName)
+    aPluginEntry.append(sPluginIdentifier)
+    aPluginEntry.append(sPluginDesc)
+    return aPluginEntry

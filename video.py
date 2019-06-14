@@ -5,7 +5,7 @@ kivy.require("1.10.1")
 
 #Reste des import kivy
 from kivy.core.window import Window
-from kivy.properties import StringProperty, BooleanProperty,ObjectProperty, ListProperty
+from kivy.properties import StringProperty, BooleanProperty, ObjectProperty, ListProperty
 from kivy.modules import inspector
 from kivy.config import Config
 from kivy.clock import Clock
@@ -34,16 +34,6 @@ from kivymd.button import MDRaisedButton
 from kivy.uix.label import Label
 from kivymd.label import MDLabel
 
-#Reste des import kivy
-from kivy.core.window import Window
-from kivy.properties import StringProperty, BooleanProperty,ObjectProperty, ListProperty
-from kivy.modules import inspector
-from kivy.config import Config
-from kivy.clock import Clock
-from kivy.animation import Animation
-from kivy.graphics import *
-from kivy.metrics import dp, sp
-
 #Reste des import kivymd
 from kivymd.theming import ThemeManager
 from kivymd.accordion import MDAccordionSubItem, MDAccordionItem
@@ -51,10 +41,13 @@ from kivymd.button import MDRaisedButton
 from kivymd.list import TwoLineListItem
 from kivymd.textfields import MDTextField
 
+#Custom Lib import
+from lib.comaddon import EXlog, ImageButton, BlackHole
+from tmdb import tmdb
+
 #Autre import
 from functools import partial
-from tmdb import tmdb
-import json
+import json, importlib
 
 app = App.get_running_app()
 
@@ -88,12 +81,7 @@ menu = {
 
 #Evite l'erreur :
 # __init__ don't take arguments
-class BlackHole(object):
-    def __init__(self, **kw):
-        super(BlackHole, self).__init__()
-
 class VideoAlan(Screen, BlackHole):
-
     fullscreen = BooleanProperty(False)
     f = ObjectProperty()
     Config.set('kivy', 'exit_on_escape', '0')
@@ -115,7 +103,6 @@ class VideoAlan(Screen, BlackHole):
         self.keyboard = None
 
     def on_keyboard_down(self,keyboard,keycode,text,modifiers):
-
         if keycode[1] == "right":
             self.video.unbind(position = self.slider)
             self.video.seek(float(self.video.position)/float(self.video.duration) + 5.0/self.video.duration)
@@ -159,52 +146,40 @@ class VideoAlan(Screen, BlackHole):
         if len(modifiers) > 0:
             if modifiers[-1] == "ctrl" and keycode[1] == "up":
                 self.durumcubugu.pos_hint = {"center_x":0.5,"y":0}
-
             elif modifiers[-1] == "ctrl" and keycode[1] == "down":
                 self.durumcubugu.pos_hint = {"center_x":0.5,"top":0}
-
             elif modifiers[-1] == "alt" and keycode[1] == "up":
                 self.menu.pos_hint = {"x":0,"y":1}
-
             elif modifiers[-1] == "alt" and keycode[1] == "down":
                 self.menu.pos_hint = {"x":0,"top":1}
 
     def on_keyboard_up(self,keyboard,keycode):
-
         self.video.bind(position = self.slider)
 
     def slider(self,ins,val):
-
         m , s = divmod(self.video.position,60)
         h , m = divmod(m,60)
 
         self.zaman = str(int(h)) + ":" + str(int(m)) + ":" + str(int(s))
-
         self.ilerleme.value = float(val)/ float(ins.duration)
 
         if self.f:
-
             if self.zaman in list(self.sub_list.keys()):
                 self.altyazi.text = self.sub_list[self.zaman]
-
             if self.zaman in self.sub_list_e:
                 self.altyazi.text = ""
 
     def oynat(self):
-
         self.video.state = "play"
 
     def duraklat(self):
-
         self.video.state = "pause"
 
     def durdur(self):
-
         self.video.state = "stop"
         self.ilerleme.value = 0,0
 
     def calistir(self,window,path):
-
         self.sub_list = {}
         self.sub_list_e = []
         self.altyazi.text = ""
@@ -218,7 +193,6 @@ class VideoAlan(Screen, BlackHole):
                 return
 
         if path.endswith(".srt"):
-
             for i in self.f:
                 self.sub_list[str(i.start.hours) + ":" + str(i.start.minutes) +":" + str(i.start.seconds)] = "[b]" + (i.text.replace("<","[")).replace(">","]") + "[/b]"
 
@@ -229,7 +203,6 @@ class VideoAlan(Screen, BlackHole):
             self.video.source = path
 
     def on_touch_down(self,touch):
-
         if "button" in touch.profile:
             if touch.button == "scrolldown" and self.durumcubugu.collide_point(*touch.pos) == False and self.ses.pos_hint != {"right":0.9,"top":0.9}:
                 self.ses.pos_hint = {"right":0.9,"top":0.9}
@@ -241,31 +214,24 @@ class VideoAlan(Screen, BlackHole):
 
             if touch.button == "scrolldown":
                 self.video.volume += 0.05
-
                 if self.durumcubugu.collide_point(*touch.pos) == False:
                     self.ses_ayari.value += 0.05
-
                 if self.video.volume > 2:
                     self.video.volume = 2
-
                 if self.ses_ayari.value > 2:
                     self.ses_ayari.value = 2
 
             if touch.button == "scrollup":
                 self.video.volume -= 0.05
-
                 if self.durumcubugu.collide_point(*touch.pos) == False:
                     self.ses_ayari.value -= 0.05
-
                 if self.video.volume < 0:
                     self.video.volume = 0
-
                 if self.ses_ayari.value < 0:
                     self.ses_ayari.value = 0
 
             if self.video.collide_point(*touch.pos):
                 if touch.is_double_tap:
-
                     if self.fullscreen:
                         self.video.pos_hint = {"x":0,"y":0.1}
                         Window.fullscreen = False
@@ -288,9 +254,7 @@ class VideoAlan(Screen, BlackHole):
             pass
 
     def on_touch_up(self,touch):
-
         if self.video.loaded:
-
             if self.ilerleme.collide_point(*touch.pos):
 
                 self.video.seek(self.ilerleme.value)
@@ -309,7 +273,7 @@ class OpenFolder(Screen, BlackHole):
     pass
 
 def onChange(self, text):
-    print(('onchange',  text))
+    EXlog(('onchange',  text))
     if text == "movie" or text =="tv":
         sm.clear_widgets(screens=[self])
         sm.add_widget(ListDiscover(name = "discover", menu=text))
@@ -320,32 +284,67 @@ def onChange(self, text):
         sm.add_widget(ListParam(name = "param"))
         sm.current = 'param'
 
-class ImageButton(ButtonBehavior, AsyncImage, BlackHole):
+class ListDiscover(Screen, BlackHole):
+    #init les object du fichier KV
+    grid_l = ObjectProperty(None)
+    scroll_l = ObjectProperty(None)
 
     def __init__(self, **kwargs):
-        super(ImageButton, self).__init__(**kwargs)
+        self.pageNumber = 1
+        self.picktypes = menu.keys()
+        self.soustypes = sous_menu.get(kwargs['types']).keys()
 
-        #icon = AsyncImage(source='https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/eye-24-256.png')
-        self.background_normal = kwargs['img']
+        super(ListDiscover, self).__init__(**kwargs)
+
+        #grille de poster
+        self.grid = self.grid_l
+
+        self.menu = kwargs['menu']
         self.types = kwargs['types']
-        self.tmdb = kwargs['tmdbid']
-        #print("ratio", self.root.width)
 
-    def on_press(self):
+        EXlog((self.menu, self.types))
 
-        def on_stop(*l):
-            self.animation = Animation(size =(self.size[0] - 10, self.size[1] - 10), t='in_quad', duration=0.5)
-            self.animation.start(self)
+        #poster
+        self.ids.grid_id.clear_widgets()
+        self.add()
 
-        self.animation = Animation(size =(self.size[0] + 10, self.size[1] + 10), t='in_quad', duration=0.5)
-        self.animation.bind(on_complete=on_stop)
-        self.animation.start(self)
+    def add(self):
+        json = _jsonload(self.types, self.menu,NextPage=self.pageNumber)
+        for data in json:
+            btn = ImageButton(types=self.menu,
+            tmdbid=data['tmdbid'],
+            img=data['backdrop_path_780'],
+            size=(Window.width , Window.width / 1.777),
+            functionName = ListInfo)
 
-        app = App.get_running_app()
-        print((self.parent.parent.parent.parent.manager))
+            self.ids.grid_id.add_widget(btn)
+            label = discover_layout(data)
+            self.ids.grid_id.add_widget(label)
 
-        app.root.manager.add_widget(ListInfo(name = "info", types=self.types, tmdbid=self.tmdb))
-        app.root.manager.current = "info"
+    def scroll_direction(self, scroll_y):
+        if scroll_y < 0:
+            self.pageNumber = self.pageNumber + 1
+            self.add()
+            self.ids.scroll_id.scroll_y = float(1) / (self.pageNumber)
+
+    def onChange(self, text):
+        discover = menu.get(text)
+        onChange(self, discover)
+
+    def on_sub_Change(self, text=None):
+        menu = sous_menu.get(self.menu).get(text)
+        sm.add_widget(ListDiscover(name ="list", types=self.menu, menu=menu))
+        sm.current = "list"
+
+class discover_layout(BoxLayout):
+
+    def __init__(self, data, **kwargs):
+        super(discover_layout, self).__init__(**kwargs)
+        self.title = data['title']
+        self.overview = data['overview'][0:140]
+        self.release_date = data['release_date']
+        self.vote_average = str(data['vote_average'])
+    pass
 
 #screen information
 class ListInfo(Screen, BlackHole):
@@ -395,7 +394,7 @@ class ListInfo(Screen, BlackHole):
     def onChange(self):
         app = App.get_running_app()
         if app.root.manager.current == "source":
-            print("paseeeeeeeeeee")
+            EXlog("paseeeeeeeeeee")
             app.root.manager.current = 'info'
             app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('source')])
         elif app.root.manager.current == "info":
@@ -416,25 +415,24 @@ class ListSource(Screen, BlackHole):
     def __init__(self, **kwargs):
         super(ListSource, self).__init__(**kwargs)
 
-        print(kwargs)
+        EXlog(kwargs)
         self.ids.bar_label.text = kwargs['title']
 
-        from iplugin import plugin
+        from iplugin import getAllPlugins
 
-        _plugin = plugin().getFolder()
+        _plugin = getAllPlugins()
 
-        for main in json.loads(_plugin):
-
-            for sub in main.get('source'):
-                text = ("%s - %s [%s]") % (main['plugin'], sub['title'] ,sub['qual'])
-                self.ids.grid_id.add_widget(Button(text=text, font_size=14, on_press=partial(self.plays, url=sub['url'])))
+        for main in _plugin:
+            text = ("%s - %s \n %s") % (main[0] , main[1] ,  main[2])
+            self.ids.grid_id.add_widget(Button(text=text, font_size=14, on_press=partial(self.plays, sName=main[1])))
 
     def plays(self, *args, **kwargs):
-        print((kwargs['url']))
-        app = App.get_running_app()
+        module = importlib.import_module("plugin."+str(kwargs['sName']), package=None)
+        content = module.ShowPlugin()
 
-        app.root.manager.get_screen("main").calistir(kwargs['url'],kwargs['url'])
-        app.root.manager.current =  "main"
+        app = App.get_running_app()
+        if app.root.manager.current == "discover":
+            app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('source')])
 
 class MyCircle(GridLayout, BlackHole):
     def __init__(self, **kwargs):
@@ -446,73 +444,12 @@ class MyCircle(GridLayout, BlackHole):
             pts = [(Window.width/1.17), (Window.height/2.45), min(80, 80) / 2, 0, num]
             self.line = Line(circle=pts, width=5)
 
-class ListDiscover(Screen, BlackHole):
-    #init les object du fichier KV
-    grid_l = ObjectProperty(None)
-    scroll_l = ObjectProperty(None)
-
-    def __init__(self, **kwargs):
-        self.pageNumber = 1
-        self.picktypes = menu.keys()
-        self.soustypes = sous_menu.get(kwargs['types']).keys()
-
-        super(ListDiscover, self).__init__(**kwargs)
-
-        #grille de poster
-        self.grid = self.grid_l
-
-        self.menu = kwargs['menu']
-        self.types = kwargs['types']
-
-        print((self.menu, self.types))
-
-        #poster
-        self.ids.grid_id.clear_widgets()
-        self.add()
-
-    def add(self):
-        json = _jsonload(self.types, self.menu,NextPage=self.pageNumber)
-        for data in json:
-            btn = ImageButton(types=self.menu,
-            tmdbid=data['tmdbid'],
-            img=data['backdrop_path_780'],
-            size=(Window.width , Window.width / 1.777))
-
-            self.ids.grid_id.add_widget(btn)
-            label = discover_layout(data)
-            self.ids.grid_id.add_widget(label)
-
-    def scroll_direction(self, scroll_y):
-        if scroll_y < 0:
-            self.pageNumber = self.pageNumber + 1
-            self.add()
-            self.ids.scroll_id.scroll_y = float(1) / (self.pageNumber)
-
-    def onChange(self, text):
-        discover = menu.get(text)
-        onChange(self, discover)
-
-    def on_sub_Change(self, text=None):
-        menu = sous_menu.get(self.menu).get(text)
-        sm.add_widget(ListDiscover(name ="list", types=self.menu, menu=menu))
-        sm.current = "list"
-
-class discover_layout(BoxLayout):
-
-    def __init__(self, data, **kwargs):
-        super(discover_layout, self).__init__(**kwargs)
-        self.title = data['title']
-        self.overview = data['overview'][0:140]
-        self.release_date = data['release_date']
-        self.vote_average = str(data['vote_average'])
-    pass
-
 class ListParam(Screen, BlackHole):
     pass
 
 def _jsonload(types, menu,NextPage):
 
-    print(("json", types, menu))
+    EXlog(("json", types, menu))
     if menu == 'popular':
         return tmdb().getPopular(NextPage)
     elif menu == "top_rated":
@@ -534,7 +471,7 @@ class ScreenSwitcher(ScreenManager, BlackHole):
     def set_previous_screen(self):
         app = App.get_running_app()
         previousName = app.root.manager.previous()
-        print((app.root.manager.current))
+        EXlog((app.root.manager.current))
         if app.root.manager.current == "source":
             app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('source')])
         elif app.root.manager.current == "info":
@@ -547,12 +484,12 @@ class MainScreen(GridLayout,BlackHole):
     nav_drawer = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
-        print((menu.keys()))
+        EXlog((menu.keys()))
         self.picktypes = menu.keys()
         super(MainScreen, self).__init__(**kwargs)
 
     def onChange(self, types, menu, text):
-        print(('types %s / menu %s / Text %s'% (types, menu, text)))
+        EXlog(('types %s / menu %s / Text %s'% (types, menu, text)))
 
         if menu == "discover":
             if "discover" in self.manager.screen_names:

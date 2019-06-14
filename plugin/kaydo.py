@@ -1,40 +1,21 @@
-#coding: utf-8
+#-*- coding: utf-8 -*-
+from lib.comaddon import EXlog
 
-import re
-import base64
+SITE_IDENTIFIER = 'kaydo'
+SITE_NAME = 'Kaydo'
+SITE_DESC = 'Kaydo : Films et serie en HD et en streaming'
 
-from iplugin import iplugin
-##class nom de fichier
-class kaydo(iplugin):
+URL_MAIN = 'https://hdss.to/'
+URL_LISTE = URL_MAIN
 
-    def __init__(self, **kwargs):
-        #Kwargs get_tmdbid, get_title
-        iplugin.__init__(self)
+#URL_SEARCH = ('', 'sHowResultSearch')
+#URL_SEARCH_MOVIES = ('', 'sHowResultSearch')
+FUNCTION_SEARCH = 'sHowResultSearch'
 
-        #print "Kaydo"
+sPattern1 = '<a href="([^"]+)".+?src="([^"]+)" alt.*?="(.+?)".*?>'
 
-        #print kwargs['get_title']
+UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:56.0) Gecko/20100101 Firefox/56.0'
 
-        json = { 
-            "plugin" : "kaydo",
-            "thumb" : "http://kaydo",
-        "source" :[{
-            "title" : "Avatar",
-            "url" : "http://",
-            "qual" : "HD"
-            },
-            {"title" : "Avatar",
-            "url" : "http://",
-            "qual" : "HD"
-            }]
-        }
-        #self.setJson(json)
-
-        #ou
-
-        
-        self.setPlugin("kaydo")
-        self.setThumb("http://kaydo")
-        self.setSource("Avengers","http://disneyhdsource.ml/mp4/avengers.mp4", "1080")
-        self.setSource("Deadpool","http://disneyhdsource.ml/mp4/deadpool.mp4", "1080")
+def ShowPlugin():
+    EXlog('Kaydo Load')
 
