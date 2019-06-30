@@ -49,15 +49,15 @@
             id: nav_drawer
 			#drawer_logo: 'img/icon.png'
 
-			NavigationDrawerSubheader:
-				text: "eXode 0.0.1"
+			#NavigationDrawerSubheader:
+			#	text: "eXode 0.0.1"
 
-			NavigationDrawerDivider:
+			#NavigationDrawerDivider:
 
 			MDAccordion:
 				orientation: 'vertical'
 				size_hint_y: None
-				height: dp(700)
+				height: self.parent.height
 
 				MDAccordionItem:
 					title:'Films'
@@ -107,7 +107,7 @@
 					icon: 'play'
 					#on_press: root.onChange('player', 'autre')
 				MDAccordionItem:
-					title:'Paramètres'
+					title:'Parametres'
 					icon: 'settings'
 					#on_press: root.onChange('setting', 'autre')
 					MDAccordionSubItem:
@@ -602,7 +602,7 @@
 
 	BoxLayout:
 		orientation: 'vertical'
-        padding: dp(10), dp(10)
+        padding: dp(0), dp(0)
         spacing: dp(10)
 
 		Label:
@@ -621,7 +621,7 @@
 			size: self.size
 			do_scroll_y: True
 			do_scroll_x: False
-			bar_width: '8dp'
+			bar_width: '12dp'
 
 			GridLayout:
 				id : grid_id
@@ -635,8 +635,8 @@
 				height: self.minimum_height
 				cols: 1
 				#spacing: 5
-				spacing: dp(4)
-				padding: dp(4), dp(4)
+				spacing: dp(20)
+				padding: dp(0), dp(0)
 				#row_default_height:(0.1 * (self.width - self.spacing[0]) - self.padding[0])
 				#row_default_height: (self.width - self.cols*self.spacing[0])/self.cols
 				#row_force_default: True
@@ -644,7 +644,7 @@
 
 				canvas: 
 					Color: 
-						rgba: 0,128,222,0.5
+						rgb: app.theme_cls.primary_color
 					Rectangle: 
 						pos: self.pos 
 						size: self.size	

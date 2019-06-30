@@ -2,3 +2,4 @@
 /*.env
 tmdb.pyc
 .vscode/settings.json
+config.ini
