@@ -635,7 +635,7 @@
 				height: self.minimum_height
 				cols: 1
 				#spacing: 5
-				spacing: dp(20)
+				spacing: dp(10)
 				padding: dp(0), dp(0)
 				#row_default_height:(0.1 * (self.width - self.spacing[0]) - self.padding[0])
 				#row_default_height: (self.width - self.cols*self.spacing[0])/self.cols
@@ -659,51 +659,57 @@
 	vote_average:''
 	release_date:''
 
-	FloatLayout:
-		# cols:2
-		orientation: "vertical"
-		#pos_hint: {"x":1,"top":1}
-		#size_hint: None, None
-		size_hint_y: None
-		# padding: 5
-		# spacing: 5
-		height: dp(150)
-		#width:400
-		#spacing: 5
-		spacing: dp(4)
-		padding: dp(20), dp(4)
+	AnchorLayout:
+		anchor_x: 'center'
+		anchor_y: 'bottom'
+		padding: dp(0), dp(0), dp(0), dp(10)
 
-		canvas: 
-			Color: 
-				rgba: 0,0,0,0.5
-			Rectangle: 
-				pos: self.pos 
-				size: self.size	
+		FloatLayout:
+			# cols:2
+			orientation: "vertical"
+			#pos_hint: {"x":1,"top":1}
+			#size_hint: None, None
+			size_hint_y: None
+			# padding: 5
+			# spacing: 5
+			height: dp(150)
+			#width:400
+			#spacing: 5
+			spacing: dp(4)
+			padding: dp(20)
 
-		Label:
-			text: root.title
-			text_size: self.size
-			font_size:'30sp'
-			pos_hint: {'x': .05, 'y': .7}
-			#pos: 10,10
-		
-		Label:
-			text: root.vote_average
-			text_size: self.size
-			font_size:'30sp'
-			pos_hint: {'x': .85, 'y': .7}
 
-		Label:
-			text: root.release_date
-			text_size: self.size
-			font_size:'15sp'
-			pos_hint: {'x': .05, 'y': .6}
+			canvas: 
+				Color: 
+					rgba: 0,0,0,0.5
+				Rectangle: 
+					pos: self.pos 
+					size: self.size	
 
-		Label:
-			text: root.overview
-			text_size: self.size
-			size_hint: .9, .5
-			pos_hint: {'x': .05, 'y': .1}
+			Label:
+				text: root.title
+				text_size: self.size
+				font_size:'30sp'
+				pos_hint: {'x': .05, 'y': .7}
+				#pos: 10,10
+			
+			Label:
+				text: root.vote_average
+				text_size: self.size
+				font_size:'30sp'
+				pos_hint: {'x': .85, 'y': .7}
+
+			Label:
+				text: root.release_date
+				text_size: self.size
+				font_size:'15sp'
+				pos_hint: {'x': .05, 'y': .6}
+
+			Label:
+				text: root.overview
+				text_size: self.size
+				size_hint: .9, .5
+				pos_hint: {'x': .05, 'y': .1}
 
 <ListSource>
 	grid_id:grid_id
