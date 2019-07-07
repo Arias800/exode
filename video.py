@@ -311,7 +311,7 @@ class ListDiscover(Screen, BlackHole):
     def add(self):
         json = _jsonload(self.types, self.menu,NextPage=self.pageNumber)
         for data in json:
-            btn = ImageButton(types=self.menu,
+            btn = ImageButton(types=self.types,
             tmdbid=data['tmdbid'],
             img=data['backdrop_path_780'],
             size=(Window.width , Window.width / 1.777),

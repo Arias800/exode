@@ -20,6 +20,7 @@
 # ],
 
 import json
+import requests
 
 class tmdb:
     URL = "http://api.themoviedb.org/3/"
@@ -50,9 +51,13 @@ class tmdb:
     def getByid(self, types, id):
 
         print(("get id", types , id))
-        in_file = open("film.json","r",encoding="utf-8")
-        results = json.load(in_file)
-        in_file.close()
+        #news code
+        rqst = requests.get('https://api.themoviedb.org/3/%s/%s?api_key=%s&language=fr-FR' % (types, id, self.api_key))
+        results = rqst.json()
+
+        #in_file = open("film.json","r",encoding="utf-8")
+        #results = json.load(in_file)
+        #in_file.close()
         if results:
             self.results = {"results" : [results]}
             return self._format_light()
