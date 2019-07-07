@@ -363,7 +363,8 @@ class ListInfo(Screen, BlackHole):
         for value in json[0]:
             setattr(self, value, json[0][value])
 
-        self.ids.cicle_l.add_widget(MyCircle(num = self.vote_average))
+        #self.ids.cicle_l.add_widget(MyCircle(num = self.vote_average))
+        
         self.ids.list_label.text = self.title
 
     def show_synopsis(self):

@@ -426,7 +426,7 @@
 	overview:''
 	pickSource:''
 
-	cicle_l : cicle_l
+	#cicle_l : cicle_l
 
 	BoxLayout:
 		orientation: 'vertical'
@@ -451,54 +451,31 @@
         MDSeparator:
 
 
-	# BoxLayout:
-	# 	orientation: "vertical"
+		BoxLayout:
+			orientation: 'horizontal'
+			size_hint:None, None
+			spacing:10
+			padding:10
+			height: 60
 
-	# 	BoxLayout:
-	# 		#id: box_share2
 
-	# 		orientation: "horizontal"
-	# 		pos_hint: {"x":0,"top":1}
-	# 		size_hint: 1,None
-	# 		padding: 5
-	# 		spacing: 5
-	# 		height: 50
+			MDRaisedButton:
+				text: "Recherche source"
+				elevation_normal: 2
+				opposite_colors: True
+				on_press: root.show_source()
 
-	# 		canvas.before:
+			MDRaisedButton:
+				text: "Add favorite"
+				elevation_normal: 2
+				opposite_colors: True
+				on_press: root.show_source()
 
-	# 			Color:
-	# 				rgba: 0,0,0,0.5
-	# 			Rectangle:
-	# 				pos: self.pos
-	# 				size: self.size
-
-	# 		Button:
-	# 			size_hint: None, None 
-	# 			size: 32, 32
-	# 			background_normal:'img/back.png'
-	# 			on_press:
-	# 				root.onChange(self.text)
-
-	# 		Button:
-	# 			text: 'Recherche source'  
-	# 			size_hint: None, 1
-	# 			width:150
-	# 			on_press: root.show_source()
-			
-
-			#Button:
-			#
-			#	text: "Synopsis"
-			#	size_hint: None,1
-			#	width: 140
-			#	on_press:root.show_synopsis()
-		MDRaisedButton:
-			text: "Recherche source"
-			#elevation_normal: 2
-			opposite_colors: True
-			size_hint:1,None
-			pos_hint: {'center_x': 0.5, 'center_y': .65}
-			on_press: root.show_source()
+			MDRaisedButton:
+				text: "Noté"
+				elevation_normal: 2
+				opposite_colors: True
+				on_press: root.show_source()
 
 		ScrollView:
 			id: scroll_id
@@ -519,7 +496,6 @@
 				cols: 1
 				#spacing: 5
 				spacing: dp(4)
-				padding: dp(4), dp(4)
 
 				FloatLayout:
 
@@ -550,7 +526,7 @@
 					canvas.before:
 
 						Color:
-							rgba: 0,128,222,0.5
+							rgba: 0,0,0,0.5
 						Rectangle:
 							pos: self.pos
 							size: self.size
@@ -559,22 +535,23 @@
 						text: root.title
 						text_size: self.size
 						font_size:'40sp'
-						pos_hint: {'x': .1, 'y': .8}
+						pos_hint: {'x': 0.05, 'y': .8}
 					Label:
 						text: root.genres
 						text_size: self.size
 						font_size:'25sp'
-						pos_hint: {'x': .1, 'y': .75}
+						pos_hint: {'x': 0.05, 'y': .75}
 
 					Label:
 						text: root.vote_average
 						text_size: self.size
 						font_size:'40sp'
-						pos_hint: {'x': .8, 'y': .75}
+						pos_hint: {'x': .85, 'y': .8}
 
-					GridLayout:
-						cols: 1
-						id : cicle_l
+					#fait chier a regler
+					#GridLayout:
+					#	cols: 1			
+					#	id : cicle_l
 
 					ScrollView:
 						id: scroll_id
