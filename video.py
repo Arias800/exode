@@ -407,6 +407,16 @@ class ListInfo(Screen, BlackHole):
         app.root.manager.add_widget(ListSource(name = "source", title=self.title))
         app.root.manager.current =  "source"
 
+    def show_bottom(self):
+        from kivymd.bottomsheet import MDGridBottomSheet
+        bs = MDGridBottomSheet()
+        bs.add_item("Facebook", lambda x: x, icon_src='./assets/facebook-box.png')
+        bs.add_item("YouTube", lambda x: x, icon_src='./assets/youtube-play.png')
+        bs.add_item("Twitter", lambda x: x, icon_src='./assets/twitter.png')
+        bs.add_item("Da Cloud", lambda x: x, icon_src='./assets/cloud-upload.png')
+        bs.add_item("Camera", lambda x: x, icon_src='./assets/camera.png')
+        bs.open()
+
     pass
 
 class ListSource(Screen, BlackHole):
