@@ -407,17 +407,37 @@ class ListInfo(Screen, BlackHole):
         app.root.manager.add_widget(ListSource(name = "source", title=self.title))
         app.root.manager.current =  "source"
 
+#test source ne veut lancer que kaydo ?
     def show_bottom(self):
-        from kivymd.bottomsheet import MDGridBottomSheet
-        bs = MDGridBottomSheet()
-        bs.add_item("Facebook", lambda x: x, icon_src='./assets/facebook-box.png')
-        bs.add_item("YouTube", lambda x: x, icon_src='./assets/youtube-play.png')
-        bs.add_item("Twitter", lambda x: x, icon_src='./assets/twitter.png')
-        bs.add_item("Da Cloud", lambda x: x, icon_src='./assets/cloud-upload.png')
-        bs.add_item("Camera", lambda x: x, icon_src='./assets/camera.png')
+        from kivymd.bottomsheet import MDListBottomSheet
+        from iplugin import getAllPlugins
+
+        bs = MDListBottomSheet()
+        _plugin = getAllPlugins()
+
+        #boucle ne fonctione pas comme je veut lambda de Me... !
+
+        for main in _plugin:
+            text = ("%s - %s \n %s") % (main[0] , main[1] ,  main[2])
+            #fonctionne mais on peux modifier le text 
+            bs.add_item(main[1], lambda x: self.plays(sName=x.text))
+            #bs.add_item(text, lambda x: self.plays(sName=main[1]))
+        #plante bs.add_item("Here's another!", lambda x: x, icon='md-nfc')
         bs.open()
 
+    def plays(self, *args, **kwargs):
+
+        print(kwargs)
+
+        module = importlib.import_module("plugin."+str(kwargs['sName']), package=None)
+        content = module.ShowPlugin()
+
+        app = App.get_running_app()
+        if app.root.manager.current == "discover":
+            app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('source')])
+
     pass
+
 
 class ListSource(Screen, BlackHole):
 
