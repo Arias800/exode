@@ -1,5 +1,5 @@
 #-*- coding: utf-8 -*-
-from kivy.properties import ObjectProperty
+from kivymd.bottomsheet import MDListBottomSheet
 
 from lib.comaddon import EXlog
 
@@ -21,10 +21,14 @@ sPattern1 = '<a href="([^"]+)".+?src="([^"]+)" alt.*?="(.+?)".*?>'
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:56.0) Gecko/20100101 Firefox/56.0'
 
-def ListMenu():
-    Menu = [('Liste Film',URL_LISTE),('Liste Film',URL_LISTE),('Liste Film',URL_LISTE),('Liste Film',URL_LISTE)]
-    EXlog('Menu '+str(Menu))
-    return Menu
+def ListMenu(self, kwargs):
+    bs = MDListBottomSheet()
+    Menu = [('Liste Film',URL_LISTE)]
+    for txt in Menu:
+        text = ("%s") % (txt[0])
+        bs.add_item(text, lambda x: self.PluginMenu(sName=str(kwargs['sName']),sCat=str(int(kwargs['sCat'])+1),sUrl=str(txt[1])))
+    bs.open()
+    return kwargs['sCat']
 
 def getHtml(sUrl):
     import urllib.parse
@@ -36,8 +40,9 @@ def getHtml(sUrl):
     with urllib.request.urlopen(req) as response:
        return response.read()
 
-def showMovies(sUrl):
-    html = getHtml(sUrl)
+def showMovies(self, kwargs):
+    bs = MDListBottomSheet()
+    html = getHtml(kwargs['sUrl'])
 
     result = re.findall('<a href="([^"]+)".+?src="([^"]+)" alt.*?="(.+?)".*?>',str(html))
     sTitle = []
@@ -47,4 +52,9 @@ def showMovies(sUrl):
         sUrl.append(URL_MAIN + res[0])
         sTitle.append(res[2].replace('streaming', '').replace(' 1080p', '').replace('_', ' '))
     content = dict(zip(sTitle,sUrl))
-    return content
+
+    for aEntry in content.items():
+        text = ("%s") % (aEntry[0])
+        bs.add_item(text, lambda x: self.PluginMenu(sName=str(kwargs['sName']), sCat=str(int(kwargs['sCat'])+1)))
+    bs.open()
+    return kwargs['sCat']
