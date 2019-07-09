@@ -40,6 +40,7 @@ from kivymd.accordion import MDAccordionSubItem, MDAccordionItem
 from kivymd.button import MDRaisedButton
 from kivymd.list import TwoLineListItem
 from kivymd.textfields import MDTextField
+from kivymd.bottomsheet import MDListBottomSheet
 
 #Custom Lib import
 from lib.comaddon import EXlog, ImageButton, BlackHole
@@ -348,7 +349,6 @@ class discover_layout(BoxLayout):
 
 #screen information
 class ListInfo(Screen, BlackHole):
-
     grid_l = ObjectProperty(None)
     scroll_l = ObjectProperty(None)
     circle_l = ObjectProperty(None)
@@ -409,7 +409,6 @@ class ListInfo(Screen, BlackHole):
 
 #test source ne veut lancer que kaydo ?
     def show_bottom(self):
-        from kivymd.bottomsheet import MDListBottomSheet
         from iplugin import getAllPlugins
 
         bs = MDListBottomSheet()
@@ -420,7 +419,7 @@ class ListInfo(Screen, BlackHole):
         for main in _plugin:
             text = ("%s - %s \n %s") % (main[0] , main[1] ,  main[2])
             #fonctionne mais on peux modifier le text 
-            bs.add_item(main[1], lambda x: self.plays(sName=x.text))
+            bs.add_item(main[1], lambda x: self.PluginMenu(sName=x.text))
             #bs.add_item(text, lambda x: self.plays(sName=main[1]))
         #plante bs.add_item("Here's another!", lambda x: x, icon='md-nfc')
         bs.open()
@@ -430,7 +429,7 @@ class ListInfo(Screen, BlackHole):
         print(kwargs)
 
         module = importlib.import_module("plugin."+str(kwargs['sName']), package=None)
-        content = module.ShowPlugin()
+        content = module.ListMenu()
 
         app = App.get_running_app()
         if app.root.manager.current == "discover":
@@ -438,6 +437,29 @@ class ListInfo(Screen, BlackHole):
 
     pass
 
+    def PluginMenu(self, *args, **kwargs):
+        module = importlib.import_module("plugin."+str(kwargs['sName']), package=None)
+        bs = MDListBottomSheet()
+        try:
+            kwargs['sCat']
+        except KeyError:
+            kwargs['sCat'] = '1'
+
+        if kwargs['sCat'] == '1':
+            content = module.ListMenu()
+        elif kwargs['sCat'] == '2':
+            content = module.showMovies(kwargs['sUrl'])
+
+        if kwargs['sCat'] == '1':
+            for txt in content:
+                text = ("%s") % (txt[0])
+                bs.add_item(text, lambda x: self.PluginMenu(sName=str(kwargs['sName']),sCat=str(int(kwargs['sCat'])+1),sUrl=str(txt[1])))
+            bs.open()
+        else:
+            for sTitle,sUrl in content.items():
+                text = ("%s") % (sTitle)
+                bs.add_item(text, lambda x: self.PluginMenu(sName=str(kwargs['sName']), sCat=str(int(kwargs['sCat'])+1)))
+            bs.open()
 
 class ListSource(Screen, BlackHole):
 
@@ -459,7 +481,7 @@ class ListSource(Screen, BlackHole):
 
     def plays(self, *args, **kwargs):
         module = importlib.import_module("plugin."+str(kwargs['sName']), package=None)
-        content = module.ShowPlugin()
+        content = module.ListMenu()
 
         app = App.get_running_app()
         if app.root.manager.current == "discover":
