@@ -439,27 +439,16 @@ class ListInfo(Screen, BlackHole):
 
     def PluginMenu(self, *args, **kwargs):
         module = importlib.import_module("plugin."+str(kwargs['sName']), package=None)
-        bs = MDListBottomSheet()
         try:
             kwargs['sCat']
         except KeyError:
             kwargs['sCat'] = '1'
 
+        EXlog(kwargs['sCat'])
         if kwargs['sCat'] == '1':
-            content = module.ListMenu()
+            kwargs['sCat'] = module.ListMenu(self,kwargs)
         elif kwargs['sCat'] == '2':
-            content = module.showMovies(kwargs['sUrl'])
-
-        if kwargs['sCat'] == '1':
-            for txt in content:
-                text = ("%s") % (txt[0])
-                bs.add_item(text, lambda x: self.PluginMenu(sName=str(kwargs['sName']),sCat=str(int(kwargs['sCat'])+1),sUrl=str(txt[1])))
-            bs.open()
-        else:
-            for sTitle,sUrl in content.items():
-                text = ("%s") % (sTitle)
-                bs.add_item(text, lambda x: self.PluginMenu(sName=str(kwargs['sName']), sCat=str(int(kwargs['sCat'])+1)))
-            bs.open()
+            kwargs['sCat'] = module.showMovies(self,kwargs)
 
 class ListSource(Screen, BlackHole):
 
