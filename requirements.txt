@@ -10,10 +10,11 @@ kivy-deps.glew==0.1.12
 kivy-deps.gstreamer==0.1.17
 kivy-deps.sdl2==0.1.22
 Kivy-Garden==0.1.4
-#kivymd==0.1.2
+#kivymd==0.100.2
 git+https://github.com/HeaTTheatR/KivyMD.git
 lazy-object-proxy==1.4.1
 mccabe==0.6.1
+Pillow==6.1.0
 Pygments==2.4.2
 pylint==2.3.1
 pypiwin32==223
