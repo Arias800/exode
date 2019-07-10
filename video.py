@@ -407,7 +407,7 @@ class ListInfo(Screen, BlackHole):
         app.root.manager.add_widget(ListSource(name = "source", title=self.title))
         app.root.manager.current =  "source"
 
-#test source ne veut lancer que kaydo ?
+
     def show_bottom(self):
         from iplugin import getAllPlugins
 
@@ -552,6 +552,15 @@ class MainScreen(GridLayout,BlackHole):
             sm.current = 'param'
 
         self.ids.nav_layout.toggle_nav_drawer()
+
+
+    def onRoot(self):
+        from kivy.uix.modalview import ModalView
+        from kivymd.filemanager import MDFileManager
+
+        if not self.manager:
+            self.manager = ModalView(size_hint=(1, 1), auto_dismiss=False)
+            self.file_manager = MDFileManager(exit_manager=self.exit_manager, select_path=self.select_path)
 
 class Video(App):
 

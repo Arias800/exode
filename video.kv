@@ -20,19 +20,22 @@
 #
 #:import os os
 #:import NavigationLayout kivymd.navigationdrawer.NavigationLayout
+#:import MDToolbar kivymd.toolbar.MDToolbar
 #:import MDNavigationDrawer kivymd.navigationdrawer.MDNavigationDrawer
 #:import NavigationDrawerDivider kivymd.navigationdrawer.NavigationDrawerDivider
-#:import NavigationDrawerToolbar kivymd.navigationdrawer.NavigationDrawerToolbar
+##:import NavigationDrawerToolbar kivymd.navigationdrawer.NavigationDrawerToolbar
 #:import NavigationDrawerSubheader kivymd.navigationdrawer.NavigationDrawerSubheader
 
-#:import MDSeparator kivymd.card.MDSeparator
-#:import MDTabbedPanel kivymd.tabs.MDTabbedPanel
-#:import MDTab kivymd.tabs.MDTab
+
+
+##:import MDSeparator kivymd.card.MDSeparator
+##:import MDTabbedPanel kivymd.tabs.MDTabbedPanel
+##:import MDTab kivymd.tabs.MDTab
 
 ##Si fork de KivyMD https://github.com/HeaTTheatR/KivyMD utiliser ceux la a la place des 3 precedent au dessus
-##:import MDTabbedPanel kivymd.tabs.MDTabsLabel
-##:import MDTab kivymd.tabs.MDTabs
-##:import MDSeparator kivymd.cards.MDSeparator
+#:import MDTabbedPanel kivymd.tabs.MDTabsLabel
+#:import MDTab kivymd.tabs.MDTabs
+#:import MDSeparator kivymd.cards.MDSeparator
 
 #:import MDSpinner kivymd.spinner.MDSpinner
 
@@ -111,6 +114,9 @@
 				MDAccordionItem:
 					title:'Lecteur'
 					icon: 'play'
+					MDAccordionSubItem:
+						text: "Parcourir"
+						on_press: root.onRoot()
 					#on_press: root.onChange('player', 'autre')
 				MDAccordionItem:
 					title:'Parametres'
@@ -137,9 +143,9 @@
 
 		BoxLayout:
             orientation: 'vertical'
-            Toolbar:
+            #Toolbar:
             #Si c'est la nouvelle version de KivyMD utiliser MDToolbar a la place de Toolbar
-            #MDToolbar:
+            MDToolbar:
                 id: toolbar
                 title: 'eXode'
                 md_bg_color: app.theme_cls.primary_color
