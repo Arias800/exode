@@ -1,9 +1,9 @@
 #-*- coding: utf-8 -*-
 from kivymd.bottomsheet import MDListBottomSheet
-
+from lib.handler.requestHandler import cRequestHandler
 from lib.comaddon import EXlog
 
-import re 
+import re,json
 
 SITE_IDENTIFIER = 'disneyhd_tk'
 SITE_NAME = 'Disney HD'
@@ -21,40 +21,50 @@ sPattern1 = '<a href="([^"]+)".+?src="([^"]+)" alt.*?="(.+?)".*?>'
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:56.0) Gecko/20100101 Firefox/56.0'
 
-def ListMenu(self, kwargs):
-    bs = MDListBottomSheet()
-    Menu = [('Liste Film',URL_LISTE)]
-    for txt in Menu:
-        text = ("%s") % (txt[0])
-        bs.add_item(text, lambda x: self.PluginMenu(sName=str(kwargs['sName']),sCat=str(int(kwargs['sCat'])+1),sUrl=str(txt[1])))
-    bs.open()
-    return kwargs['sCat']
+def getJson():
+    UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:56.0) Gecko/20100101 Firefox/56.0'
+    oRequest = cRequestHandler('https://disneyhd.tk/movies_list.php')
+    oRequest.addHeaderEntry('User-Agent', UA)
+    sHtmlContent = oRequest.request()
 
-def getHtml(sUrl):
-    import urllib.parse
-    import urllib.request
+    aResult = re.findall('<img src="([^"]+)"><div class="title">([^>]+)<\/div><\/a><a class="item" href="([^"]+)"',str(sHtmlContent))
+    d1 = {"plugin":SITE_NAME}
 
-    headers = {'User-Agent': UA}
+    i = 0
+    for aEntry in aResult:
+        if i >= 2:
+            break
+        sUrl = URL_MAIN + aEntry[2]
+        sQual,url = getFinalUrl(sUrl)
 
-    req = urllib.request.Request(sUrl, None, headers)
-    with urllib.request.urlopen(req) as response:
-       return response.read()
+        for qual,sUrl in zip(sQual,url):
+            sTitle = aEntry[1]
+            extra = ({"source":{'title' : sTitle,"url":sUrl,"qual":qual}})
+            d1.update(extra)
+        i = i+1
 
-def showMovies(self, kwargs):
-    bs = MDListBottomSheet()
-    html = getHtml(kwargs['sUrl'])
+    JSON = json.dumps(d1)
 
-    result = re.findall('<a href="([^"]+)".+?src="([^"]+)" alt.*?="(.+?)".*?>',str(html))
-    sTitle = []
-    sUrl = []
+    return JSON
 
-    for res in result:
-        sUrl.append(URL_MAIN + res[0])
-        sTitle.append(res[2].replace('streaming', '').replace(' 1080p', '').replace('_', ' '))
-    content = dict(zip(sTitle,sUrl))
+def getFinalUrl(sUrl):
 
-    for aEntry in content.items():
-        text = ("%s") % (aEntry[0])
-        bs.add_item(text, lambda x: self.PluginMenu(sName=str(kwargs['sName']), sCat=str(int(kwargs['sCat'])+1)))
-    bs.open()
-    return kwargs['sCat']
+    oRequestHandler = cRequestHandler(sUrl)
+    sHtmlContent = oRequestHandler.request()
+
+    #film
+    if '<ol id="playlist">' in str(sHtmlContent):
+        aResult = re.findall('<li data-trackurl="([^"]+)">(.+?)<\/li>',str(sHtmlContent))
+        
+    elif 'data-ws=' in str(sHtmlContent):
+        aResult = re.findall('data-ws="([^"]+)">(.+?)</span>',str(sHtmlContent))
+    else:
+        aResult = re.findall('<span class="qualiteversion" data-qualurl="([^"]+)">([^"]+)</span>',str(sHtmlContent))
+
+    url = []
+    sQual = []
+    for aEntry in aResult:
+        url.append(aEntry[0])
+        sQual.append(aEntry[1])
+
+    return sQual,url
