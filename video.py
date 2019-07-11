@@ -277,7 +277,7 @@ class OpenFolder(Screen, BlackHole):
     pass
 
 def onChange(self, text):
-    EXlog(('onchange',  text))
+    EXlog('onchange',  text)
     if text == "movie" or text =="tv":
         sm.clear_widgets(screens=[self])
         sm.add_widget(ListDiscover(name = "discover", menu=text))
@@ -306,7 +306,7 @@ class ListDiscover(Screen, BlackHole):
         self.menu = kwargs['menu']
         self.types = kwargs['types']
 
-        EXlog((self.menu, self.types))
+        print(self.menu, self.types)
 
         #poster
         self.ids.grid_id.clear_widgets()
@@ -475,7 +475,7 @@ class ListParam(Screen, BlackHole):
 
 def _jsonload(types, menu,NextPage):
 
-    EXlog(("json", types, menu))
+    print("json", types, menu)
     if menu == 'popular':
         return tmdb().getPopular(NextPage)
     elif menu == "top_rated":
@@ -497,7 +497,7 @@ class ScreenSwitcher(ScreenManager, BlackHole):
     def set_previous_screen(self):
         app = App.get_running_app()
         previousName = app.root.manager.previous()
-        print((app.root.manager.current))
+        print(app.root.manager.current)
         if app.root.manager.current == "source":
             app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('source')])
         elif app.root.manager.current == "info":
@@ -510,12 +510,12 @@ class MainScreen(GridLayout,BlackHole):
     nav_drawer = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
-        print((menu.keys()))
+        print(menu.keys())
         self.picktypes = menu.keys()
         super(MainScreen, self).__init__(**kwargs)
 
     def onChange(self, types, menu, text):
-        print(('types %s / menu %s / Text %s'% (types, menu, text)))
+        print('types %s / menu %s / Text %s'% (types, menu, text))
 
         if menu == "discover":
             if "discover" in self.manager.screen_names:
