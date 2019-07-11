@@ -22,28 +22,33 @@ sPattern1 = '<a href="([^"]+)".+?src="([^"]+)" alt.*?="(.+?)".*?>'
 UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:56.0) Gecko/20100101 Firefox/56.0'
 
 def getJson():
-    UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:56.0) Gecko/20100101 Firefox/56.0'
     oRequest = cRequestHandler('https://disneyhd.tk/movies_list.php')
     oRequest.addHeaderEntry('User-Agent', UA)
     sHtmlContent = oRequest.request()
 
-    aResult = re.findall('<img src="([^"]+)"><div class="title">([^>]+)<\/div><\/a><a class="item" href="([^"]+)"',str(sHtmlContent))
+    aResult = re.findall('href="([^"]+)" title="([^"]+)"><img src="([^"]+)"',str(sHtmlContent))
     d1 = {"plugin":SITE_NAME}
+
+    dest = []
 
     i = 0
     for aEntry in aResult:
-        if i >= 2:
+        #Pour eviter de spammer le serveur le temps que la recheche sois mise en place
+        if i >= 5:
             break
-        sUrl = URL_MAIN + aEntry[2]
+
+        sTitle = aEntry[1]
+        sUrl = URL_MAIN + aEntry[0]
+
         sQual,url = getFinalUrl(sUrl)
 
-        for qual,sUrl in zip(sQual,url):
-            sTitle = aEntry[1]
-            extra = ({"source":{'title' : sTitle,"url":sUrl,"qual":qual}})
-            d1.update(extra)
-        i = i+1
+        for qual,sUrl1 in zip(sQual,url):
+            extra = {"source":{'title' : sTitle,"url":sUrl1,"qual":qual}}
+            dest.append((d1))
+            dest.append((extra))
 
-    JSON = json.dumps(d1)
+        i = i+1
+    JSON = json.dumps(dest)
 
     return JSON
 
@@ -52,7 +57,6 @@ def getFinalUrl(sUrl):
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
 
-    #film
     if '<ol id="playlist">' in str(sHtmlContent):
         aResult = re.findall('<li data-trackurl="([^"]+)">(.+?)<\/li>',str(sHtmlContent))
         
