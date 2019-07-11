@@ -306,7 +306,7 @@ class ListDiscover(Screen, BlackHole):
         self.menu = kwargs['menu']
         self.types = kwargs['types']
 
-        print(self.menu, self.types)
+        EXlog((self.menu, self.types))
 
         #poster
         self.ids.grid_id.clear_widgets()
@@ -411,14 +411,12 @@ class ListInfo(Screen, BlackHole):
         app.root.manager.add_widget(ListSource(name = "source", title=self.title))
         app.root.manager.current =  "source"
 
-#test source ne veut lancer que kaydo ?
     def show_bottom(self):
         from kivymd.bottomsheet import MDListBottomSheet
-        bs = MDListBottomSheet()
         from iplugin import plugin
 
-        #boucle ne fonctione pas comme je veut lambda de Me... !
-        _plugin = plugin().getFolder().replace('\\','').replace('["','').replace('"]','')
+        _plugin = plugin().getFolder(self.title).replace('\\','').replace('["','').replace('"]','')
+        bs = MDListBottomSheet()
 
         main = re.findall('plugin": "(.+?)".+?{"title": "(.+?)", "url": "(.+?)", "qual": "(.+?)"}',str(_plugin))
         for sub in main:
@@ -427,7 +425,7 @@ class ListInfo(Screen, BlackHole):
         bs.open()
 
     def plays(self, *args, **kwargs):
-        print (kwargs['url'])
+        EXlog (kwargs['url'])
 
         app = App.get_running_app()
         app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('discover')])
@@ -475,7 +473,7 @@ class ListParam(Screen, BlackHole):
 
 def _jsonload(types, menu,NextPage):
 
-    print("json", types, menu)
+    EXlog(("json", types, menu))
     if menu == 'popular':
         return tmdb().getPopular(NextPage)
     elif menu == "top_rated":
@@ -497,7 +495,7 @@ class ScreenSwitcher(ScreenManager, BlackHole):
     def set_previous_screen(self):
         app = App.get_running_app()
         previousName = app.root.manager.previous()
-        print(app.root.manager.current)
+        EXlog(app.root.manager.current)
         if app.root.manager.current == "source":
             app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('source')])
         elif app.root.manager.current == "info":
@@ -510,12 +508,12 @@ class MainScreen(GridLayout,BlackHole):
     nav_drawer = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
-        print(menu.keys())
+        EXlog(menu.keys())
         self.picktypes = menu.keys()
         super(MainScreen, self).__init__(**kwargs)
 
     def onChange(self, types, menu, text):
-        print('types %s / menu %s / Text %s'% (types, menu, text))
+        EXlog('types %s / menu %s / Text %s'% (types, menu, text))
 
         if menu == "discover":
             if "discover" in self.manager.screen_names:

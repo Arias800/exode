@@ -17,8 +17,8 @@ class plugin(object):
         try:
             if json.get('plugin') is None:
                 return False
-            #if json.get('thumb') is None:
-            #    return False
+            if json.get('thumb') is None:
+                return False
             for e in json.get('source'):
                 if e.get('title') is None:
                     return False
@@ -32,7 +32,7 @@ class plugin(object):
                         
         return True
 
-    def getFolder(self):
+    def getFolder(self,title):
 
         app_path = os.path.dirname(os.path.abspath(__file__))
         plugin_path = os.path.join(app_path, 'plugin')
@@ -47,15 +47,13 @@ class plugin(object):
 
             module = importlib.import_module("plugin."+name, package=None)
 
-        #json ou list
-            if self.is_valid(module.getJson()):
-                self.__FullJson.append(module.getJson())
-            elif self.is_valid(module.getList()):
-                self.__FullJson.append(module.getList())
+            json1 = module.getJson(title)
+            if self.is_valid(json1):
+                self.__FullJson.append(json1)
             else:
-                print ("erreur Json")
+                list1 = module.getList(title)
+                self.__FullJson.append(list1)
 
-            EXlog(self.__FullJson)
         return json.dumps(self.__FullJson)
 
 class iplugin(object):
