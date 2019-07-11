@@ -3,3 +3,7 @@ py -m pip freeze > requirements.txt
 
 install requierement
 py -m pip install -r requirements.txt
+
+git kivyMD
+
+git+https://github.com/HeaTTheatR/KivyMD.git

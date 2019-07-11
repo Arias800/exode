@@ -48,7 +48,7 @@ from tmdb import tmdb
 
 #Autre import
 from functools import partial
-import json, importlib
+import json, importlib, re
 
 app = App.get_running_app()
 
@@ -76,6 +76,9 @@ menu = {
     "Series tv": 'tv',
     "Lecteur": 'player',
     'Parametre': 'pref'}
+
+#Commande pour lancer l'application sous linux: 
+#   KIVY_VIDEO=ffpyplayer python3 video.py
 
 #pk ça utiliser les nom anglais pour apelle au function
 #pouvoir modifier quand y a auras un fichier lang.
@@ -274,7 +277,7 @@ class OpenFolder(Screen, BlackHole):
     pass
 
 def onChange(self, text):
-    EXlog(('onchange',  text))
+    EXlog('onchange',  text)
     if text == "movie" or text =="tv":
         sm.clear_widgets(screens=[self])
         sm.add_widget(ListDiscover(name = "discover", menu=text))
@@ -303,7 +306,7 @@ class ListDiscover(Screen, BlackHole):
         self.menu = kwargs['menu']
         self.types = kwargs['types']
 
-        EXlog((self.menu, self.types))
+        print(self.menu, self.types)
 
         #poster
         self.ids.grid_id.clear_widgets()
@@ -349,6 +352,7 @@ class discover_layout(BoxLayout):
 
 #screen information
 class ListInfo(Screen, BlackHole):
+
     grid_l = ObjectProperty(None)
     scroll_l = ObjectProperty(None)
     circle_l = ObjectProperty(None)
@@ -409,46 +413,26 @@ class ListInfo(Screen, BlackHole):
 
 #test source ne veut lancer que kaydo ?
     def show_bottom(self):
-        from iplugin import getAllPlugins
-
+        from kivymd.bottomsheet import MDListBottomSheet
         bs = MDListBottomSheet()
-        _plugin = getAllPlugins()
+        from iplugin import plugin
 
         #boucle ne fonctione pas comme je veut lambda de Me... !
+        _plugin = plugin().getFolder().replace('\\','').replace('["','').replace('"]','')
 
-        for main in _plugin:
-            text = ("%s - %s \n %s") % (main[0] , main[1] ,  main[2])
-            #fonctionne mais on peux modifier le text 
-            bs.add_item(main[1], lambda x: self.PluginMenu(sName=x.text))
-            #bs.add_item(text, lambda x: self.plays(sName=main[1]))
-        #plante bs.add_item("Here's another!", lambda x: x, icon='md-nfc')
+        main = re.findall('plugin": "(.+?)".+?{"title": "(.+?)", "url": "(.+?)", "qual": "(.+?)"}',str(_plugin))
+        for sub in main:
+            text = ("%s - %s [%s]") % (sub[0], sub[1] ,sub[3])
+            bs.add_item(text, lambda x: self.plays(url=sub[2]))
         bs.open()
 
     def plays(self, *args, **kwargs):
-
-        print(kwargs)
-
-        module = importlib.import_module("plugin."+str(kwargs['sName']), package=None)
-        content = module.ListMenu()
+        print (kwargs['url'])
 
         app = App.get_running_app()
-        if app.root.manager.current == "discover":
-            app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('source')])
-
-    pass
-
-    def PluginMenu(self, *args, **kwargs):
-        module = importlib.import_module("plugin."+str(kwargs['sName']), package=None)
-        try:
-            kwargs['sCat']
-        except KeyError:
-            kwargs['sCat'] = '1'
-
-        EXlog(kwargs['sCat'])
-        if kwargs['sCat'] == '1':
-            kwargs['sCat'] = module.ListMenu(self,kwargs)
-        elif kwargs['sCat'] == '2':
-            kwargs['sCat'] = module.showMovies(self,kwargs)
+        app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('discover')])
+        app.root.manager.get_screen("main").calistir(kwargs['url'],kwargs['url'])
+        app.root.manager.current =  "main"
 
 class ListSource(Screen, BlackHole):
 
@@ -470,7 +454,7 @@ class ListSource(Screen, BlackHole):
 
     def plays(self, *args, **kwargs):
         module = importlib.import_module("plugin."+str(kwargs['sName']), package=None)
-        content = module.ListMenu()
+        content = module.ShowPlugin()
 
         app = App.get_running_app()
         if app.root.manager.current == "discover":
@@ -491,7 +475,7 @@ class ListParam(Screen, BlackHole):
 
 def _jsonload(types, menu,NextPage):
 
-    EXlog(("json", types, menu))
+    print("json", types, menu)
     if menu == 'popular':
         return tmdb().getPopular(NextPage)
     elif menu == "top_rated":
@@ -513,7 +497,7 @@ class ScreenSwitcher(ScreenManager, BlackHole):
     def set_previous_screen(self):
         app = App.get_running_app()
         previousName = app.root.manager.previous()
-        EXlog((app.root.manager.current))
+        print(app.root.manager.current)
         if app.root.manager.current == "source":
             app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('source')])
         elif app.root.manager.current == "info":
@@ -526,12 +510,12 @@ class MainScreen(GridLayout,BlackHole):
     nav_drawer = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
-        EXlog((menu.keys()))
+        print(menu.keys())
         self.picktypes = menu.keys()
         super(MainScreen, self).__init__(**kwargs)
 
     def onChange(self, types, menu, text):
-        EXlog(('types %s / menu %s / Text %s'% (types, menu, text)))
+        print('types %s / menu %s / Text %s'% (types, menu, text))
 
         if menu == "discover":
             if "discover" in self.manager.screen_names:
@@ -552,6 +536,31 @@ class MainScreen(GridLayout,BlackHole):
             sm.current = 'param'
 
         self.ids.nav_layout.toggle_nav_drawer()
+
+    def onRoot(self):
+  
+        from kivy.uix.modalview import ModalView
+        from kivymd.filemanager import MDFileManager
+
+        if not self.manager:
+            self.manager = ModalView(size_hint=(1, 1), auto_dismiss=False)
+            self.file_manager = MDFileManager(exit_manager=self.root_exit, select_path=self.root_select)
+
+    def root_select_path(self, path):
+        """
+        It will be called when you click on the file name or the catalog selection button.
+        :type path: str;
+        :param path: path to the selected directory or file;
+        """
+        self.path_selected_callback(path)
+
+        self.root_exit()
+        toast(path)
+
+    def root_exit(self, *args):
+        """Called when the user reaches the root of the directory tree."""
+        self.manager.dismiss()
+        self.manager_open = False
 
 class Video(App):
 
