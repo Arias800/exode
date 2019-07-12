@@ -533,13 +533,15 @@
 							pos: self.pos
 							size: self.size
 
-					AsyncImage:
-						size_hint: None,None
-						size:self.image_ratio*root.height,root.height
-						mipmap: True      
+
+					AsyncImage:  
 						source: root.backdrop_path
-						allow_stretch:False
-						keep_ratio:False
+						allow_stretch: True
+						keep_ratio: True
+						size_hint_y: None
+						size_hint_x: None
+						width: self.parent.width
+						height: self.parent.width/self.image_ratio
 
 					Label:
 						text: root.title
