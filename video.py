@@ -412,7 +412,7 @@ class ListInfo(Screen, BlackHole):
         app.root.manager.current =  "source"
 
     def show_bottom(self):
-        #loading
+        #loading ne demarrer pas asser tot
         self.ids.spinner.active = True
 
         from kivymd.bottomsheet import MDListBottomSheet
@@ -427,7 +427,10 @@ class ListInfo(Screen, BlackHole):
             bs.add_item(text, lambda x: self.plays(url=sub[2]))
         bs.open()
 
-        #loading
+        #loading stop en time mais a voir pour le mettre en vrais temp de chargement
+        Clock.schedule_once(self.spinner_stop, 8)
+
+    def spinner_stop(self, *args):
         self.ids.spinner.active = False
 
     def plays(self, *args, **kwargs):
