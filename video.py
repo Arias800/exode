@@ -412,6 +412,9 @@ class ListInfo(Screen, BlackHole):
         app.root.manager.current =  "source"
 
     def show_bottom(self):
+        #loading
+        self.ids.spinner.active = True
+
         from kivymd.bottomsheet import MDListBottomSheet
         from iplugin import plugin
 
@@ -423,6 +426,9 @@ class ListInfo(Screen, BlackHole):
             text = ("%s - %s [%s]") % (sub[0], sub[1] ,sub[3])
             bs.add_item(text, lambda x: self.plays(url=sub[2]))
         bs.open()
+
+        #loading
+        self.ids.spinner.active = False
 
     def plays(self, *args, **kwargs):
         EXlog (kwargs['url'])

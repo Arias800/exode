@@ -428,6 +428,8 @@
 	background_color: (0,0,0,0.8)
 
 #info
+
+
 <ListInfo>:
 
 	#box_share2: box_share2
@@ -439,6 +441,8 @@
 	vote_circle:''
 	overview:''
 	pickSource:''
+
+	spinner: spinner
 
 	#cicle_l : cicle_l
 
@@ -470,7 +474,7 @@
 			size_hint:None, None
 			spacing:10
 			padding:10
-			height: 60
+			height: 60			
 
 
 			MDRaisedButton:
@@ -496,6 +500,13 @@
 				elevation_normal: 2
 				opposite_colors: True
 				on_press: root.show_source()
+
+			MDSpinner:
+				id: spinner
+				size_hint: None,None
+				size: dp(30),dp(30)
+				pos_hint:{"x":.5,"y":.1}
+				active: False
 
 		ScrollView:
 			id: scroll_id
