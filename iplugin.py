@@ -46,6 +46,7 @@ class plugin(object):
             name = name.replace('.py', '')
 
             module = importlib.import_module("plugin."+name, package=None)
+            EXlog("Recherche en cours sur "+name)
 
             json1 = module.getJson(title)
             if self.is_valid(json1):

@@ -422,7 +422,6 @@ class ListInfo(Screen, BlackHole):
 
         main = re.findall('plugin": "(.+?)".+?{"title": "(.+?)", "url": "(.+?)", "qual": "(.+?)"}',str(_plugin))
 
-
         for sub in main:
             text = ("%s - %s [%s]") % (sub[0], sub[1] ,sub[3])
             #bs.add_item(text, lambda x: self.plays(url=sub[2]))
@@ -432,7 +431,6 @@ class ListInfo(Screen, BlackHole):
 
         #loading stop en time mais a voir pour le mettre en vrais temp de chargement
         Clock.schedule_once(self.spinner_stop, 8)
-        
 
     def spinner_stop(self, *args):
         self.ids.spinner.active = False
