@@ -46,7 +46,8 @@ def getJson(title):
             if Url == False:
                 continue
             else:
-                if int(len((qua,Url))) > 2:
+                #Si plus d'un url
+                if type(Url) is list:
                     for qua1 , Url1 in zip(qua, Url):
                         extra = ({"source":{'title' : sTitle,"url":Url1,"qual":qua1}})
                         dest.append((d1))
