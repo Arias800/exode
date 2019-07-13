@@ -2,6 +2,7 @@
 from kivymd.bottomsheet import MDListBottomSheet
 from lib.handler.requestHandler import cRequestHandler
 from lib.comaddon import EXlog
+from lib.hoster import checkHoster
 
 import re, json
 
@@ -37,12 +38,25 @@ def getJson(title):
         sQual,url = getFinalUrl(sUrl,qual)
 
         for qual,sUrl in zip(sQual,url):
-            extra = ({"source":{'title' : sTitle,"url":sUrl,"qual":qual}})
-            dest.append((d1))
-            dest.append((extra))
+            qua, Url = checkHoster(sUrl)
+
+            if qua == True:
+                qua = sQual  
+
+            if Url == False:
+                continue
+            else:
+                if int(len((qua,Url))) > 2:
+                    for qua1 , Url1 in zip(qua, Url):
+                        extra = ({"source":{'title' : sTitle,"url":Url1,"qual":qua1}})
+                        dest.append((d1))
+                        dest.append((extra))
+                else:
+                    extra = ({"source":{'title' : sTitle,"url":Url,"qual":qua[0]}})
+                    dest.append((d1))
+                    dest.append((extra))                       
 
     JSON = json.dumps(dest)
-
     return JSON
 
 def getFinalUrl(sUrl,qual=''):
