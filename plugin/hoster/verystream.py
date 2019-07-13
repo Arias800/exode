@@ -1,8 +1,6 @@
 #coding: utf-8
 #Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
 from lib.handler.requestHandler import cRequestHandler
-from lib.parser import cParser
-from lib.comaddon import EXlog
 
 import re
 
@@ -11,8 +9,6 @@ def getMediaLinkForGuest(sUrl):
     sHtmlContent = oRequest.request()
 
     api_call = ''
-
-    oParser = cParser()
 
     sPattern =  'id="videolink">([^<>]+)<\/p>'
     aResult = re.findall(sPattern, str(sHtmlContent))
