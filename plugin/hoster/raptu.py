@@ -1,18 +1,19 @@
 #-*- coding: utf-8 -*-
 #Vstream https://github.com/Kodi-vStream/venom-xbmc-addons
-#A corriger plus tard je le mets juste pour pas bloquer Kaydo
 from lib.handler.requestHandler import cRequestHandler
 from lib.parser import cParser
+from lib.comaddon import EXlog
 
 def getMediaLinkForGuest(sUrl):
-    api_call = False
-
     oParser = cParser()
     oRequest = cRequestHandler(sUrl)
+    oRequest.addHeaderEntry('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0')
+    oRequest.addHeaderEntry('Referer',sUrl)
     sHtmlContent = oRequest.request()
 
-    sPattern = '<source src="([^"]+)" type="video/.+?"'
+    sPattern = '<source src="([^"]+)" type="video/.+?" label="([^"]+)"'
     aResult = oParser.parse(sHtmlContent, sPattern)
+
     if (aResult[0] == True):
         url=[]
         qua=[]
@@ -20,7 +21,6 @@ def getMediaLinkForGuest(sUrl):
             url.append(str(i[0]))
             qua.append(str(i[1]))
 
-    if (api_call):
         return qua, url
 
     return False, False
