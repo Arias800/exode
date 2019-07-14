@@ -421,7 +421,6 @@ class ListInfo(Screen, BlackHole):
         bs = MDListBottomSheet()
 
         main = re.findall('plugin": "(.+?)".+?{"title": "(.+?)", "url": "(.+?)", "qual": "(.+?)"}',str(_plugin))
-
         for sub in main:
             text = ("%s - %s [%s]") % (sub[0], sub[1] ,sub[3])
             #bs.add_item(text, lambda x: self.plays(url=sub[2]))
@@ -438,9 +437,13 @@ class ListInfo(Screen, BlackHole):
     def plays(self, *args, **kwargs):
         EXlog (kwargs)
 
+        #player n'accepter pas les m3u8 ni les connections securiser https
+
+        url = kwargs['url'].replace('https', 'http')
+
         app = App.get_running_app()
         app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('discover')])
-        app.root.manager.get_screen("main").calistir(kwargs['url'],kwargs['url'])
+        app.root.manager.get_screen("main").calistir(url,url)
         app.root.manager.current =  "main"
 
 
