@@ -57,13 +57,11 @@ sous_menu = {
     "Populaires": "popular",
     "Mieux notes": "top_rated",
     "En salles": "now_playing",
-    "Recemment" : "latest",
     "A venir" : "upcoming" },
     "tv": {
     "Populaires": "popular",
     "Mieux notes" : "top_rated",
     "Diffusees 7 jours" : "on_the_air",
-    "Recemment" : "latest",
     "Diffusees ce jour": "airing_today" },
     "player": {
     "Nop": "Nop" },
@@ -489,12 +487,7 @@ class ListParam(Screen, BlackHole):
 def _jsonload(types, menu,NextPage):
 
     EXlog(("json", types, menu))
-    if menu == 'popular':
-        return tmdb().getPopular(NextPage)
-    elif menu == "top_rated":
-        return tmdb().getRated(NextPage)
-    elif menu == "discover":
-        return tmdb().getDiscover(types,NextPage)
+    return tmdb().getTmdb(types, menu, NextPage)
 
 class ScreenSwitcher(ScreenManager, BlackHole):
      #The screens can be added on the __init__ method like this or on the .kv file
