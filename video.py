@@ -425,7 +425,7 @@ class ListInfo(Screen, BlackHole):
         for sub in main:
             text = ("%s - %s [%s]") % (sub[0], sub[1] ,sub[3])
             #bs.add_item(text, lambda x: self.plays(url=sub[2]))
-            bs.add_item(sub[2], lambda x: self.plays(url=x.text))
+            bs.add_item(text, lambda x, url=sub[2], title=sub[1]: self.plays(url=url, title=title))
             
         bs.open()
 
@@ -436,12 +436,13 @@ class ListInfo(Screen, BlackHole):
         self.ids.spinner.active = False
 
     def plays(self, *args, **kwargs):
-        EXlog (kwargs['url'])
+        EXlog (kwargs)
 
         app = App.get_running_app()
         app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('discover')])
         app.root.manager.get_screen("main").calistir(kwargs['url'],kwargs['url'])
         app.root.manager.current =  "main"
+
 
 class ListSource(Screen, BlackHole):
 
