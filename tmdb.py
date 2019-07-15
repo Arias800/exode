@@ -72,6 +72,10 @@ class tmdb:
         #primary_release_date.asc, primary_release_date.desc, original_title.asc, original_title.desc, 
         # vote_average.asc, vote_average.desc, vote_count.asc, vote_count.desc
         #default: popularity.desc
+        #tendance 
+        #Media Type :  all, movie, tv, person
+        #time window : day, week
+        #/trending/{media_type}/{time_window}
         
         if menu == "discover":
             url = "discover/"+types
