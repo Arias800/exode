@@ -78,7 +78,8 @@ class tmdb:
         #/trending/{media_type}/{time_window}
         
         if menu == "discover":
-            url = "discover/"+types
+            #url = "discover/"+types
+            url = "trending/all/week"
             print("paseeee")
         else :
             url = types+"/"+menu

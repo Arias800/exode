@@ -54,6 +54,7 @@
 
         MDNavigationDrawer:
             id: nav_drawer
+
 			#drawer_logo: 'img/icon.png'
 
 			#NavigationDrawerSubheader:
@@ -61,20 +62,23 @@
 
 			#NavigationDrawerDivider:
 
-			# NavigationDrawerIconButton:
-			# 	icon: 'home'
-			# 	text: 'Decouvrir'
-			# 	on_release: app.root.ids.scr_mngr.current = 'about'
-			# 	active_color_type : 'accent'
+			#faut que je trouve comment avoir le meme design que MDaccordionItem
+			NavigationDrawerIconButton:
+				icon: 'home'
+				text: 'Decouvrir'
+				on_release: app.root.ids.scr_mngr.current = 'about'
+				#theme_text_color: 'Custom'
 				#active_color: get_color_from_hex(colors['Amber']['700'])
+				#text_color: app.theme_cls.primary_color
+				#theme_text_color: 'Secondary'
 
-			#NavigationDrawerDivider:
+			NavigationDrawerDivider:
 
 			MDAccordion:
 				orientation: 'vertical'
 				size_hint_y: None
-				height: self.parent.height
-				#height: self.parent.height - dp(120)
+				#height: self.parent.height
+				height: self.parent.height - dp(120)
 
 				MDAccordionItem:
 					title:'Films'
@@ -158,7 +162,8 @@
                 id: toolbar
                 title: 'eXode'
                 md_bg_color: app.theme_cls.primary_color
-				background_color: app.theme_cls.primary_dark
+				#background_color: app.theme_cls.primary_light
+				background_color: app.theme_cls.bg_dark
                 background_palette: 'Primary'
                 background_hue: '500'
                 left_action_items: [['menu', lambda x: nav_layout.toggle_nav_drawer()]]
