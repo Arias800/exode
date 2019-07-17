@@ -77,9 +77,9 @@ class tmdb:
         #time window : day, week
         #/trending/{media_type}/{time_window}
         
-        if types == "trending":
+        if menu == "trending":
             #url = "discover/"+types
-            url = "trending/all/" + menu
+            url = "trending/"+types+"/week"
             print("paseeee")
         else :
             url = types+"/"+menu
@@ -120,6 +120,7 @@ class tmdb:
         videos = []
 
         for i in self.results.get("results", []):
+
             tub = {'tmdbid' : i["id"],
             "vote_average" : str(i["vote_average"]) }
 

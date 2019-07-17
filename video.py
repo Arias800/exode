@@ -500,7 +500,7 @@ class ScreenSwitcher(ScreenManager, BlackHole):
         try:
             self.add_widget(ListDiscover(name = "discover", types=types, menu=text))
         except NameError:
-            self.add_widget(ListDiscover(name = "discover", types="trending", menu='week'))
+            self.add_widget(ListDiscover(name = "discover", types="movie", menu='trending'))
         self.add_widget(VideoAlan(name = "main"))
 
     #Fonction pour retourner a l'ecran precedent

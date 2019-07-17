@@ -103,18 +103,12 @@
 
 
 				MDAccordionItem:
-					title:'Tendance'
-					icon: 'trending-up'
-					MDAccordionSubItem:
-						text: "Quotidien"
-						on_press: root.onChange('trending', 'discover', 'day')
-					MDAccordionSubItem:
-						text: "Hebdomadaire"
-						on_press: root.onChange('trending', 'discover', 'week')
-
-				MDAccordionItem:
 					title:'Films'
 					icon: 'movie'
+					MDAccordionSubItem:
+						text: "Tendances"
+						on_press: root.onChange('movie', 'discover', 'trending')
+						#on_press: root.onChange(self.text)
 					MDAccordionSubItem:
 						text: "Populaires"
 						on_press: root.onChange('movie', 'list', 'popular')
@@ -134,6 +128,9 @@
 				MDAccordionItem:
 					title:'Series'
 					icon: 'video'
+					MDAccordionSubItem:
+						text: "Tendances"
+						on_press: root.onChange('tv', 'discover', 'trending')
 					MDAccordionSubItem:
 						text: "Populaires"
 						on_press: root.onChange('tv', 'list', 'popular')
