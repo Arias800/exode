@@ -53,6 +53,9 @@ import json, importlib, re
 app = App.get_running_app()
 
 sous_menu = {
+    "trending": {
+    "Quotidien": "day",
+    "Hebdomadaire": "week" },
     "movie": {
     "Populaires": "popular",
     "Mieux notes": "top_rated",
@@ -70,6 +73,7 @@ sous_menu = {
 }
 
 menu = {
+    "Tendance": 'trending',
     "Films": 'movie',
     "Series tv": 'tv',
     "Lecteur": 'player',
@@ -496,7 +500,7 @@ class ScreenSwitcher(ScreenManager, BlackHole):
         try:
             self.add_widget(ListDiscover(name = "discover", types=types, menu=text))
         except NameError:
-            self.add_widget(ListDiscover(name = "discover", types="movie", menu='discover'))
+            self.add_widget(ListDiscover(name = "discover", types="trending", menu='week'))
         self.add_widget(VideoAlan(name = "main"))
 
     #Fonction pour retourner a l'ecran precedent
