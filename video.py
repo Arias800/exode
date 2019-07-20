@@ -316,6 +316,7 @@ class ListDiscover(Screen, BlackHole):
 
     def add(self):
         json = _jsonload(self.types, self.menu,NextPage=self.pageNumber)
+
         for data in json:
             btn = ImageButton(types=self.types,
             tmdbid=data['tmdbid'],
@@ -348,6 +349,7 @@ class discover_layout(BoxLayout):
 
     def __init__(self, data, **kwargs):
         super(discover_layout, self).__init__(**kwargs)
+
         self.title = data['title']
         self.overview = data['overview'][0:140]
         self.release_date = data['release_date']

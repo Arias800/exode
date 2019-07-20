@@ -143,10 +143,15 @@ class tmdb:
             else:
                 tub.update({"title" : "NC"})
 
+            if 'tagline' in i:
+                tub.update({"tagline" : i["tagline"]})
+
             if 'release_date' in i:
                 tub.update({"release_date" : i["release_date"]})
+                tub.update({"year" : i["release_date"][0:4]})
             elif 'first_air_date' in i:
                 tub.update({"release_date" : i["first_air_date"]})
+                tub.update({"year" : i["first_air_date"][0:4]})
 
             if 'overview' in i:
                 tub.update({"overview" : i["overview"]})
