@@ -303,7 +303,7 @@ class ListDiscover(Screen, BlackHole):
         super(ListDiscover, self).__init__(**kwargs)
 
         #grille de poster
-        self.grid = self.grid_l
+        #self.grid = self.grid_l
 
         self.menu = kwargs['menu']
         self.types = kwargs['types']
@@ -342,7 +342,9 @@ class ListDiscover(Screen, BlackHole):
         sm.add_widget(ListDiscover(name ="list", types=self.menu, menu=menu))
         sm.current = "list"
 
+
 class discover_layout(BoxLayout):
+    bar_l = ObjectProperty(None)
 
     def __init__(self, data, **kwargs):
         super(discover_layout, self).__init__(**kwargs)
@@ -350,8 +352,12 @@ class discover_layout(BoxLayout):
         self.overview = data['overview'][0:140]
         self.release_date = data['release_date']
         self.vote_average = str(data['vote_average'])
-        #self.vote_bar = str(round(10 - float(data['vote_average']), 2))
+
+        #bar de vote a voir si ont garde ou pas
+        vote_bar = str(round(float(data['vote_average']) / 10 , 1))
+        self.ids.bar_l.size_hint_x = vote_bar
     pass
+
 
 #screen information
 class ListInfo(Screen, BlackHole):
