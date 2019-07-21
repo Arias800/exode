@@ -60,15 +60,6 @@
             size_hint_x: None
             width: self.texture_size[0]
 
-#pas trouver comment agrandir l'image
-<FloatingButton@MDFloatingActionButton>
-    size_hint: 1, 1
-    size: dp(46), dp(46)
-    elevation: 5
-    md_bg_color: app.theme_cls.primary_color
-    text_color: root.theme_cls.accent_color
-    on_release: self.parent.callback(self)
-
 
 <MainScreen>:
     manager: manager
@@ -260,7 +251,7 @@
 
 			canvas.before:
 				Color:
-					rgba: 0.6,0.6,0.6,0.9
+					rgba: 0,0,0,0.5
 				Rectangle:
 					pos: self.pos
 					size: self.size
@@ -286,6 +277,7 @@
 			padding: 3,3
 			size_hint: 0.9,None
 			height: 56
+			spacing: '10dp'
 
 			canvas.before:
 				Color:
@@ -294,44 +286,57 @@
 					pos: self.pos
 					size: self.size
 
-			Button:
-
-				size: 48,48
-				size_hint: None,None
-				pos_hint: {"center_x":0.5,"center_y":0.5}
-				background_normal: "play-icon.png"
-				background_down: "play-icon_dwn.png"
-
-
-				on_release: root.oynat()
-
-			FloatingButton:
-				icon: 'play-circle-outline'
-				size_hint: None, None
+			# Button:
+			# 	size: 48,48
+			# 	size_hint: None,None
+			# 	pos_hint: {"center_x":0.5,"center_y":0.5}
+			# 	background_normal: "play-icon.png"
+			# 	background_down: "play-icon_dwn.png"
+			# 	on_release: root.oynat()
+				
+		
+			MDFloatingActionButton:
+				icon:"play"
+				theme_text_color: 'Custom'
+				md_bg_color: app.theme_cls.primary_color
+				text_color: app.theme_cls.accent_color
 				size: dp(48), dp(48)
-				opposite_colors: True
-				elevation_normal: 8
-				pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+				pos_hint: {'center_x': 0.1, 'center_y': 0.5}
 				on_release: root.oynat()
 
 
-			Button:
+			# Button:
+			# 	size: 48,48
+			# 	size_hint: None,None
+			# 	pos_hint: {"center_x":0.5,"center_y":0.5}
+			# 	background_normal: "pause-icon.png"
+			# 	background_down: "pause-icon_dwn.png"
+			# 	on_release: root.duraklat()
 
-				size: 48,48
-				size_hint: None,None
-				pos_hint: {"center_x":0.5,"center_y":0.5}
-				background_normal: "pause-icon.png"
-				background_down: "pause-icon_dwn.png"
-
+			MDFloatingActionButton:
+				icon:"pause"
+				theme_text_color: 'Custom'
+				md_bg_color: app.theme_cls.primary_color
+				text_color: app.theme_cls.accent_color
+				size: dp(48), dp(48)
+				pos_hint: {'center_x': 0.3, 'center_y': 0.5}
 				on_release: root.duraklat()
 
-			Button:
-				size: 48,48
-				size_hint: None,None
-				pos_hint: {"center_x":0.5,"center_y":0.5}
-				background_normal: "stop-icon.png"
-				background_down: "stop-icon_dwn.png"
+			# Button:
+			# 	size: 48,48
+			# 	size_hint: None,None
+			# 	pos_hint: {"center_x":0.5,"center_y":0.5}
+			# 	background_normal: "stop-icon.png"
+			# 	background_down: "stop-icon_dwn.png"
+			# 	on_release: root.durdur()
 
+			MDFloatingActionButton:
+				icon:"stop"
+				theme_text_color: 'Custom'
+				md_bg_color: app.theme_cls.primary_color
+				text_color: app.theme_cls.accent_color
+				size: dp(48), dp(48)
+				pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 				on_release: root.durdur()
 
 			Slider:
