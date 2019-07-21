@@ -578,7 +578,7 @@
 					size_hint_y: None
 					# padding: 5
 					# spacing: 5
-					height: dp(400)
+					height: dp(200)
 					#width:400
 					#spacing: 5
 					spacing: dp(4)
@@ -593,22 +593,28 @@
 							size: self.size
 
 					Label:
+						padding: dp(40),dp(0)
 						text: root.title
 						text_size: self.size
 						font_size:'40sp'
-						pos_hint: {'x': 0.05, 'y': .8}
+						pos_hint: {'x': 0, 'y': .7}
 
 					Label:
+						padding: dp(40),dp(0)
 						text: root.genres
 						text_size: self.size
 						font_size:'25sp'
-						pos_hint: {'x': 0.05, 'y': .75}
+						pos_hint: {'x': 0, 'y': .6}
 
-					Label:
-						text: root.vote_average
-						text_size: self.size
-						font_size:'40sp'
-						pos_hint: {'x': .85, 'y': .8}
+					AnchorLayout:
+						anchor_x: 'right'
+						anchor_y: 'top'
+						padding: dp(20),dp(0)
+						Label:
+							font_size:'40sp'
+							text: root.vote_average
+							size_hint: None, None
+				
 
 					#fait chier a regler
 					#GridLayout:
@@ -616,7 +622,7 @@
 					#	id : cicle_l
 
 					AnchorLayout:
-						padding: dp(100),dp(1)
+						padding: dp(40),dp(0)
 						anchor_x: 'left'
 						anchor_y: 'bottom'
 
@@ -625,12 +631,13 @@
 							do_scroll_y: True
 							do_scroll_x: False
 							bar_width: '8dp'
-							size_hint: .9, .3
+							size_hint: 1, .5
 	        				pos_hint: {'x': 0.05, 'y': 0.1}
 
 							TextInput:
 								height: self.minimum_height
 	            				size_hint_y: None
+								size_hint_x: 1
 								text: root.overview
 								text_size: self.size
 								font_size:'25sp'
@@ -722,7 +729,7 @@
 			size_hint_y: None
 			# padding: 5
 			# spacing: 5
-			height: dp(150)
+			height: dp(80)
 			#width:400
 			#spacing: 5
 			spacing: dp(4)
@@ -739,26 +746,28 @@
 				text: root.title
 				text_size: self.size
 				font_size:'30sp'
-				pos_hint: {'x': .05, 'y': .7}
+				pos_hint: {'x': .0, 'y': .4}
+				padding: dp(40),dp(0)
 				#pos: 10,10
 			
 			Label:
 				text: root.vote_average
 				text_size: self.size
 				font_size:'30sp'
-				pos_hint: {'x': .85, 'y': .7}
+				pos_hint: {'x': .85, 'y': .4}
 
-			Label:
-				text: root.release_date
-				text_size: self.size
-				font_size:'15sp'
-				pos_hint: {'x': .05, 'y': .6}
 
-			Label:
-				text: root.overview
-				text_size: self.size
-				size_hint: .9, .5
-				pos_hint: {'x': .05, 'y': .1}
+			# Label:
+			# 	text: root.release_date
+			# 	text_size: self.size
+			# 	font_size:'15sp'
+			# 	pos_hint: {'x': .05, 'y': .6}
+
+			# Label:
+			# 	text: root.overview
+			# 	text_size: self.size
+			# 	size_hint: .9, .5
+			# 	pos_hint: {'x': .05, 'y': .1}
 
 		#bar de vote	
 		FloatLayout:
