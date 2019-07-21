@@ -42,31 +42,32 @@
 #:import MDAccordionSubItem kivymd.accordion.MDAccordionSubItem
 #:import MDRaisedButton kivymd.button.MDRaisedButton
 
-# <ExampleButtons@MDRectangleFlatIconButton>
-#     canvas.before:
-#         Color:
-#             rgba: app.theme_cls.primary_color
-# 		Rectangle:
-# 			pos: self.pos
-# 			size: self.size
+<ExampleButtons@MDRectangleFlatIconButton>
+    canvas.before:
+        Color:
+            rgba: app.theme_cls.primary_color
+		Rectangle:
+			pos: self.pos
+			size: self.size
 
-#     BoxLayout:
-#         spacing: dp(10)
-#         MDIcon:
-#             id: lbl_ic
-#             icon: root.icon
-#             theme_text_color: 'Custom'
-#             text_color: root.theme_cls.accent_color
-#             size_hint_x: None
-#             width: self.texture_size[0]
-#         MDLabel:
-#             id: lbl_txt
-#             text: root.text
-#             font_size: sp(root.font_size)
-#             can_capitalize: root.can_capitalize
-#             shorten: True
-# 			theme_text_color:'Custom'
-#             text_color: root.theme_cls.accent_color
+    BoxLayout:
+        spacing: dp(10)
+        MDIcon:
+            id: lbl_ic
+            icon: root.icon
+            theme_text_color: 'Custom'
+            text_color: root.theme_cls.accent_color
+            size_hint_x: None
+            width: self.texture_size[0]
+
+#pas trouver comment agrandir l'image
+<FloatingButton@MDFloatingActionButton>
+    size_hint: 1, 1
+    size: dp(46), dp(46)
+    elevation: 5
+    md_bg_color: app.theme_cls.primary_color
+    text_color: root.theme_cls.accent_color
+    on_release: self.parent.callback(self)
 
 
 <MainScreen>:
@@ -303,6 +304,16 @@
 
 
 				on_release: root.oynat()
+
+			FloatingButton:
+				icon: 'play-circle-outline'
+				size_hint: None, None
+				size: dp(48), dp(48)
+				opposite_colors: True
+				elevation_normal: 8
+				pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+				on_release: root.oynat()
+
 
 			Button:
 
