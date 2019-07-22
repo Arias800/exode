@@ -41,6 +41,7 @@
 #:import MDAccordionItem kivymd.accordion.MDAccordionItem
 #:import MDAccordionSubItem kivymd.accordion.MDAccordionSubItem
 #:import MDRaisedButton kivymd.button.MDRaisedButton
+#:import MDSlider kivymd.slider.MDSlider
 
 <ExampleButtons@MDRectangleFlatIconButton>
     canvas.before:
@@ -59,6 +60,27 @@
             text_color: root.theme_cls.accent_color
             size_hint_x: None
             width: self.texture_size[0]
+
+
+<PlayerSlider@MDSlider>
+    id: slider
+    canvas:
+        Clear
+        Color:
+            rgba: 0,0,0,0.5
+        Rectangle:
+            size:
+                (self.width - self.padding*2 - self._offset[0], dp(8))
+            pos:
+                (self.x + self.padding + self._offset[0], self.center_y - dp(8))
+        
+        Color:
+            rgba: root.theme_cls.accent_color
+        Rectangle:
+            size:
+                ((self.width-self.padding*2)*self.value_normalized, sp(8))
+            pos:
+                (self.x + self.padding, self.center_y - dp(8))
 
 
 <MainScreen>:
@@ -267,6 +289,22 @@
 				value_track: True
 				value_track_color: [0,0.6,0,1]
 
+
+
+		#slider player progression video
+		BoxLayout:
+			size_hint: 1,None
+			pos_hint: {"center_x":0.5,"y":0}
+			height:135
+			padding:0
+
+			PlayerSlider:
+				id: _ilerleme
+				padding:0
+				min:0
+				max:1
+				value:0
+
 		BoxLayout:
 			id: _durumcubugu
 
@@ -274,14 +312,14 @@
 
 			orientation: "horizontal"
 
-			padding: 3,3
-			size_hint: 0.9,None
-			height: 56
+			padding: 10,10
+			size_hint: 1,None
+			height: 60
 			spacing: '10dp'
 
 			canvas.before:
 				Color:
-					rgba: 0.6,0.6,0.6,0.9
+					rgba: 0, 0, 0, 1
 				Rectangle:
 					pos: self.pos
 					size: self.size
@@ -339,8 +377,10 @@
 				pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 				on_release: root.durdur()
 
+
+			# a faire utiliser pour le volume
 			Slider:
-				id: _ilerleme
+				#id: _ilerleme
 				min:0
 				max:1
 				value:0
