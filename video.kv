@@ -62,8 +62,26 @@
             width: self.texture_size[0]
 
 
-<PlayerSlider@MDSlider>
-    id: slider
+<SeekSlider@MDSlider>
+    canvas:
+        Clear
+        Color:
+            rgba: 0,0,0,0.5
+        Rectangle:
+            size:
+                (self.width - self.padding*2 - self._offset[0], dp(8))
+            pos:
+                (self.x + self.padding + self._offset[0], self.center_y - dp(8))
+        
+        Color:
+            rgba: root.theme_cls.accent_color
+        Rectangle:
+            size:
+                ((self.width-self.padding*2)*self.value_normalized, sp(8))
+            pos:
+                (self.x + self.padding, self.center_y - dp(8))
+
+<VolumeSlider@MDSlider>
     canvas:
         Clear
         Color:
@@ -220,6 +238,9 @@
 	ses: _ses
 	ses_ayari: _ses_ayari
 
+	duration: ''
+	position: ''
+
 	# ActionBar:
 	# 	pos_hint: {'top':1}
 	# 	ActionView:
@@ -264,6 +285,7 @@
 			font_size: 40
 			text: u""
 
+		#boite d'info lecteur
 		BoxLayout:
 
 			id: _ses
@@ -279,7 +301,7 @@
 					size: self.size
 
 			Slider:
-				id: _ses_ayari
+				#id: _ses_ayari
 				orientation: "vertical"
 				min:0
 				max:2
@@ -292,18 +314,20 @@
 
 
 		#slider player progression video
+		#mauvais placement a revoir
 		BoxLayout:
 			size_hint: 1,None
-			pos_hint: {"center_x":0.5,"y":0}
-			height:135
+			pos_hint: {"center_x":0.5,"y":0.12}
+			height:dp(8)
 			padding:0
 
-			PlayerSlider:
+			SeekSlider:
 				id: _ilerleme
 				padding:0
 				min:0
 				max:1
 				value:0
+				on_touch_move: root.volume()
 
 		BoxLayout:
 			id: _durumcubugu
@@ -331,6 +355,33 @@
 			# 	background_normal: "play-icon.png"
 			# 	background_down: "play-icon_dwn.png"
 			# 	on_release: root.oynat()
+
+			BoxLayout:
+				size_hint:None, 1
+				padding: dp(10),dp(0)
+				pos_hint: {'center_x': 0.1, 'center_y': 0.7}
+				width:dp(150)
+
+				Label:
+					#padding: dp(10),dp(0)
+					text: root.position
+					text_size: self.size
+					font_size:'15sp'
+					#pos_hint: {'center_x': 0.1, 'center_y': 0.5}
+				
+				Label:
+					#padding: dp(10),dp(0)
+					text: '/'
+					text_size: self.size
+					font_size:'15sp'
+					#pos_hint: {'center_x': 0.1, 'center_y': 0.5}
+
+				Label:
+					#padding: dp(10),dp(0)
+					text: root.duration
+					text_size: self.size
+					font_size:'20sp'
+					#pos_hint: {'center_x': 0.1, 'center_y': 0.5}
 				
 		
 			MDFloatingActionButton:
@@ -378,16 +429,27 @@
 				on_release: root.durdur()
 
 
-			# a faire utiliser pour le volume
-			Slider:
-				#id: _ilerleme
-				min:0
-				max:1
-				value:0
+			# Slider pour le volume
+			BoxLayout:
 				pos_hint: {"center_x":0.5,"center_y":0.5}
-				cursor_size: 0,0
-				value_track: True
-				value_track_color: [0,0.6,0,1]
+				height:dp(8)
+
+				VolumeSlider:
+					id: _ses_ayari
+					min:0
+					max:1
+					value:0
+
+			# Slider:
+			# 	id: _ses_ayari
+			# 	min:0
+			# 	max:1
+			# 	value:0
+			# 	pos_hint: {"center_x":0.5,"center_y":0.5}
+			# 	cursor_size: 0,0
+			# 	value_track: True
+			# 	value_track_color: [0,0.6,0,1]
+			# 	on_touch_move: root.volume()
 
 		BoxLayout:
 			id: _menu

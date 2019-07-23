@@ -41,6 +41,7 @@ from kivymd.button import MDRaisedButton
 from kivymd.list import TwoLineListItem
 from kivymd.textfields import MDTextField
 from kivymd.bottomsheet import MDListBottomSheet
+from kivymd.toast import toast
 
 #Custom Lib import
 from lib.comaddon import EXlog, ImageButton, BlackHole
@@ -103,6 +104,8 @@ class VideoAlan(Screen, BlackHole):
         self.keyboard.bind(on_key_down = self.on_keyboard_down)
         self.keyboard.bind(on_key_up = self.on_keyboard_up)
         self.ses_ayari.value = self.video.volume
+        self.duration = str(self.video.duration)
+        self.position = str(self.video.position)
 
     def keyboard_closed(self):
         self.keyboard.unbind(on_key_down = self.on_keyboard_down)
@@ -185,6 +188,13 @@ class VideoAlan(Screen, BlackHole):
         self.video.state = "stop"
         self.ilerleme.value = 0,0
 
+    def volume(self):
+        toast(str(round(self.ses_ayari.value, 2)))
+
+    def seek(self):
+        toast(str(round(self._ilerleme.value, 2)))
+
+
     def calistir(self,window,path):
         self.sub_list = {}
         self.sub_list_e = []
@@ -226,6 +236,7 @@ class VideoAlan(Screen, BlackHole):
                     self.video.volume = 2
                 if self.ses_ayari.value > 2:
                     self.ses_ayari.value = 2
+                
 
             if touch.button == "scrollup":
                 self.video.volume -= 0.05
