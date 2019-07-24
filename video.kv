@@ -315,38 +315,43 @@
 
 		#slider player progression video
 		#mauvais placement a revoir
-		BoxLayout:
-			size_hint: 1,None
-			pos_hint: {"center_x":0.5,"y":0.12}
-			height:dp(8)
-			padding:0
 
-			SeekSlider:
-				id: _ilerleme
+		BoxLayout:
+			orientation:"vertical"
+			size_hint: 1,None
+			height: dp(90)
+
+			BoxLayout:
+				#orientation:'vertical'
+				size_hint: 1,None
+				pos_hint: {"center_x":0.5,"y":0}
+				height:dp(16)
 				padding:0
-				min:0
-				max:1
-				value:0
-				on_touch_move: root.volume()
 
-		BoxLayout:
-			id: _durumcubugu
+				SeekSlider:
+					id: _ilerleme
+					padding:0
+					min:0
+					max:1
+					value:0
+					on_touch_move: root.seek()
 
-			pos_hint: {"center_x":0.5,"y":0}
+			BoxLayout:
+				id: _durumcubugu
 
-			orientation: "horizontal"
+				orientation: "horizontal"
 
-			padding: 10,10
-			size_hint: 1,None
-			height: 60
-			spacing: '10dp'
+				padding: 10,10
+				size_hint: 1,None
+				height: dp(80)
+				spacing: '10dp'
 
-			canvas.before:
-				Color:
-					rgba: 0, 0, 0, 1
-				Rectangle:
-					pos: self.pos
-					size: self.size
+				canvas.before:
+					Color:
+						rgba: 0, 0, 0, 1
+					Rectangle:
+						pos: self.pos
+						size: self.size
 
 			# Button:
 			# 	size: 48,48
@@ -356,89 +361,116 @@
 			# 	background_down: "play-icon_dwn.png"
 			# 	on_release: root.oynat()
 
-			BoxLayout:
-				size_hint:None, 1
-				padding: dp(10),dp(0)
-				pos_hint: {'center_x': 0.1, 'center_y': 0.7}
-				width:dp(150)
+				BoxLayout:
+					size_hint:None, 1
+					padding: dp(10),dp(0)
+					pos_hint: {'center_x': 0.1, 'center_y': 0.8}
+					width:dp(150)
 
-				Label:
-					#padding: dp(10),dp(0)
-					text: root.position
-					text_size: self.size
-					font_size:'15sp'
-					#pos_hint: {'center_x': 0.1, 'center_y': 0.5}
-				
-				Label:
-					#padding: dp(10),dp(0)
-					text: '/'
-					text_size: self.size
-					font_size:'15sp'
-					#pos_hint: {'center_x': 0.1, 'center_y': 0.5}
+					Label:
+						#padding: dp(10),dp(0)
+						text: root.position
+						text_size: self.size
+						font_size:'15sp'
+						#pos_hint: {'center_x': 0.1, 'center_y': 0.5}
+					
+					Label:
+						#padding: dp(10),dp(0)
+						text: '/'
+						text_size: self.size
+						font_size:'15sp'
+						#pos_hint: {'center_x': 0.1, 'center_y': 0.5}
 
-				Label:
-					#padding: dp(10),dp(0)
-					text: root.duration
-					text_size: self.size
-					font_size:'20sp'
-					#pos_hint: {'center_x': 0.1, 'center_y': 0.5}
-				
-		
-			MDFloatingActionButton:
-				icon:"play"
-				theme_text_color: 'Custom'
-				md_bg_color: app.theme_cls.primary_color
-				text_color: app.theme_cls.accent_color
-				size: dp(48), dp(48)
-				pos_hint: {'center_x': 0.1, 'center_y': 0.5}
-				on_release: root.oynat()
-
-
-			# Button:
-			# 	size: 48,48
-			# 	size_hint: None,None
-			# 	pos_hint: {"center_x":0.5,"center_y":0.5}
-			# 	background_normal: "pause-icon.png"
-			# 	background_down: "pause-icon_dwn.png"
-			# 	on_release: root.duraklat()
-
-			MDFloatingActionButton:
-				icon:"pause"
-				theme_text_color: 'Custom'
-				md_bg_color: app.theme_cls.primary_color
-				text_color: app.theme_cls.accent_color
-				size: dp(48), dp(48)
-				pos_hint: {'center_x': 0.3, 'center_y': 0.5}
-				on_release: root.duraklat()
-
-			# Button:
-			# 	size: 48,48
-			# 	size_hint: None,None
-			# 	pos_hint: {"center_x":0.5,"center_y":0.5}
-			# 	background_normal: "stop-icon.png"
-			# 	background_down: "stop-icon_dwn.png"
-			# 	on_release: root.durdur()
-
-			MDFloatingActionButton:
-				icon:"stop"
-				theme_text_color: 'Custom'
-				md_bg_color: app.theme_cls.primary_color
-				text_color: app.theme_cls.accent_color
-				size: dp(48), dp(48)
-				pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-				on_release: root.durdur()
+					Label:
+						#padding: dp(10),dp(0)
+						text: root.duration
+						text_size: self.size
+						font_size:'20sp'
+						#pos_hint: {'center_x': 0.1, 'center_y': 0.5}
+					
+			
+				MDFloatingActionButton:
+					icon:"play"
+					theme_text_color: 'Custom'
+					md_bg_color: app.theme_cls.primary_color
+					text_color: app.theme_cls.accent_color
+					size: dp(48), dp(48)
+					pos_hint: {'center_x': 0.1, 'center_y': 0.5}
+					on_release: root.oynat()
 
 
-			# Slider pour le volume
-			BoxLayout:
-				pos_hint: {"center_x":0.5,"center_y":0.5}
-				height:dp(8)
+				# Button:
+				# 	size: 48,48
+				# 	size_hint: None,None
+				# 	pos_hint: {"center_x":0.5,"center_y":0.5}
+				# 	background_normal: "pause-icon.png"
+				# 	background_down: "pause-icon_dwn.png"
+				# 	on_release: root.duraklat()
 
-				VolumeSlider:
-					id: _ses_ayari
-					min:0
-					max:1
-					value:0
+				MDFloatingActionButton:
+					icon:"pause"
+					theme_text_color: 'Custom'
+					md_bg_color: app.theme_cls.primary_color
+					text_color: app.theme_cls.accent_color
+					size: dp(48), dp(48)
+					pos_hint: {'center_x': 0.3, 'center_y': 0.5}
+					on_release: root.duraklat()
+
+				# Button:
+				# 	size: 48,48
+				# 	size_hint: None,None
+				# 	pos_hint: {"center_x":0.5,"center_y":0.5}
+				# 	background_normal: "stop-icon.png"
+				# 	background_down: "stop-icon_dwn.png"
+				# 	on_release: root.durdur()
+
+				MDFloatingActionButton:
+					icon:"stop"
+					theme_text_color: 'Custom'
+					md_bg_color: app.theme_cls.primary_color
+					text_color: app.theme_cls.accent_color
+					size: dp(48), dp(48)
+					pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+					on_release: root.durdur()
+
+
+				#boite invisible espace
+				BoxLayout:
+					size_hint: 0.5, 1 
+					pos_hint: {'center_x': 0, 'center_y': 0.5}
+
+
+				BoxLayout: 
+					size_hint:None, 1
+					width:dp(50)
+					pos_hint: {'center_x': 0.8, 'center_y': 0.65}
+					MDIconButton:
+						icon:'volume-mute' #volume-off
+						theme_text_color: 'Custom'
+						text_color: app.theme_cls.primary_color
+
+
+				# Slider pour le volume
+				BoxLayout:
+					size_hint:None, 1
+					pos_hint: {'center_x': 0.5, 'center_y': 0.62}
+					width:dp(150)
+			
+
+					VolumeSlider:
+						padding:0,0
+						id: _ses_ayari
+						min:0
+						max:1
+						value:0
+						on_touch_move: root.volume()
+
+
+				#boite invisible espace
+				BoxLayout:
+					size_hint: None, 1 
+					width:dp(40)
+					pos_hint: {'center_x': 0, 'center_y': 0.5}
 
 			# Slider:
 			# 	id: _ses_ayari

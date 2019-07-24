@@ -192,7 +192,7 @@ class VideoAlan(Screen, BlackHole):
         toast(str(round(self.ses_ayari.value, 2)))
 
     def seek(self):
-        toast(str(round(self._ilerleme.value, 2)))
+        toast(str(round(self.ilerleme.value, 2)))
 
 
     def calistir(self,window,path):
