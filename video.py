@@ -49,7 +49,7 @@ from tmdb import tmdb
 
 #Autre import
 from functools import partial
-import json, importlib, re
+import json, importlib, re, os
 
 app = App.get_running_app()
 
@@ -204,7 +204,6 @@ class VideoAlan(Screen, BlackHole):
     def seek(self):
         toast(str(round(self.ilerleme.value, 2)))
 
-
     def calistir(self,window,path):
         self.sub_list = {}
         self.sub_list_e = []
@@ -235,7 +234,6 @@ class VideoAlan(Screen, BlackHole):
         self.position = str(self.video.position)
         self.duration = str(self.video.duration)
 
-
     def on_touch_down(self,touch):
         if "button" in touch.profile:
             if touch.button == "scrolldown" and self.durumcubugu.collide_point(*touch.pos) == False and self.ses.pos_hint != {"right":0.9,"top":0.9}:
@@ -254,7 +252,6 @@ class VideoAlan(Screen, BlackHole):
                     self.video.volume = 2
                 if self.ses_ayari.value > 2:
                     self.ses_ayari.value = 2
-                
 
             if touch.button == "scrollup":
                 self.video.volume -= 0.05
@@ -372,7 +369,6 @@ class ListDiscover(Screen, BlackHole):
         sm.add_widget(ListDiscover(name ="list", types=self.menu, menu=menu))
         sm.current = "list"
 
-
 class discover_layout(BoxLayout):
     bar_l = ObjectProperty(None)
 
@@ -388,7 +384,6 @@ class discover_layout(BoxLayout):
         vote_bar = str(round(float(data['vote_average']) / 10 , 1))
         self.ids.bar_l.size_hint_x = vote_bar
     pass
-
 
 #screen information
 class ListInfo(Screen, BlackHole):
@@ -476,16 +471,20 @@ class ListInfo(Screen, BlackHole):
 
     def plays(self, *args, **kwargs):
         EXlog (kwargs)
+        #gstreamer n'accepter pas les m3u8 ni les connections securiser https
 
-        #player n'accepter pas les m3u8 ni les connections securiser https
-
-        url = kwargs['url'].replace('https', 'http')
+        try:
+            if os.environ['KIVY_VIDEO'] == 'gstplayer':
+                url = kwargs['url'].replace('https', 'http') 
+            else:
+                url = kwargs['url']
+        except KeyError:
+            url = kwargs['url'].replace('https', 'http') 
 
         app = App.get_running_app()
         app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('discover')])
         app.root.manager.get_screen("main").calistir(url,url)
         app.root.manager.current =  "main"
-
 
 class ListSource(Screen, BlackHole):
 
