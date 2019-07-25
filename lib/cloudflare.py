@@ -3,13 +3,12 @@
 #
 #alors la j'ai pas le courage
 
-
 import re,os
 import time, json, random
 
 from lib.comaddon import EXlog
 
-from lib.config import GestionCookie
+from lib.utils import GestionCookie
 
 try:
     from urllib.parse import urlparse
@@ -602,7 +601,6 @@ class CloudflareScraper(Session):
         #self.MemCookie.update( redirect.cookies.get_dict() )
         
         EXlog( '>>>' + str( redirect.headers)   )
-        
 
         if 'Location' in redirect.headers:
             redirect_location = urlparse(redirect.headers["Location"])
