@@ -63,6 +63,37 @@ class tmdb:
             return self._format_light()
         return
 
+    def getTmdb(self, types, menu, page):
+        #types movie/tv
+        #menu discover, top_rated
+
+        #touts faire avec discovers et c'est tris
+        #popularity.asc, popularity.desc, release_date.asc, release_date.desc, revenue.asc, revenue.desc, 
+        #primary_release_date.asc, primary_release_date.desc, original_title.asc, original_title.desc, 
+        # vote_average.asc, vote_average.desc, vote_count.asc, vote_count.desc
+        #default: popularity.desc
+        #tendance 
+        #Media Type :  all, movie, tv, person
+        #time window : day, week
+        #/trending/{media_type}/{time_window}
+        
+        if menu == "trending":
+            #url = "discover/"+types
+            url = "trending/"+types+"/week"
+            print("paseeee")
+        else :
+            url = types+"/"+menu
+
+        print(("get id", types , id))
+        #news code
+        rqst = requests.get('https://api.themoviedb.org/3/%s?api_key=%s&language=fr-FR&page=%s' % (url, self.api_key, page))
+        self.results = rqst.json()
+
+        if self.results:
+            #self.results = {"results" : [results]}
+            return self._format_light()
+        return
+
     def getRated(self,NextPage):
         in_file = open("rated.json","r",encoding="utf-8")
         self.results = json.load(in_file)
@@ -71,19 +102,14 @@ class tmdb:
             return self._format_light()
         return
 
-    def getDiscover(self, types,NextPage):
+    def getDiscover(self, types,menu, NextPage):
         #Ca ouvre popular2 juste pour pas avoir un autre json pour rien
-        if NextPage == 2:
-            in_file = open("popular2.json","r",encoding="utf-8")
-        else:
-            if types == "movie":
-                file = "discover_movie.json"
-            elif types == "tv":
-                file = "discover_tv.json"
-            in_file = open(file,"r",encoding="utf-8")
+        #types movie / tv
+        #menu popular, top_rated
+        rqst = requests.get('https://api.themoviedb.org/3/%s/%s?api_key=%s&language=fr-FR' % (types, menu, self.api_key))
+        self.results = rqst.json()
 
-        self.results = json.load(in_file)
-        in_file.close()
+
         if self.results:
             return self._format_light()
         return
@@ -94,6 +120,7 @@ class tmdb:
         videos = []
 
         for i in self.results.get("results", []):
+
             tub = {'tmdbid' : i["id"],
             "vote_average" : str(i["vote_average"]) }
 
@@ -116,10 +143,15 @@ class tmdb:
             else:
                 tub.update({"title" : "NC"})
 
+            if 'tagline' in i:
+                tub.update({"tagline" : i["tagline"]})
+
             if 'release_date' in i:
                 tub.update({"release_date" : i["release_date"]})
+                tub.update({"year" : i["release_date"][0:4]})
             elif 'first_air_date' in i:
                 tub.update({"release_date" : i["first_air_date"]})
+                tub.update({"year" : i["first_air_date"][0:4]})
 
             if 'overview' in i:
                 tub.update({"overview" : i["overview"]})

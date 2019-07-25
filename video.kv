@@ -41,6 +41,65 @@
 #:import MDAccordionItem kivymd.accordion.MDAccordionItem
 #:import MDAccordionSubItem kivymd.accordion.MDAccordionSubItem
 #:import MDRaisedButton kivymd.button.MDRaisedButton
+#:import MDSlider kivymd.slider.MDSlider
+
+<ExampleButtons@MDRectangleFlatIconButton>
+    canvas.before:
+        Color:
+            rgba: app.theme_cls.primary_color
+		Rectangle:
+			pos: self.pos
+			size: self.size
+
+    BoxLayout:
+        spacing: dp(10)
+        MDIcon:
+            id: lbl_ic
+            icon: root.icon
+            theme_text_color: 'Custom'
+            text_color: root.theme_cls.accent_color
+            size_hint_x: None
+            width: self.texture_size[0]
+
+
+<SeekSlider@MDSlider>
+    canvas:
+        Clear
+        Color:
+            rgba: 0,0,0,0.5
+        Rectangle:
+            size:
+                (self.width - self.padding*2 - self._offset[0], dp(8))
+            pos:
+                (self.x + self.padding + self._offset[0], self.center_y - dp(8))
+        
+        Color:
+            rgba: root.theme_cls.accent_color
+        Rectangle:
+            size:
+                ((self.width-self.padding*2)*self.value_normalized, sp(8))
+            pos:
+                (self.x + self.padding, self.center_y - dp(8))
+
+<VolumeSlider@MDSlider>
+    canvas:
+        Clear
+        Color:
+            rgba: 0,0,0,0.5
+        Rectangle:
+            size:
+                (self.width - self.padding*2 - self._offset[0], dp(8))
+            pos:
+                (self.x + self.padding + self._offset[0], self.center_y - dp(8))
+        
+        Color:
+            rgba: root.theme_cls.accent_color
+        Rectangle:
+            size:
+                ((self.width-self.padding*2)*self.value_normalized, sp(8))
+            pos:
+                (self.x + self.padding, self.center_y - dp(8))
+
 
 <MainScreen>:
     manager: manager
@@ -53,6 +112,7 @@
 
         MDNavigationDrawer:
             id: nav_drawer
+
 			#drawer_logo: 'img/icon.png'
 
 			#NavigationDrawerSubheader:
@@ -60,17 +120,27 @@
 
 			#NavigationDrawerDivider:
 
+			#j'ai fait autrement mais ça montre comment faire un button custom
+			# ExampleButtons:
+			# 	text: "MDRectangleFlatIconButton"
+			# 	icon: "language-python"
+			# 	#pos_hint: {'center_x': .5, 'center_y': .45}
+			# 	width: self.parent.width - dp(0.5)
+
 			MDAccordion:
 				orientation: 'vertical'
 				size_hint_y: None
+				#height: self.parent.height
 				height: self.parent.height
+
 
 				MDAccordionItem:
 					title:'Films'
 					icon: 'movie'
 					MDAccordionSubItem:
-						text: "Decouvrir"
-						on_press: root.onChange('movie', 'discover', 'discover')
+						text: "Tendances"
+						on_press: root.onChange('movie', 'discover', 'trending')
+						#on_press: root.onChange(self.text)
 					MDAccordionSubItem:
 						text: "Populaires"
 						on_press: root.onChange('movie', 'list', 'popular')
@@ -81,9 +151,9 @@
 					MDAccordionSubItem:
 						text: "En salles"
 						on_press: root.onChange('movie', 'list', 'now_playing')
-					MDAccordionSubItem:
-						text: "Recemment"
-						on_press: root.onChange('movie', 'list', 'latest')
+					#MDAccordionSubItem:
+					#	text: "Recemment"
+					#	on_press: root.onChange('movie', 'list', 'latest')
 					MDAccordionSubItem:
 						text: "A venir"
 						on_press: root.onChange('movie', 'list', 'upcoming')
@@ -91,8 +161,8 @@
 					title:'Series'
 					icon: 'video'
 					MDAccordionSubItem:
-						text: "Decouvrir"
-						on_press: root.onChange('tv', 'discover', 'discover')
+						text: "Tendances"
+						on_press: root.onChange('tv', 'discover', 'trending')
 					MDAccordionSubItem:
 						text: "Populaires"
 						on_press: root.onChange('tv', 'list', 'popular')
@@ -126,6 +196,7 @@
 						text: "Couleur"
 						on_press: root.onChange('tv', 'app', 'airing_today')
 
+
             # NavigationDrawerToolbar:
             #     title: "eXode"
             # NavigationDrawerIconButton:
@@ -146,6 +217,8 @@
                 id: toolbar
                 title: 'eXode'
                 md_bg_color: app.theme_cls.primary_color
+				#background_color: app.theme_cls.primary_light
+				background_color: app.theme_cls.bg_dark
                 background_palette: 'Primary'
                 background_hue: '500'
                 left_action_items: [['menu', lambda x: nav_layout.toggle_nav_drawer()]]
@@ -156,6 +229,7 @@
 				id: manager
 
 <VideoAlan>:
+
 	video: _video
 	ilerleme: _ilerleme
 	altyazi: _altyazi
@@ -163,6 +237,9 @@
 	menu: _menu
 	ses: _ses
 	ses_ayari: _ses_ayari
+
+	duration: ''
+	position: ''
 
 	# ActionBar:
 	# 	pos_hint: {'top':1}
@@ -188,9 +265,11 @@
 	# 				text: 'Tool4'
 
 	RelativeLayout:
+
 		size_hint: 1,1
 
 		Video:
+
 			size_hint: 0,0
 			id: _video
 			allow_stretch: True
@@ -198,6 +277,7 @@
 			state: "play"
 
 		Label:
+
 			id: _altyazi
 			markup: True
 			size_hint: 1,0.3
@@ -205,7 +285,9 @@
 			font_size: 40
 			text: u""
 
+		#boite d'info lecteur
 		BoxLayout:
+
 			id: _ses
 			size_hint:None,None
 			size: 30,150
@@ -213,13 +295,13 @@
 
 			canvas.before:
 				Color:
-					rgba: 0.6,0.6,0.6,0.9
+					rgba: 0,0,0,0.5
 				Rectangle:
 					pos: self.pos
 					size: self.size
 
 			Slider:
-				id: _ses_ayari
+				#id: _ses_ayari
 				orientation: "vertical"
 				min:0
 				max:2
@@ -229,61 +311,173 @@
 				value_track: True
 				value_track_color: [0,0.6,0,1]
 
+
 		BoxLayout:
-			id: _durumcubugu
+			orientation:"vertical"
+			size_hint: 1,None
+			height: dp(90)
 
-			pos_hint: {"center_x":0.5,"y":0}
+			BoxLayout:
+				#orientation:'vertical'
+				size_hint: 1,None
+				pos_hint: {"center_x":0.5,"y":0}
+				height:dp(16)
+				padding:0
 
-			orientation: "horizontal"
+				SeekSlider:
+					id: _ilerleme
+					padding:0
+					min:0
+					max:1
+					value:0
+					on_touch_move: root.seek()
 
-			padding: 3,3
-			size_hint: 0.9,None
-			height: 56
+			BoxLayout:
+				id: _durumcubugu
 
-			canvas.before:
-				Color:
-					rgba: 0.6,0.6,0.6,0.9
-				Rectangle:
-					pos: self.pos
-					size: self.size
+				orientation: "horizontal"
 
-			Button:
-				size: 48,48
-				size_hint: None,None
-				pos_hint: {"center_x":0.5,"center_y":0.5}
-				background_normal: "play-icon.png"
-				background_down: "play-icon_dwn.png"
+				padding: 10,10
+				size_hint: 1,None
+				height: dp(80)
+				spacing: '10dp'
+
+				canvas.before:
+					Color:
+						rgba: 0, 0, 0, 1
+					Rectangle:
+						pos: self.pos
+						size: self.size
+
+			# Button:
+			# 	size: 48,48
+			# 	size_hint: None,None
+			# 	pos_hint: {"center_x":0.5,"center_y":0.5}
+			# 	background_normal: "play-icon.png"
+			# 	background_down: "play-icon_dwn.png"
+			# 	on_release: root.oynat()
+
+				BoxLayout:
+					size_hint:None, 1
+					padding: dp(10),dp(0)
+					pos_hint: {'center_x': 0.1, 'center_y': 0.8}
+					width:dp(150)
+
+					Label:
+						#padding: dp(10),dp(0)
+						text: root.position
+						text_size: self.size
+						font_size:'15sp'
+						#pos_hint: {'center_x': 0.1, 'center_y': 0.5}
+					
+					Label:
+						#padding: dp(10),dp(0)
+						text: '/'
+						text_size: self.size
+						font_size:'15sp'
+						#pos_hint: {'center_x': 0.1, 'center_y': 0.5}
+
+					Label:
+						#padding: dp(10),dp(0)
+						text: root.duration
+						text_size: self.size
+						font_size:'15sp'
+						#pos_hint: {'center_x': 0.1, 'center_y': 0.5}
+					
+			
+				MDFloatingActionButton:
+					icon:"play"
+					theme_text_color: 'Custom'
+					md_bg_color: app.theme_cls.primary_color
+					text_color: app.theme_cls.accent_color
+					size: dp(48), dp(48)
+					pos_hint: {'center_x': 0.1, 'center_y': 0.5}
+					on_release: root.oynat()
 
 
-				on_release: root.oynat()
+				# Button:
+				# 	size: 48,48
+				# 	size_hint: None,None
+				# 	pos_hint: {"center_x":0.5,"center_y":0.5}
+				# 	background_normal: "pause-icon.png"
+				# 	background_down: "pause-icon_dwn.png"
+				# 	on_release: root.duraklat()
 
-			Button:
-				size: 48,48
-				size_hint: None,None
-				pos_hint: {"center_x":0.5,"center_y":0.5}
-				background_normal: "pause-icon.png"
-				background_down: "pause-icon_dwn.png"
+				MDFloatingActionButton:
+					icon:"pause"
+					theme_text_color: 'Custom'
+					md_bg_color: app.theme_cls.primary_color
+					text_color: app.theme_cls.accent_color
+					size: dp(48), dp(48)
+					pos_hint: {'center_x': 0.3, 'center_y': 0.5}
+					on_release: root.duraklat()
 
-				on_release: root.duraklat()
+				# Button:
+				# 	size: 48,48
+				# 	size_hint: None,None
+				# 	pos_hint: {"center_x":0.5,"center_y":0.5}
+				# 	background_normal: "stop-icon.png"
+				# 	background_down: "stop-icon_dwn.png"
+				# 	on_release: root.durdur()
 
-			Button:
-				size: 48,48
-				size_hint: None,None
-				pos_hint: {"center_x":0.5,"center_y":0.5}
-				background_normal: "stop-icon.png"
-				background_down: "stop-icon_dwn.png"
+				MDFloatingActionButton:
+					icon:"stop"
+					theme_text_color: 'Custom'
+					md_bg_color: app.theme_cls.primary_color
+					text_color: app.theme_cls.accent_color
+					size: dp(48), dp(48)
+					pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+					on_release: root.durdur()
 
-				on_release: root.durdur()
 
-			Slider:
-				id: _ilerleme
-				min:0
-				max:1
-				value:0
-				pos_hint: {"center_x":0.5,"center_y":0.5}
-				cursor_size: 0,0
-				value_track: True
-				value_track_color: [0,0.6,0,1]
+				#boite invisible espace
+				BoxLayout:
+					size_hint: 0.5, 1 
+					pos_hint: {'center_x': 0, 'center_y': 0.5}
+
+
+				BoxLayout: 
+					size_hint:None, 1
+					width:dp(50)
+					pos_hint: {'center_x': 0.8, 'center_y': 0.65}
+					MDIconButton:
+						icon:'volume-mute' #volume-off
+						theme_text_color: 'Custom'
+						text_color: app.theme_cls.primary_color
+
+
+				# Slider pour le volume
+				BoxLayout:
+					size_hint:None, 1
+					pos_hint: {'center_x': 0.5, 'center_y': 0.62}
+					width:dp(150)
+			
+
+					VolumeSlider:
+						padding:0,0
+						id: _ses_ayari
+						min:0
+						max:1
+						value:0
+						on_touch_move: root.volume()
+
+
+				#boite invisible espace
+				BoxLayout:
+					size_hint: None, 1 
+					width:dp(40)
+					pos_hint: {'center_x': 0, 'center_y': 0.5}
+
+			# Slider:
+			# 	id: _ses_ayari
+			# 	min:0
+			# 	max:1
+			# 	value:0
+			# 	pos_hint: {"center_x":0.5,"center_y":0.5}
+			# 	cursor_size: 0,0
+			# 	value_track: True
+			# 	value_track_color: [0,0.6,0,1]
+			# 	on_touch_move: root.volume()
 
 		BoxLayout:
 			id: _menu
@@ -314,6 +508,7 @@
 				#option_cls: root.onChange(self.text)
 				size_hint: None, 1
 		
+
 			Button:
 				text: "VIDEO"
 				size_hint: None,1
@@ -345,6 +540,7 @@
 		orientation: "vertical"
 
 		BoxLayout:
+
 			id: _menu
 
 			orientation: "horizontal"
@@ -355,6 +551,7 @@
 			height: 50
 
 			canvas.before:
+
 				Color:
 					rgba: 0,0,0,0.5
 				Rectangle:
@@ -414,7 +611,6 @@
 	background_color: (0,0,0,0.8)
 
 #info
-
 <ListInfo>:
 	#box_share2: box_share2
 	backdrop_path:''
@@ -427,7 +623,6 @@
 	pickSource:''
 
 	spinner: spinner
-
 	#cicle_l : cicle_l
 
 	BoxLayout:
@@ -452,14 +647,12 @@
 
         MDSeparator:
 
-		GridLayout:
-			cols:5
+		BoxLayout:
 			orientation: 'horizontal'
 			size_hint:None, None
 			spacing:10
 			padding:10
-			height: 60
-			width: self.parent.width		
+			height: 60			
 
 			MDRaisedButton:
 				text: "Recherche source"
@@ -485,16 +678,12 @@
 				opposite_colors: True
 				on_press: root.show_source()
 
-			#loading
-			AnchorLayout:
-				anchor_x: 'right'
-				anchor_y: 'top'
-				padding:8
-				MDSpinner:
-					id: spinner
-					size_hint: None,None
-					size: dp(30),dp(30)
-					active: False
+			MDSpinner:
+				id: spinner
+				size_hint: None,None
+				size: dp(30),dp(30)
+				pos_hint:{"x":.5,"y":.1}
+				active: False
 
 		ScrollView:
 			id: scroll_id
@@ -517,6 +706,15 @@
 				spacing: dp(4)
 
 				FloatLayout:
+					AsyncImage:
+						source: root.backdrop_path
+						allow_stretch: True
+						keep_ratio: False
+						size_hint_y: None
+						size_hint_x: None
+                		size: Window.width, Window.height-120
+
+				FloatLayout:
 				#position dans le cadre x, y pos: 100, 100
 				# taille en % width, height size_hint: .2, .4
 					
@@ -526,67 +724,69 @@
 					size_hint_y: None
 					# padding: 5
 					# spacing: 5
-					height: dp(400)
+					height: dp(200)
 					#width:400
 					#spacing: 5
 					spacing: dp(4)
 					padding: dp(20), dp(4)
-
+			
 					canvas.before:
+
 						Color:
 							rgba: 0,0,0,0.5
 						Rectangle:
 							pos: self.pos
 							size: self.size
 
-
-					AsyncImage:  
-						source: root.backdrop_path
-						allow_stretch: True
-						keep_ratio: True
-						size_hint_y: None
-						size_hint_x: None
-						width: self.parent.width
-						height: self.parent.width/self.image_ratio
-
 					Label:
+						padding: dp(40),dp(0)
 						text: root.title
 						text_size: self.size
 						font_size:'40sp'
-						pos_hint: {'x': 0.05, 'y': .8}
+						pos_hint: {'x': 0, 'y': .7}
+
 					Label:
+						padding: dp(40),dp(0)
 						text: root.genres
 						text_size: self.size
 						font_size:'25sp'
-						pos_hint: {'x': 0.05, 'y': .75}
+						pos_hint: {'x': 0, 'y': .6}
 
-					Label:
-						text: root.vote_average
-						text_size: self.size
-						font_size:'40sp'
-						pos_hint: {'x': .85, 'y': .8}
+					AnchorLayout:
+						anchor_x: 'right'
+						anchor_y: 'top'
+						padding: dp(20),dp(0)
+						Label:
+							font_size:'40sp'
+							text: root.vote_average
+							size_hint: None, None
+				
 
 					#fait chier a regler
 					#GridLayout:
 					#	cols: 1			
 					#	id : cicle_l
 
-					ScrollView:
-						id: scroll_id
-						do_scroll_y: True
-						do_scroll_x: False
-						bar_width: '8dp'
-						size_hint: .9, .5
-						spacing: dp(4)
-						padding: dp(20), dp(4)
-        				pos_hint: {'x': 0.05, 'y': 0.1}
+					AnchorLayout:
+						padding: dp(40),dp(0)
+						anchor_x: 'left'
+						anchor_y: 'bottom'
 
-						TextInput:
-							height: self.minimum_height
-            				size_hint_y: None
-							text: root.overview
-							text_size: self.size
-							font_size:'25sp'
+						ScrollView:
+							id: scroll_id
+							do_scroll_y: True
+							do_scroll_x: False
+							bar_width: '8dp'
+							size_hint: 1, .5
+	        				pos_hint: {'x': 0.05, 'y': 0.1}
+
+							TextInput:
+								height: self.minimum_height
+	            				size_hint_y: None
+								size_hint_x: 1
+								text: root.overview
+								text_size: self.size
+								font_size:'25sp'
 
 #film populaire
 <ListDiscover>:
@@ -651,9 +851,10 @@
 						size: self.size	
 
 <discover_layout>
-
 	#label_title:label_title
 	#label_over:label_over
+
+	bar_l: bar_l #bar de vote
 
 	title: ''
 	overview:''
@@ -665,6 +866,7 @@
 		anchor_y: 'bottom'
 		padding: dp(0), dp(0), dp(0), dp(10)
 
+
 		FloatLayout:
 			# cols:2
 			orientation: "vertical"
@@ -673,7 +875,7 @@
 			size_hint_y: None
 			# padding: 5
 			# spacing: 5
-			height: dp(150)
+			height: dp(80)
 			#width:400
 			#spacing: 5
 			spacing: dp(4)
@@ -690,26 +892,52 @@
 				text: root.title
 				text_size: self.size
 				font_size:'30sp'
-				pos_hint: {'x': .05, 'y': .7}
+				pos_hint: {'x': .0, 'y': .4}
+				padding: dp(40),dp(0)
 				#pos: 10,10
 			
 			Label:
 				text: root.vote_average
 				text_size: self.size
 				font_size:'30sp'
-				pos_hint: {'x': .85, 'y': .7}
+				pos_hint: {'x': .85, 'y': .4}
 
-			Label:
-				text: root.release_date
-				text_size: self.size
-				font_size:'15sp'
-				pos_hint: {'x': .05, 'y': .6}
 
-			Label:
-				text: root.overview
-				text_size: self.size
-				size_hint: .9, .5
-				pos_hint: {'x': .05, 'y': .1}
+			# Label:
+			# 	text: root.release_date
+			# 	text_size: self.size
+			# 	font_size:'15sp'
+			# 	pos_hint: {'x': .05, 'y': .6}
+
+			# Label:
+			# 	text: root.overview
+			# 	text_size: self.size
+			# 	size_hint: .9, .5
+			# 	pos_hint: {'x': .05, 'y': .1}
+
+		#bar de vote	
+		FloatLayout:
+			size_hint : 1, None
+			height:dp(10)
+
+			canvas:
+				Color:
+					rgb: app.theme_cls.bg_normal
+				Rectangle: 
+					pos: self.pos 
+					size: self.size	#width , height
+		#bar de vote
+		FloatLayout:
+			id: bar_l
+			size_hint : 0, None
+			height:dp(10)
+
+			canvas:
+				Color:
+					rgb: app.theme_cls.accent_color
+				Rectangle: 
+					pos: self.pos 
+					size: self.size	#width , height
 
 <ListSource>
 	grid_id:grid_id

@@ -41,6 +41,7 @@ from kivymd.button import MDRaisedButton
 from kivymd.list import TwoLineListItem
 from kivymd.textfields import MDTextField
 from kivymd.bottomsheet import MDListBottomSheet
+from kivymd.toast import toast
 
 #Custom Lib import
 from lib.comaddon import EXlog, ImageButton, BlackHole
@@ -48,22 +49,23 @@ from tmdb import tmdb
 
 #Autre import
 from functools import partial
-import json, importlib, re
+import json, importlib, re, os
 
 app = App.get_running_app()
 
 sous_menu = {
+    "trending": {
+    "Quotidien": "day",
+    "Hebdomadaire": "week" },
     "movie": {
     "Populaires": "popular",
     "Mieux notes": "top_rated",
     "En salles": "now_playing",
-    "Recemment" : "latest",
     "A venir" : "upcoming" },
     "tv": {
     "Populaires": "popular",
     "Mieux notes" : "top_rated",
     "Diffusees 7 jours" : "on_the_air",
-    "Recemment" : "latest",
     "Diffusees ce jour": "airing_today" },
     "player": {
     "Nop": "Nop" },
@@ -72,6 +74,7 @@ sous_menu = {
 }
 
 menu = {
+    "Tendance": 'trending',
     "Films": 'movie',
     "Series tv": 'tv',
     "Lecteur": 'player',
@@ -101,6 +104,8 @@ class VideoAlan(Screen, BlackHole):
         self.keyboard.bind(on_key_down = self.on_keyboard_down)
         self.keyboard.bind(on_key_up = self.on_keyboard_up)
         self.ses_ayari.value = self.video.volume
+        self.duration = str(self.video.duration)
+        self.position = str(self.video.position)
 
     def keyboard_closed(self):
         self.keyboard.unbind(on_key_down = self.on_keyboard_down)
@@ -160,12 +165,22 @@ class VideoAlan(Screen, BlackHole):
     def on_keyboard_up(self,keyboard,keycode):
         self.video.bind(position = self.slider)
 
+    #slider et position en temp reel
+    #affichage 2.3.42 a revoire pour 2.30.42
     def slider(self,ins,val):
         m , s = divmod(self.video.position,60)
         h , m = divmod(m,60)
 
+        dur_m , dur_s = divmod(self.video.duration,60)
+        dur_h , dur_m = divmod(dur_m,60)
+
         self.zaman = str(int(h)) + ":" + str(int(m)) + ":" + str(int(s))
+        self.durzaman = str(int(dur_h)) + ":" + str(int(dur_m)) + ":" + str(int(dur_s))
+        
         self.ilerleme.value = float(val)/ float(ins.duration)
+
+        self.position = str(self.zaman)
+        self.duration = str(self.durzaman)
 
         if self.f:
             if self.zaman in list(self.sub_list.keys()):
@@ -182,6 +197,12 @@ class VideoAlan(Screen, BlackHole):
     def durdur(self):
         self.video.state = "stop"
         self.ilerleme.value = 0,0
+
+    def volume(self):
+        toast(str(round(self.ses_ayari.value, 2)))
+
+    def seek(self):
+        toast(str(round(self.ilerleme.value, 2)))
 
     def calistir(self,window,path):
         self.sub_list = {}
@@ -205,6 +226,13 @@ class VideoAlan(Screen, BlackHole):
                     self.sub_list_e.append(str(i.end.hours) + ":" + str(i.end.minutes) +":" + str(i.end.seconds))
         else:
             self.video.source = path
+            print('lecture')
+            # self.triggerUpdate = Clock.create_trigger(self.checkUpdate)
+            # Clock.schedule_interval(self.triggerUpdate, 0.01)
+
+    def checkUpdate(self, *args):
+        self.position = str(self.video.position)
+        self.duration = str(self.video.duration)
 
     def on_touch_down(self,touch):
         if "button" in touch.profile:
@@ -301,7 +329,7 @@ class ListDiscover(Screen, BlackHole):
         super(ListDiscover, self).__init__(**kwargs)
 
         #grille de poster
-        self.grid = self.grid_l
+        #self.grid = self.grid_l
 
         self.menu = kwargs['menu']
         self.types = kwargs['types']
@@ -314,6 +342,7 @@ class ListDiscover(Screen, BlackHole):
 
     def add(self):
         json = _jsonload(self.types, self.menu,NextPage=self.pageNumber)
+
         for data in json:
             btn = ImageButton(types=self.types,
             tmdbid=data['tmdbid'],
@@ -341,13 +370,19 @@ class ListDiscover(Screen, BlackHole):
         sm.current = "list"
 
 class discover_layout(BoxLayout):
+    bar_l = ObjectProperty(None)
 
     def __init__(self, data, **kwargs):
         super(discover_layout, self).__init__(**kwargs)
+
         self.title = data['title']
         self.overview = data['overview'][0:140]
         self.release_date = data['release_date']
         self.vote_average = str(data['vote_average'])
+
+        #bar de vote a voir si ont garde ou pas
+        vote_bar = str(round(float(data['vote_average']) / 10 , 1))
+        self.ids.bar_l.size_hint_x = vote_bar
     pass
 
 #screen information
@@ -421,11 +456,10 @@ class ListInfo(Screen, BlackHole):
         bs = MDListBottomSheet()
 
         main = re.findall('plugin": "(.+?)".+?{"title": "(.+?)", "url": "(.+?)", "qual": "(.+?)"}',str(_plugin))
-
         for sub in main:
             text = ("%s - %s [%s]") % (sub[0], sub[1] ,sub[3])
             #bs.add_item(text, lambda x: self.plays(url=sub[2]))
-            bs.add_item(sub[2], lambda x: self.plays(url=x.text))
+            bs.add_item(text, lambda x, url=sub[2], title=sub[1]: self.plays(url=url, title=title))
             
         bs.open()
 
@@ -436,11 +470,20 @@ class ListInfo(Screen, BlackHole):
         self.ids.spinner.active = False
 
     def plays(self, *args, **kwargs):
-        EXlog (kwargs['url'])
+        EXlog (kwargs)
+        #gstreamer n'accepter pas les m3u8 ni les connections securiser https
+
+        try:
+            if os.environ['KIVY_VIDEO'] == 'gstplayer':
+                url = kwargs['url'].replace('https', 'http') 
+            else:
+                url = kwargs['url']
+        except KeyError:
+            url = kwargs['url'].replace('https', 'http') 
 
         app = App.get_running_app()
         app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('discover')])
-        app.root.manager.get_screen("main").calistir(kwargs['url'],kwargs['url'])
+        app.root.manager.get_screen("main").calistir(url,url)
         app.root.manager.current =  "main"
 
 class ListSource(Screen, BlackHole):
@@ -485,12 +528,7 @@ class ListParam(Screen, BlackHole):
 def _jsonload(types, menu,NextPage):
 
     EXlog(("json", types, menu))
-    if menu == 'popular':
-        return tmdb().getPopular(NextPage)
-    elif menu == "top_rated":
-        return tmdb().getRated(NextPage)
-    elif menu == "discover":
-        return tmdb().getDiscover(types,NextPage)
+    return tmdb().getTmdb(types, menu, NextPage)
 
 class ScreenSwitcher(ScreenManager, BlackHole):
      #The screens can be added on the __init__ method like this or on the .kv file
@@ -499,7 +537,7 @@ class ScreenSwitcher(ScreenManager, BlackHole):
         try:
             self.add_widget(ListDiscover(name = "discover", types=types, menu=text))
         except NameError:
-            self.add_widget(ListDiscover(name = "discover", types="movie", menu='discover'))
+            self.add_widget(ListDiscover(name = "discover", types="movie", menu='trending'))
         self.add_widget(VideoAlan(name = "main"))
 
     #Fonction pour retourner a l'ecran precedent
