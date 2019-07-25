@@ -165,12 +165,22 @@ class VideoAlan(Screen, BlackHole):
     def on_keyboard_up(self,keyboard,keycode):
         self.video.bind(position = self.slider)
 
+    #slider et position en temp reel
+    #affichage 2.3.42 a revoire pour 2.30.42
     def slider(self,ins,val):
         m , s = divmod(self.video.position,60)
         h , m = divmod(m,60)
 
+        dur_m , dur_s = divmod(self.video.duration,60)
+        dur_h , dur_m = divmod(dur_m,60)
+
         self.zaman = str(int(h)) + ":" + str(int(m)) + ":" + str(int(s))
+        self.durzaman = str(int(dur_h)) + ":" + str(int(dur_m)) + ":" + str(int(dur_s))
+        
         self.ilerleme.value = float(val)/ float(ins.duration)
+
+        self.position = str(self.zaman)
+        self.duration = str(self.durzaman)
 
         if self.f:
             if self.zaman in list(self.sub_list.keys()):
@@ -217,6 +227,14 @@ class VideoAlan(Screen, BlackHole):
                     self.sub_list_e.append(str(i.end.hours) + ":" + str(i.end.minutes) +":" + str(i.end.seconds))
         else:
             self.video.source = path
+            print('lecture')
+            # self.triggerUpdate = Clock.create_trigger(self.checkUpdate)
+            # Clock.schedule_interval(self.triggerUpdate, 0.01)
+
+    def checkUpdate(self, *args):
+        self.position = str(self.video.position)
+        self.duration = str(self.video.duration)
+
 
     def on_touch_down(self,touch):
         if "button" in touch.profile:
