@@ -45,6 +45,7 @@ from kivymd.toast import toast
 
 #Custom Lib import
 from lib.comaddon import EXlog, ImageButton, BlackHole
+from lib.utils import CleanName
 from tmdb import tmdb
 
 #Autre import
@@ -86,15 +87,12 @@ menu = {
 #pk ça utiliser les nom anglais pour apelle au function
 #pouvoir modifier quand y a auras un fichier lang.
 
-#Evite l'erreur :
-# __init__ don't take arguments
 class VideoAlan(Screen, BlackHole):
     fullscreen = BooleanProperty(False)
     f = ObjectProperty()
-    Config.set('kivy', 'exit_on_escape', '0')
+    Config.get('kivy', 'exit_on_escape')
 
     def __init__(self,**kwargs):
-
         self.picktypes = menu.keys()
 
         Window.bind(on_dropfile=self.calistir)
@@ -167,12 +165,14 @@ class VideoAlan(Screen, BlackHole):
 
     #slider et position en temp reel
     #affichage 2.3.42 a revoire pour 2.30.42
-    def slider(self,ins,val):
-        m , s = divmod(self.video.position,60)
-        h , m = divmod(m,60)
+    #divmod est inutile car meme resultat avec les operation de base
 
-        dur_m , dur_s = divmod(self.video.duration,60)
-        dur_h , dur_m = divmod(dur_m,60)
+    def slider(self,ins,val):
+        m , s = (self.video.position // 60, self.video.position % 60)
+        h , m = (m // 60, m % 60)
+
+        dur_m , dur_s = (self.video.duration // 60, self.video.duration % 60)
+        dur_h , dur_m = (dur_m // 60, dur_m % 60)
 
         self.zaman = str(int(h)) + ":" + str(int(m)) + ":" + str(int(s))
         self.durzaman = str(int(dur_h)) + ":" + str(int(dur_m)) + ":" + str(int(dur_s))
@@ -452,7 +452,7 @@ class ListInfo(Screen, BlackHole):
         from kivymd.bottomsheet import MDListBottomSheet
         from iplugin import plugin
 
-        _plugin = plugin().getFolder(self.title).replace('\\','').replace('["','').replace('"]','')
+        _plugin = plugin().getFolder(CleanName(self.title).replace(' ','+')).replace('\\','').replace('["','').replace('"]','')
         bs = MDListBottomSheet()
 
         main = re.findall('plugin": "(.+?)".+?{"title": "(.+?)", "url": "(.+?)", "qual": "(.+?)"}',str(_plugin))
@@ -482,7 +482,8 @@ class ListInfo(Screen, BlackHole):
             url = kwargs['url'].replace('https', 'http') 
 
         app = App.get_running_app()
-        app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('discover')])
+        if app.root.manager.current == "discover":
+            app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('discover')])
         app.root.manager.get_screen("main").calistir(url,url)
         app.root.manager.current =  "main"
 
