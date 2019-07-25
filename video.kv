@@ -231,7 +231,7 @@
 <VideoAlan>:
 
 	video: _video
-	ilerleme: _ilerleme
+	progression: _progression
 	altyazi: _altyazi
 	durumcubugu: _durumcubugu
 	menu: _menu
@@ -325,7 +325,7 @@
 				padding:0
 
 				SeekSlider:
-					id: _ilerleme
+					id: _progression
 					padding:0
 					min:0
 					max:1
@@ -355,7 +355,7 @@
 			# 	pos_hint: {"center_x":0.5,"center_y":0.5}
 			# 	background_normal: "play-icon.png"
 			# 	background_down: "play-icon_dwn.png"
-			# 	on_release: root.oynat()
+			# 	on_release: root.Play()
 
 				BoxLayout:
 					size_hint:None, 1
@@ -384,7 +384,6 @@
 						font_size:'15sp'
 						#pos_hint: {'center_x': 0.1, 'center_y': 0.5}
 					
-			
 				MDFloatingActionButton:
 					icon:"play"
 					theme_text_color: 'Custom'
@@ -392,8 +391,7 @@
 					text_color: app.theme_cls.accent_color
 					size: dp(48), dp(48)
 					pos_hint: {'center_x': 0.1, 'center_y': 0.5}
-					on_release: root.oynat()
-
+					on_release: root.Play()
 
 				# Button:
 				# 	size: 48,48
@@ -401,7 +399,7 @@
 				# 	pos_hint: {"center_x":0.5,"center_y":0.5}
 				# 	background_normal: "pause-icon.png"
 				# 	background_down: "pause-icon_dwn.png"
-				# 	on_release: root.duraklat()
+				# 	on_release: root.Pause()
 
 				MDFloatingActionButton:
 					icon:"pause"
@@ -410,7 +408,7 @@
 					text_color: app.theme_cls.accent_color
 					size: dp(48), dp(48)
 					pos_hint: {'center_x': 0.3, 'center_y': 0.5}
-					on_release: root.duraklat()
+					on_release: root.Pause()
 
 				# Button:
 				# 	size: 48,48
@@ -418,7 +416,7 @@
 				# 	pos_hint: {"center_x":0.5,"center_y":0.5}
 				# 	background_normal: "stop-icon.png"
 				# 	background_down: "stop-icon_dwn.png"
-				# 	on_release: root.durdur()
+				# 	on_release: root.Stop()
 
 				MDFloatingActionButton:
 					icon:"stop"
@@ -427,7 +425,7 @@
 					text_color: app.theme_cls.accent_color
 					size: dp(48), dp(48)
 					pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-					on_release: root.durdur()
+					on_release: root.Stop()
 
 
 				#boite invisible espace
