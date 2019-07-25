@@ -164,7 +164,7 @@ class VideoAlan(Screen, BlackHole):
         self.video.bind(position = self.slider)
 
     #slider et position en temp reel
-    #affichage 2.3.42 a revoire pour 2.30.42
+    #affichage 2.3.42 a revoire pour 2.30.42 -> Normalement corriger avec la fonction format
     #divmod est inutile car meme resultat avec les operation de base
 
     def slider(self,ins,val):
@@ -174,35 +174,32 @@ class VideoAlan(Screen, BlackHole):
         dur_m , dur_s = (self.video.duration // 60, self.video.duration % 60)
         dur_h , dur_m = (dur_m // 60, dur_m % 60)
 
-        self.zaman = str(int(h)) + ":" + str(int(m)) + ":" + str(int(s))
-        self.durzaman = str(int(dur_h)) + ":" + str(int(dur_m)) + ":" + str(int(dur_s))
+        self.position  = str(int(h)) + ":" + format(int(m), '02d') + ":" + format(int(s), '02d')
+        self.duration = str(int(dur_h)) + ":" + format(int(dur_m), '02d') + ":" + format(int(dur_s), '02d')
         
-        self.ilerleme.value = float(val)/ float(ins.duration)
-
-        self.position = str(self.zaman)
-        self.duration = str(self.durzaman)
+        self.progression.value = float(val)/ float(ins.duration)
 
         if self.f:
-            if self.zaman in list(self.sub_list.keys()):
-                self.altyazi.text = self.sub_list[self.zaman]
-            if self.zaman in self.sub_list_e:
+            if self.position in list(self.sub_list.keys()):
+                self.altyazi.text = self.sub_list[self.position]
+            if self.position in self.sub_list_e:
                 self.altyazi.text = ""
 
-    def oynat(self):
+    def Play(self):
         self.video.state = "play"
 
-    def duraklat(self):
+    def Pause(self):
         self.video.state = "pause"
 
-    def durdur(self):
+    def Stop(self):
         self.video.state = "stop"
-        self.ilerleme.value = 0,0
+        self.progression.value = 0,0
 
     def volume(self):
         toast(str(round(self.ses_ayari.value, 2)))
 
     def seek(self):
-        toast(str(round(self.ilerleme.value, 2)))
+        toast(str(round(self.progression.value, 2)))
 
     def calistir(self,window,path):
         self.sub_list = {}
@@ -278,7 +275,7 @@ class VideoAlan(Screen, BlackHole):
                         self.durumcubugu.pos_hint = {"x":0,"top":0}
                         self.fullscreen = not self.fullscreen
 
-            if self.ilerleme.collide_point(*touch.pos):
+            if self.progression.collide_point(*touch.pos):
                 self.video.unbind(position = self.slider)
             super(VideoAlan,self).on_touch_down(touch)
 
@@ -287,9 +284,9 @@ class VideoAlan(Screen, BlackHole):
 
     def on_touch_up(self,touch):
         if self.video.loaded:
-            if self.ilerleme.collide_point(*touch.pos):
+            if self.progression.collide_point(*touch.pos):
 
-                self.video.seek(self.ilerleme.value)
+                self.video.seek(self.progression.value)
                 self.video.bind(position = self.slider)
 
             self.video.volume = self.ses_ayari.value
