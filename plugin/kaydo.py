@@ -24,7 +24,7 @@ def getJson(title):
     oRequest.addHeaderEntry('User-Agent', UA)
     sHtmlContent = oRequest.request()
 
-    aResult = re.findall('class="TPost C">.+?href="([^"]+)">.+?<img.+?src="([^"]+)".+?<h3 class="Title">([^<]+)</h3> .+?class="Qlty">([^<]+)<.+?<p>.+?streaming,([^<]+)',str(sHtmlContent))
+    aResult = re.findall('class="TPost C">.+?href="([^"]+)">.+?<img.+?src="([^"]+)".+?<h3 class="Title">([^<]+)</h3> .+?class="Qlty">([^<]+)<',str(sHtmlContent))
     d1 = {"plugin":SITE_NAME}
 
     dest = []
