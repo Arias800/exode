@@ -59,3 +59,13 @@ class GestionCookie():
     def AddCookies(self):
         cookies = self.Readcookie(self.__sHosterIdentifier)
         return 'Cookie=' + cookies
+
+def CleanName(name):
+    #vire accent et '\'
+    try:
+        name = unicode(name, 'utf-8')#converti en unicode pour aider aux convertions
+    except:
+        pass
+    name = unicodedata.normalize('NFD', name).encode('ascii', 'ignore').decode("unicode_escape")
+    name = name.encode("utf-8") #on repasse en utf-8
+    return name.decode()
