@@ -66,6 +66,6 @@ def CleanName(name):
         name = unicode(name, 'utf-8')#converti en unicode pour aider aux convertions
     except:
         pass
-    name = unicodedata.normalize('NFD', name).encode('ascii', 'ignore').decode("unicode_escape").replace(' ','+')
-    name = ''.join([i for i in name if i.isalpha() or i == '+']) #<- Supprime tout les caractere non alphanumeric sauf les +
+    name = unicodedata.normalize('NFD', name).encode('ascii', 'ignore').decode("unicode_escape")
+    name = ''.join([i for i in name if i.isalpha() or i == '+' or i == ' ']) #<- Supprime tout les caractere non alphanumeric sauf les +
     return name
