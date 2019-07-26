@@ -262,6 +262,7 @@ class VideoAlan(Screen, BlackHole):
             if self.video.collide_point(*touch.pos):
                 if touch.is_double_tap:
                     if self.fullscreen:
+                        self.hide_widget(False)
                         self.video.pos_hint = {"x":0,"y":0.1}
                         Window.fullscreen = False
                         self.durumcubugu.pos_hint = {"center_x":0.5,"y":0}
@@ -272,7 +273,7 @@ class VideoAlan(Screen, BlackHole):
                         Window.fullscreen = True
                         self.size_hint = (1,1)
                         Window.size = (1366,768)
-                        self.durumcubugu.pos_hint = {"x":0,"top":0}
+                        self.hide_widget(True)
                         self.fullscreen = not self.fullscreen
 
             if self.progression.collide_point(*touch.pos):
@@ -298,6 +299,27 @@ class VideoAlan(Screen, BlackHole):
     def ses_gizle(self,dt):
         self.ses.pos_hint = {"left":2,"top":2}
 
+    def hide_widget(self, hide):
+        #Simule le fait de cacher les widget pendant le plein ecran
+        #alors que je les mets juste en dehors de l'écran
+        if hide:
+
+            #Change la couleur du fond pour du noir plus agreable pour le visionage
+            Window.clearcolor = (0, 0, 0, 0)
+            self.durumcubugu.pos_hint = {"x":-1,"y":-1}
+            self.ses.pos_hint = {"x":-1,"y":-1}
+            self.progression.pos_hint = {"x":-1,"y":-1}
+            self.menu.pos_hint = {"x":-1,"y":-1} 
+
+        else:
+
+            #Retour au blanc
+            Window.clearcolor = (1, 1, 1, 1)
+            self.durumcubugu.pos_hint = {"center_x":0.5,"y":0}
+            self.ses.pos_hint = {"right":0.9,"top":0.9}
+            self.progression.pos_hint = {"center_x":0.5,"y":0}
+            self.menu.pos_hint = {"x":0,"top":1}
+                       
 class OpenFolder(Screen, BlackHole):
     pass
 
