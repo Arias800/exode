@@ -61,7 +61,6 @@
             size_hint_x: None
             width: self.texture_size[0]
 
-
 <SeekSlider@MDSlider>
     canvas:
         Clear
@@ -100,7 +99,6 @@
             pos:
                 (self.x + self.padding, self.center_y - dp(8))
 
-
 <MainScreen>:
     manager: manager
     rows: 2
@@ -133,7 +131,6 @@
 				#height: self.parent.height
 				height: self.parent.height
 
-
 				MDAccordionItem:
 					title:'Films'
 					icon: 'movie'
@@ -157,6 +154,7 @@
 					MDAccordionSubItem:
 						text: "A venir"
 						on_press: root.onChange('movie', 'list', 'upcoming')
+
 				MDAccordionItem:
 					title:'Series'
 					icon: 'video'
@@ -178,6 +176,7 @@
 					MDAccordionSubItem:
 						text: "Diffusees ce jour"
 						on_press: root.onChange('tv', 'list', 'airing_today')
+
 				MDAccordionItem:
 					title:'Lecteur'
 					icon: 'play'
@@ -185,6 +184,7 @@
 						text: "Parcourir"
 						on_press: root.onRoot()
 					#on_press: root.onChange('player', 'autre')
+
 				MDAccordionItem:
 					title:'Parametres'
 					icon: 'settings'
@@ -196,7 +196,6 @@
 						text: "Couleur"
 						on_press: root.onChange('tv', 'app', 'airing_today')
 
-
             # NavigationDrawerToolbar:
             #     title: "eXode"
             # NavigationDrawerIconButton:
@@ -207,7 +206,6 @@
             #     icon: 'checkbox-blank-circle'
             #     text: "Series tv"
 			# 	on_release:root.onChange(self.text)
-
 
 		BoxLayout:
             orientation: 'vertical'
@@ -364,22 +362,8 @@
 					width:dp(150)
 
 					Label:
-						#padding: dp(10),dp(0)
-						text: root.position
-						text_size: self.size
-						font_size:'15sp'
-						#pos_hint: {'center_x': 0.1, 'center_y': 0.5}
-					
-					Label:
-						#padding: dp(10),dp(0)
-						text: '/'
-						text_size: self.size
-						font_size:'15sp'
-						#pos_hint: {'center_x': 0.1, 'center_y': 0.5}
-
-					Label:
-						#padding: dp(10),dp(0)
-						text: root.duration
+						#padding: dp(15),dp(0)
+						text: root.position + ' / ' + root.duration
 						text_size: self.size
 						font_size:'15sp'
 						#pos_hint: {'center_x': 0.1, 'center_y': 0.5}
@@ -779,6 +763,7 @@
 	        				pos_hint: {'x': 0.05, 'y': 0.1}
 
 							TextInput:
+								readonly: True
 								height: self.minimum_height
 	            				size_hint_y: None
 								size_hint_x: 1
