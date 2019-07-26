@@ -3,6 +3,7 @@ from kivymd.bottomsheet import MDListBottomSheet
 from lib.handler.requestHandler import cRequestHandler
 from lib.comaddon import EXlog
 from lib.hoster import checkHoster
+from lib.parser import cParser
 
 import re, json
 
@@ -24,41 +25,46 @@ def getJson(title):
     oRequest.addHeaderEntry('User-Agent', UA)
     sHtmlContent = oRequest.request()
 
-    aResult = re.findall('class="TPost C">.+?href="([^"]+)">.+?<img.+?src="([^"]+)".+?<h3 class="Title">([^<]+)</h3> .+?class="Qlty">([^<]+)<',str(sHtmlContent))
+    oParser = cParser()
+    sPattern = 'class="TPost C">.+?href="([^"]+)">.+?<img.+?src="([^"]+)".+?<h3 class="Title">([^<]+)</h3> .+?class="Qlty">([^<]+)<'
+    aResult = oParser.parse(sHtmlContent, sPattern) 
+
     d1 = {"plugin":SITE_NAME}
 
     dest = []
 
-    i = 0
-    for aEntry in aResult:
+    if (aResult[0] == True):
+        url=[]
+        qua=[]
+        for aEntry in aResult[1]:
 
-        sUrl = aEntry[0]
-        qual = aEntry[3]
-        sTitle = aEntry[2]
-        sQual,url = getFinalUrl(sUrl,qual)
+            sUrl = aEntry[0]
+            qual = aEntry[3]
+            sTitle = aEntry[2]
+            sQual,url = getFinalUrl(sUrl,qual)
 
-        for qual,sUrl in zip(sQual,url):
-            qua, Url = checkHoster(sUrl)
+            for qual,sUrl in zip(sQual,url):
+                qua, Url = checkHoster(sUrl)
 
-            if qua == True:
-                qua = sQual  
+                if qua == True:
+                    qua = sQual  
 
-            if Url == False:
-                continue
-            else:
-                #Si plus d'un url
-                if type(Url) is list:
-                    for qua1 , Url1 in zip(qua, Url):
-                        extra = ({"source":{'title' : sTitle,"url":Url1,"qual":qua1}})
-                        dest.append((d1))
-                        dest.append((extra))
+                if Url == False:
+                    continue
                 else:
-                    extra = ({"source":{'title' : sTitle,"url":Url,"qual":qua[0]}})
-                    dest.append((d1))
-                    dest.append((extra))                       
+                    #Si plus d'un url
+                    if type(Url) is list:
+                        for qua1 , Url1 in zip(qua, Url):
+                            extra = ({"source":{'title' : sTitle,"url":Url1,"qual":qua1}})
+                            dest.append((d1))
+                            dest.append((extra))
+                    else:
+                        extra = ({"source":{'title' : sTitle,"url":Url,"qual":qua[0]}})
+                        dest.append((d1))
+                        dest.append((extra))                       
 
-    JSON = json.dumps(dest)
-    return JSON
+        JSON = json.dumps(dest)
+        return JSON
 
 def getFinalUrl(sUrl,qual=''):
 

@@ -449,7 +449,7 @@ class ListInfo(Screen, BlackHole):
         from kivymd.bottomsheet import MDListBottomSheet
         from iplugin import plugin
 
-        _plugin = plugin().getFolder(CleanName(self.title)).replace('\\','').replace('["','').replace('"]','')
+        _plugin = plugin().getFolder(CleanName(self.title.replace(' ','+'))).replace('\\','').replace('["','').replace('"]','')
         bs = MDListBottomSheet()
 
         main = re.findall('plugin": "(.+?)".+?{"title": "(.+?)", "url": "(.+?)", "qual": "(.+?)"}',str(_plugin))

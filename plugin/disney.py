@@ -3,6 +3,7 @@ from kivymd.bottomsheet import MDListBottomSheet
 from lib.handler.requestHandler import cRequestHandler
 from lib.comaddon import EXlog
 from lib.hoster import checkHoster
+from lib.parser import cParser
 
 import re,json
 
@@ -27,23 +28,27 @@ def getJson(title):
     oRequest.addHeaderEntry('User-Agent', UA)
     sHtmlContent = oRequest.request()
 
-    aResult = re.findall('href="([^"]+)" title="([^"]+)"><img src="([^"]+)"',str(sHtmlContent))
+    oParser = cParser()
+    sPattern = 'href="([^"]+)" title="([^"]+)"><img src="([^"]+)"'
+    aResult = oParser.parse(sHtmlContent, sPattern) 
+
     d1 = {"plugin":SITE_NAME}
     dest = []
     
-    for aEntry in aResult:
+    if (aResult[0] == True):
+        for aEntry in aResult[1]:
 
-        sTitle = aEntry[1]
-        if title.lower() in sTitle.lower():
-            sUrl = URL_MAIN + aEntry[0]
+            sTitle = aEntry[1]
+            if title.lower() in sTitle.lower():
+                sUrl = URL_MAIN + aEntry[0]
 
-            sQual,url = getFinalUrl(sUrl)
+                sQual,url = getFinalUrl(sUrl)
 
-            for qual,sUrl1 in zip(sQual,url):
+                for qual,sUrl1 in zip(sQual,url):
 
-                extra = {"source":{'title' : sTitle,"url":sUrl1,"qual":qual}}
-                dest.append((d1))
-                dest.append((extra))
+                    extra = {"source":{'title' : sTitle,"url":sUrl1,"qual":qual}}
+                    dest.append((d1))
+                    dest.append((extra))
 
     JSON = json.dumps(dest)
 
