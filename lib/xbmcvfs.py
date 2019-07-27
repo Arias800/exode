@@ -4,7 +4,7 @@ from lib.comaddon import EXlog
 import os
 
 def translatePath(path):
-    path = os.getcwd().replace('\\','/').split('exode')[0] + 'exode/' + path.split('special://')[1]
+    path = os.getcwd().replace('\\','/') + '/' + path.split('special://')[1]
     EXlog(path)
     return path
 
