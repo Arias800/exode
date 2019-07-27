@@ -46,13 +46,17 @@ class plugin(object):
             name = name.replace('.py', '')
 
             module = importlib.import_module("plugin."+name, package=None)
+            _class = getattr(module, name)
+            module = _class(tmdbid="58425", title=title)
+            
+
             EXlog("Recherche en cours sur "+name)
 
-            json1 = module.getJson(title)
+            json1 = module.getJson()
             if self.is_valid(json1):
                 self.__FullJson.append(json1)
             else:
-                list1 = module.getList(title)
+                list1 = module.getList()
                 self.__FullJson.append(list1)
 
         return json.dumps(self.__FullJson)
@@ -114,6 +118,16 @@ class iplugin(object):
 
     # def serial(self):
     #     print json.dumps(self.getParams())
+
+    def similar(self, w1, w2):
+        w1 = w1 + ' ' * (len(w2) - len(w1))
+        w2 = w2 + ' ' * (len(w1) - len(w2))
+        cal = sum(1 if i == j else 0 for i, j in zip(w1, w2)) / float(len(w1))
+        print(cal, w1, w2)
+        #similaire a 70%
+        if cal > 0.70 : 
+            return True 
+        else : return False
 
 
 #La fonction json.dumps() permet de transformer mon dictionnaire (type dict) en une chaine de caractères (type str):

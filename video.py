@@ -471,15 +471,25 @@ class ListInfo(Screen, BlackHole):
         from kivymd.bottomsheet import MDListBottomSheet
         from iplugin import plugin
 
+        print(self.title, 'getfoldr')
+        print(CleanName(self.title), 'getfoldr')
+
         _plugin = plugin().getFolder(CleanName(self.title.replace(' ','+'))).replace('\\','').replace('["','').replace('"]','')
         bs = MDListBottomSheet()
 
-        main = re.findall('plugin": "(.+?)".+?{"title": "(.+?)", "url": "(.+?)", "qual": "(.+?)"}',str(_plugin))
-        for sub in main:
-            text = ("%s - %s [%s]") % (sub[0], sub[1] ,sub[3])
-            #bs.add_item(text, lambda x: self.plays(url=sub[2]))
-            bs.add_item(text, lambda x, url=sub[2], title=sub[1]: self.plays(url=url, title=title))
-            
+        #json valider pas besoin de retest
+        #main = re.findall('plugin": "(.+?)".+?{"title": "(.+?)", "url": "(.+?)", "qual": "(.+?)"}',str(_plugin))
+        #for sub in main:
+        #    text = ("%s - %s [%s]") % (sub[0], sub[1] ,sub[3])
+        #    bs.add_item(text, lambda x, url=sub[2], title=sub[1]: self.plays(url=url, title=title))            
+        #bs.open()
+
+        for main in json.loads(_plugin):
+
+            for sub in main.get('source'):
+                text = ("%s - %s [%s]") % (main['plugin'], sub['title'] ,sub['qual'])
+                bs.add_item(text, lambda x, url=sub['url'], title=sub['title']: self.plays(url=url, title=title))   
+        
         bs.open()
 
         #loading stop en time mais a voir pour le mettre en vrais temp de chargement

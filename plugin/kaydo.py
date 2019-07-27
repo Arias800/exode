@@ -20,7 +20,21 @@ FUNCTION_SEARCH = 'sHowResultSearch'
 
 UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:56.0) Gecko/20100101 Firefox/56.0'
 
-def getJson(title):
+from iplugin import iplugin
+
+##class nom de fichier
+class kaydo(iplugin):
+
+    def __init__(self, **kwargs):
+        #Kwargs tmdbid, title
+        iplugin.__init__(self)
+
+        # self.setPlugin("Kaydo")
+        # self.setThumb("http://disney")
+        # self.setSource("1001 pattes","http://disneyhdsource.ml/mp4/1001_pattes.mp4", "1080")
+        # self.setSource("Aladdin","http://disneyhdsource.ml/mp4/aladdin.mp4", "1080")
+
+def getJson2(title):
     oRequest = cRequestHandler(URL_MAIN + 'search/'+title)
     oRequest.addHeaderEntry('User-Agent', UA)
     sHtmlContent = oRequest.request()
