@@ -1,5 +1,13 @@
 #! usr/bin/env python
 #! -*- coding:utf-8 -*-
+
+#Au cas ou la personne ait mit la lib dans le meme dossier au lieu de l'installer.
+import sys
+try:
+    sys.path.append('kivymd')
+except:
+    pass
+
 import kivy
 kivy.require("1.10.1")
 
