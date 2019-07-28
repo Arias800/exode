@@ -123,7 +123,6 @@ class iplugin(object):
         w1 = w1 + ' ' * (len(w2) - len(w1))
         w2 = w2 + ' ' * (len(w1) - len(w2))
         cal = sum(1 if i == j else 0 for i, j in zip(w1, w2)) / float(len(w1))
-        print(cal, w1, w2)
         #similaire a 70%
         if cal > 0.70 : 
             return True 

@@ -28,11 +28,46 @@ class kaydo(iplugin):
     def __init__(self, **kwargs):
         #Kwargs tmdbid, title
         iplugin.__init__(self)
+        self.setPlugin("Kaydo") #nom du site
+        self.setThumb("http://kaydo") #thumb du site non utiliser pour le moment
 
-        # self.setPlugin("Kaydo")
-        # self.setThumb("http://disney")
-        # self.setSource("1001 pattes","http://disneyhdsource.ml/mp4/1001_pattes.mp4", "1080")
-        # self.setSource("Aladdin","http://disneyhdsource.ml/mp4/aladdin.mp4", "1080")
+        oRequest = cRequestHandler(URL_MAIN + 'search/'+kwargs['title'])
+        oRequest.addHeaderEntry('User-Agent', UA)
+        sHtmlContent = oRequest.request()
+
+        oParser = cParser()
+        sPattern = 'class="TPost C">.+?href="([^"]+)">.+?<img.+?src="([^"]+)".+?<h3 class="Title">([^<]+)</h3> .+?class="Qlty">([^<]+)<'
+        aResult = oParser.parse(sHtmlContent, sPattern) 
+
+        if (aResult[0] == True):
+            url=[]
+            qua=[]
+            for aEntry in aResult[1]:
+
+                sUrl = aEntry[0]
+                qual = aEntry[3]
+                sTitle = aEntry[2]
+
+                if self.similar(kwargs['title'], sTitle):
+
+                    sQual,url = getFinalUrl(sUrl,qual)
+
+                    for qual,sUrl in zip(sQual,url):
+                        qua, Url = checkHoster(sUrl)
+
+                        if qua == True:
+                            qua = sQual  
+
+                        if Url == False:
+                            continue
+                        else:
+                            #Si plus d'un url
+                            if type(Url) is list:
+                                for qua1 , Url1 in zip(qua, Url):
+                                    self.setSource(sTitle,Url1,qua1)
+                            else:
+                                self.setSource(sTitle,Url,qua[0])
+
 
 def getJson2(title):
     oRequest = cRequestHandler(URL_MAIN + 'search/'+title)
