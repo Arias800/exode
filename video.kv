@@ -517,66 +517,86 @@
 	                
 <OpenFolder>:
 	menu: _menu
+
 	BoxLayout:
+		orientation: 'vertical'
+        padding: dp(0), dp(0)
+        spacing: dp(10)
+		pos_hint: {"x":0,"top":1}
 
-		orientation: "vertical"
 
 		BoxLayout:
+			size_hint_y: None
+			height: dp(20)
+			padding: dp(20), dp(10), dp(0), dp(0)
 
+			Label:
+				size_hint: None, None
+				height: dp(10)
+				width: self.texture_size[0]
+				halign: 'left'
+				color: app.theme_cls.primary_color
+				font_size: '18sp'
+				text: "Parcourir"
+
+        MDSeparator:
+
+		BoxLayout:
+			orientation: 'horizontal'
+			size_hint:None, None
+			spacing:10
+			padding:10
+			height: 60			
+
+			MDRaisedButton:
+				text: "Valider"
+				elevation_normal: 2
+				opposite_colors: True
+				on_release: root.parent.get_screen("main").calistir(filechooser.path,filechooser.selection)
+
+			MDRaisedButton:
+				text: "nop"
+				elevation_normal: 2
+				opposite_colors: True
+				#on_press: root.show_bottom()
+
+			MDRaisedButton:
+				text: "Nop"
+				elevation_normal: 2
+				opposite_colors: True
+				#on_press: root.show_source()
+
+			MDRaisedButton:
+				text: "Nop"
+				elevation_normal: 2
+				opposite_colors: True
+				#on_press: root.show_source()
+
+
+		BoxLayout:
 			id: _menu
-
-			orientation: "horizontal"
-			pos_hint: {"x":0,"top":1}
-			size_hint: 1,None
-			padding: 5
-			spacing: 5
-			height: 50
-
-			canvas.before:
-
-				Color:
-					rgba: 0,0,0,0.5
-				Rectangle:
-					pos: self.pos
-					size: self.size
-
-			Button:
-				text: "VIDEO"
-				size_hint: None,1
-				width: 60
-				on_press:
-	                root.manager.transition.direction = 'right'
-	                root.manager.current = 'main'
-
-			Button:
-				text: "OPEN"
-				size_hint: None,1
-				width: 60
-				on_press:
-	                root.manager.transition.direction = 'left'
-	                root.manager.current = 'files'
-			
-			Button:
-				text: "LIST"
-				size_hint: None,1
-				width: 60
-				on_press:
-	                root.manager.transition.direction = 'left'
-	                root.manager.current = 'list'
-
-		BoxLayout:
 			orientation: "vertical"
+			spacing: dp(4)
+			size_hint: 1,1
 
-			FileChooserIconView:
+			FileChooserListView:
 				id: filechooser
 				size_hint: 1,0.9
+				canvas.before: 
+					Color: 
+						rgb: app.theme_cls.primary_color
+					Rectangle: 
+						pos: self.pos 
+						size: self.size	
 
-			Button:
-				size_hint: None,0.1
-				pos_hint: {"x":0,"right":1}
-				width: 60
-	            text: "SEÇ"
-	            on_release: root.parent.get_screen("main").calistir(filechooser.path,filechooser.selection)
+			# Button:
+			# 	size_hint: None,0.1
+			# 	pos_hint: {"x":0,"right":1}
+			# 	width: 60
+	        #     text: "SEÇ"
+	        #     on_release: root.parent.get_screen("main").calistir(filechooser.path,filechooser.selection)
+
+
 
 <ImageButton>:
 	#id: box_share2	

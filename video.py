@@ -333,8 +333,6 @@ class VideoAlan(Screen, BlackHole):
         else:
             return
                        
-class OpenFolder(Screen, BlackHole):
-    pass
 
 def onChange(self, text):
     EXlog('onchange',  text)
@@ -568,6 +566,9 @@ class MyCircle(GridLayout, BlackHole):
 class ListParam(Screen, BlackHole):
     pass
 
+class OpenFolder(Screen, BlackHole):
+    pass
+
 def _jsonload(types, menu,NextPage):
 
     EXlog(("json", types, menu))
@@ -628,29 +629,8 @@ class MainScreen(GridLayout,BlackHole):
         self.ids.nav_layout.toggle_nav_drawer()
 
     def onRoot(self):
-  
-        from kivy.uix.modalview import ModalView
-        from kivymd.filemanager import MDFileManager
-
-        if not self.manager:
-            self.manager = ModalView(size_hint=(1, 1), auto_dismiss=False)
-            self.file_manager = MDFileManager(exit_manager=self.root_exit, select_path=self.root_select)
-
-    def root_select_path(self, path):
-        """
-        It will be called when you click on the file name or the catalog selection button.
-        :type path: str;
-        :param path: path to the selected directory or file;
-        """
-        self.path_selected_callback(path)
-
-        self.root_exit()
-        toast(path)
-
-    def root_exit(self, *args):
-        """Called when the user reaches the root of the directory tree."""
-        self.manager.dismiss()
-        self.manager_open = False
+        self.manager.add_widget(OpenFolder(name = "folder"))
+        self.manager.current = 'folder'
 
 class Video(App):
 
