@@ -412,9 +412,6 @@ class discover_layout(BoxLayout):
         self.release_date = data['release_date']
         self.vote_average = str(data['vote_average'])
 
-        #bar de vote a voir si ont garde ou pas
-        vote_bar = str(round(float(data['vote_average']) / 10 , 1))
-        self.ids.bar_l.size_hint_x = vote_bar
     pass
 
 #screen information
