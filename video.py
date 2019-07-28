@@ -102,9 +102,9 @@ class VideoAlan(Screen, BlackHole):
 
     def __init__(self,**kwargs):
         self.picktypes = menu.keys()
-
-        Window.bind(on_dropfile=self.calistir)
         super(VideoAlan,self).__init__(**kwargs)
+        Window.bind(on_dropfile = self.calistir)
+        Window.bind(mouse_pos = self.on_motion)
         self.video.bind(position = self.slider)
         self.keyboard = Window.request_keyboard(self.keyboard_closed,self,"text")
         self.keyboard.bind(on_key_down = self.on_keyboard_down)
@@ -274,7 +274,6 @@ class VideoAlan(Screen, BlackHole):
                         self.video.pos_hint = {"x":0,"y":0.1}
                         Window.fullscreen = False
                         self.durumcubugu.pos_hint = {"center_x":0.5,"y":0}
-                        Config.set('graphics', 'show_cursor', "1")
                         self.fullscreen = not self.fullscreen
                     else:
                         self.video.pos_hint = {"x":0,"y":0}
@@ -307,11 +306,10 @@ class VideoAlan(Screen, BlackHole):
     def ses_gizle(self,dt):
         self.ses.pos_hint = {"left":2,"top":2}
 
-    def hide_widget(self, hide):
+    def hide_widget(self, hide, *largs):
         #Simule le fait de cacher les widget pendant le plein ecran
         #alors que je les mets juste en dehors de l'écran
         if hide:
-
             #Change la couleur du fond pour du noir plus agreable pour le visionage
             Window.clearcolor = (0, 0, 0, 0)
             self.durumcubugu.pos_hint = {"x":-1,"y":-1}
@@ -320,13 +318,20 @@ class VideoAlan(Screen, BlackHole):
             self.menu.pos_hint = {"x":-1,"y":-1} 
 
         else:
-
             #Retour au blanc
             Window.clearcolor = (1, 1, 1, 1)
             self.durumcubugu.pos_hint = {"center_x":0.5,"y":0}
             self.ses.pos_hint = {"right":0.9,"top":0.9}
             self.progression.pos_hint = {"center_x":0.5,"y":0}
             self.menu.pos_hint = {"x":0,"top":1}
+
+    def on_motion(self, reste, pos):
+        app = App.get_running_app()
+        if app.root.manager.current == "main":
+            Clock.schedule_once(partial(self.hide_widget, False), 0.5)
+            Clock.schedule_once(partial(self.hide_widget, True), 5)
+        else:
+            return
                        
 class OpenFolder(Screen, BlackHole):
     pass
