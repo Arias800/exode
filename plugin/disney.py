@@ -34,6 +34,11 @@ class disney(iplugin):
         self.setPlugin("Disney") #nom du site
         self.setThumb("http://disney") #thumb du site non utiliser pour le moment
 
+        #JSON = json.dumps(dest)
+        #self.setSource("1001 pattes","http://disneyhdsource.ml/mp4/1001_pattes.mp4", "1080")
+        #self.setSource("Aladdin","http://disneyhdsource.ml/mp4/aladdin.mp4", "1080")
+
+    def search(self, **kwargs):
         #debut grab
         oRequest = cRequestHandler('https://disneyhd.tk/movies_list.php')
         oRequest.addHeaderEntry('User-Agent', UA)
@@ -63,15 +68,6 @@ class disney(iplugin):
                         #dest.append((d1))
                         #dest.append((extra))
                         self.setSource(sTitle,sUrl1,qual)
-
-        #JSON = json.dumps(dest)
-
-
-
-
-
-        #self.setSource("1001 pattes","http://disneyhdsource.ml/mp4/1001_pattes.mp4", "1080")
-        #self.setSource("Aladdin","http://disneyhdsource.ml/mp4/aladdin.mp4", "1080")
 
 
 def getJson2(title):
