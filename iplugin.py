@@ -9,29 +9,6 @@ class plugin(object):
 
         self.__FullJson = []
 
-    #valid le json evite les erreurs
-    def is_valid(self, json):
-
-        if not json:
-            return False
-        try:
-            if json.get('plugin') is None:
-                return False
-            if json.get('thumb') is None:
-                return False
-            for e in json.get('source'):
-                if e.get('title') is None:
-                    return False
-                if e.get('url') is None:
-                    return False
-                if e.get('qual') is None:
-                    return False
-        except AttributeError:
-            # counters is not a dictionary, ignore and move on
-            pass    
-                        
-        return True
-
     def getFolder(self,title):
 
         app_path = os.path.dirname(os.path.abspath(__file__))
@@ -47,17 +24,13 @@ class plugin(object):
 
             module = importlib.import_module("plugin."+name, package=None)
             _class = getattr(module, name)
-            module = _class(tmdbid="58425", title=title)
-            
+            module = _class()
 
-            EXlog("Recherche en cours sur "+name)
+            EXlog("Recherche en cours sur " + name)
+            module.search(tmdbid="58425", title=title) 
 
-            json1 = module.getJson()
-            if self.is_valid(json1):
-                self.__FullJson.append(json1)
-            else:
-                list1 = module.getList()
-                self.__FullJson.append(list1)
+            _json = module.getJson()
+            self.__FullJson.append(_json)
 
         return json.dumps(self.__FullJson)
 
@@ -80,6 +53,29 @@ class iplugin(object):
 #         "qual" : "HD"
 #     }
 # }
+
+    #valid le json evite les erreurs
+    def is_valid(self, json):
+
+        if not json:
+            return False
+        try:
+            if json.get('plugin') is None:
+                return False
+            if json.get('thumb') is None:
+                return False
+            for e in json.get('source'):
+                if e.get('title') is None:
+                    return False
+                if e.get('url') is None:
+                    return False
+                if e.get('qual') is None:
+                    return False
+        except AttributeError:
+            # counters is not a dictionary, ignore and move on
+            pass    
+                        
+        return True
 
 #nom du plugin
     def getPlugin(self):
@@ -109,9 +105,14 @@ class iplugin(object):
         json["source"] =  self.getSource()
         return json
     
-#full json
+    #full json
     def getJson(self):
-        return self.__Json
+        if self.is_valid(self.__Json):
+            return self.__Json
+        else:
+            return self.getList()
+            
+        return False
 
     def setJson(self, json):
         self.__Json = json
