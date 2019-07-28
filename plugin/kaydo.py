@@ -31,6 +31,8 @@ class kaydo(iplugin):
         self.setPlugin("Kaydo") #nom du site
         self.setThumb("http://kaydo") #thumb du site non utiliser pour le moment
 
+    def search(self, **kwargs):
+            
         oRequest = cRequestHandler(URL_MAIN + 'search/'+kwargs['title'])
         oRequest.addHeaderEntry('User-Agent', UA)
         sHtmlContent = oRequest.request()
