@@ -483,7 +483,10 @@ class ListInfo(Screen, BlackHole):
         print(CleanName(self.title), 'getfoldr')
 
         _plugin = plugin().getFolder(CleanName(self.title.replace(' ','+'))).replace('\\','').replace('["','').replace('"]','')
+        #sv = ScrollView()
         bs = MDListBottomSheet()
+        #sv.add_widget(bs)
+
 
         #json valider pas besoin de retest
         #main = re.findall('plugin": "(.+?)".+?{"title": "(.+?)", "url": "(.+?)", "qual": "(.+?)"}',str(_plugin))
