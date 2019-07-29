@@ -582,9 +582,18 @@ class ListParam(Screen, BlackHole):
         print("parammmmmmmm")
 
         #json param
-        data = [
-        {"type": "title", "title": "Windows"},
+        #graphics
+        conf_graphics = [
+        #{"type": "title", "title": "Windows"},
         {"type": "bool", "title": "Fullscreen", "desc": "Set the window in windowed or fullscreen", "section": "graphics", "key": "fullscreen"}
+        ]
+
+        #theme
+        conf_theme = [
+        {"type": "options", "title": "Style", "desc": "Style des fenêtres", "section": "theme", "key": "Style", 'options': ['Light', 'Dark']},
+        {"type": "options", "title": "Palette", "desc": "Couleurs des fenêtres", "section": "theme", "key": "Palette", 'options': 
+        ["Red", "Pink", "Purple", "DeepPurple", "Indigo", "Blue", "LightBlue", "Cyan", "Teal", "Green", "LightGreen", "Lime", "Yellow", "Amber",
+        "Orange", "DeepOrange", "Brown", "Gray", "BlueGray"]}
         ]
 
         config = ConfigParser()
@@ -593,7 +602,8 @@ class ListParam(Screen, BlackHole):
         s = Settings()
         #s.add_json_panel('My custom panel', config, 'settings_custom.json')
         #s.add_json_panel('Another panel', config, 'settings_test2.json')
-        s.add_json_panel('panel', config, data=json.dumps(data))
+        s.add_json_panel('Graphics', config, data=json.dumps(conf_graphics))
+        s.add_json_panel('Theme', config, data=json.dumps(conf_theme))
         self.ids.grid_id.add_widget(s)
 
 class OpenFolder(Screen, BlackHole):
@@ -674,6 +684,8 @@ class Video(App):
         Config.get('graphics', 'height')
         Config.get('graphics', 'resizable')
         Config.get('graphics', 'fullscreen')
+
+        print(Config.get('theme', 'style'), 'theme')
         Config.write()
 
         self.theme_cls.theme_style = 'Light'
