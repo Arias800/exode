@@ -99,6 +99,34 @@
             pos:
                 (self.x + self.padding, self.center_y - dp(8))
 
+
+<MDBottomSheet>
+    md_bg_color: 0, 0, 0, .8
+    upper_padding: upper_padding
+    gl_content: gl_content
+
+	ScrollView:
+		size: self.size
+		do_scroll_y: True
+		do_scroll_x: False
+		bar_width: '8dp'
+		BoxLayout:
+			size_hint_y: None
+			orientation: 'vertical'
+			padding: 0, 1, 0, 0
+			height: upper_padding.height + gl_content.height + 1
+			BsPadding:
+				id: upper_padding
+				size_hint_y: None
+				#5 = nombre d"item afficher
+				height: root.height - min(root.width * 5 / 16, gl_content.height)
+				on_release: root.dismiss()
+			BottomSheetContent:
+				id: gl_content
+				size_hint_y: None
+				md_bg_color: root.theme_cls.bg_normal
+				cols: 1
+
 <MainScreen>:
     manager: manager
     rows: 2

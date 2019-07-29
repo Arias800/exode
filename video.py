@@ -483,7 +483,7 @@ class ListInfo(Screen, BlackHole):
         print(CleanName(self.title), 'getfoldr')
 
         _plugin = plugin().getFolder(CleanName(self.title.replace(' ','+'))).replace('\\','').replace('["','').replace('"]','')
-        #sv = ScrollView()
+        sv = ScrollView()
         bs = MDListBottomSheet()
         #sv.add_widget(bs)
 
@@ -497,10 +497,16 @@ class ListInfo(Screen, BlackHole):
 
         for main in json.loads(_plugin):
 
-            for sub in main.get('source'):
-                text = ("%s - %s [%s]") % (main['plugin'], sub['title'] ,sub['qual'])
-                bs.add_item(text, lambda x, url=sub['url'], title=sub['title']: self.plays(url=url, title=title))   
-        
+            if main.get('source'):
+                for sub in main.get('source'):
+                    text = ("%s - %s [%s]") % (main['plugin'], sub['title'] ,sub['qual'])
+                    bs.add_item(text, lambda x, url=sub['url'], title=sub['title']: self.plays(url=url, title=title))
+            else:
+                text = ("%s - Aucune réponse") % (main['plugin'])
+                bs.add_item(text, lambda x:x)
+
+
+
         bs.open()
 
         #loading stop en time mais a voir pour le mettre en vrais temp de chargement
