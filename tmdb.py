@@ -22,7 +22,10 @@
 import json
 import requests
 
-class tmdb:
+from kivy.uix.widget import Widget
+from kivy.network.urlrequest import UrlRequest
+
+class tmdb(Widget):
     URL = "http://api.themoviedb.org/3/"
     CACHE = "special://userdata/addon_data/plugin.video.vstream/video_cache.db"
 
@@ -35,6 +38,33 @@ class tmdb:
         self.poster = 'https://image.tmdb.org/t/p/w342'
         self.fanart = 'https://image.tmdb.org/t/p/original'
         self.fanart_780 = 'https://image.tmdb.org/t/p/w780'
+
+
+    def getUser(self, req, result):
+        print('paseeeeeeeeeeeeeeeee')
+        print(result, "pasesssssssss")
+
+    def getSession(self, req, result):
+        import webbrowser
+        
+        print(result['request_token'], "ouiiiiiiiiiiiiiiiiiiiii")
+
+        url = 'https://www.themoviedb.org/authenticate/'+result['request_token']
+        webbrowser.open(url)
+
+        header = {'request_token': result['request_token']}
+
+        req_body=json.dumps({"request_token": result['request_token']})
+    
+        url2 = 'https://api.themoviedb.org/3/authentication/session/new?api_key=%s' % (self.api_key)
+
+        req = UrlRequest(url2, on_success=self.getUser, req_body=header)
+        return
+
+    def getToken(self):
+        url2 = 'https://api.themoviedb.org/3/authentication/token/new?api_key=%s' % (self.api_key)
+
+        req = UrlRequest(url2, on_success=self.getSession)
 
     #utilise un json pour le moment
     def getPopular(self,NextPage):

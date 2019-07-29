@@ -616,6 +616,8 @@ class ListTmdb(Screen, BlackHole):
     def __init__(self, **kwargs):
         super(ListTmdb, self).__init__(**kwargs)
 
+        tmdb().getToken()
+
         #self.ids.grid_id.add_widget(s)
 
 class OpenFolder(Screen, BlackHole):
