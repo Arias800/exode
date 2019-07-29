@@ -216,10 +216,9 @@
 				MDAccordionItem:
 					title:'Parametres'
 					icon: 'settings'
-					#on_press: root.onChange('setting', 'autre')
 					MDAccordionSubItem:
 						text: "Application"
-						on_press: root.onChange('tv', 'app', 'airing_today')
+						on_press: root.onChange('param', 'param', 'param')
 					MDAccordionSubItem:
 						text: "Couleur"
 						on_press: root.onChange('tv', 'app', 'airing_today')
@@ -945,6 +944,64 @@
 			# 	pos_hint: {'x': .05, 'y': .1}
 
 <ListSource>
+	grid_id:grid_id
+
+	BoxLayout:
+		orientation: 'vertical'
+        #padding: dp(10), dp(10)
+        spacing: dp(10)
+
+		BoxLayout:
+			size_hint_y: None
+			height: dp(20)
+			padding: dp(20), dp(10), dp(0), dp(0)
+
+			Label:
+				id:bar_label
+				size_hint: None, None
+				height: dp(10)
+				width: self.texture_size[0]
+				halign: 'left'
+				color: app.theme_cls.primary_color
+				font_size: '18sp'
+				text:
+
+        MDSeparator:	
+
+		ScrollView:
+			id: scroll_id
+			size: self.size
+			do_scroll_y: False
+			do_scroll_x: False
+			bar_width: '8dp'
+
+			GridLayout:
+				# cols:2
+				id:grid_id
+				orientation: "vertical"
+				#pos_hint: {"x":1,"top":1}
+				#size_hint: None,None
+				# padding: 5
+				# spacing: 5
+				size_hint_y: None
+				height: self.parent.height
+				cols: 1
+				#spacing: 5
+				spacing: dp(10)
+				padding: dp(0), dp(0)
+				#row_default_height:(0.1 * (self.width - self.spacing[0]) - self.padding[0])
+				#row_default_height: (self.width - self.cols*self.spacing[0])/self.cols
+				#row_force_default: True
+				#row_default_width: .50
+
+				canvas: 
+					Color: 
+						rgb: app.theme_cls.primary_color
+					Rectangle: 
+						pos: self.pos 
+						size: self.size	
+
+<ListParam>
 	grid_id:grid_id
 
 	BoxLayout:

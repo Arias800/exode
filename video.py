@@ -570,7 +570,31 @@ class MyCircle(GridLayout, BlackHole):
             self.line = Line(circle=pts, width=5)
 
 class ListParam(Screen, BlackHole):
-    pass
+
+    grid_id = ObjectProperty(None)
+
+    def __init__(self, **kwargs):
+        super(ListParam, self).__init__(**kwargs)
+
+        from kivy.uix.settings import Settings, SettingsWithSpinner, SettingsPanel
+        from kivy.config import ConfigParser
+
+        print("parammmmmmmm")
+
+        #json param
+        data = [
+        {"type": "title", "title": "Windows"},
+        {"type": "bool", "title": "Fullscreen", "desc": "Set the window in windowed or fullscreen", "section": "graphics", "key": "fullscreen"}
+        ]
+
+        config = ConfigParser()
+        config.read('config.ini')
+
+        s = Settings()
+        #s.add_json_panel('My custom panel', config, 'settings_custom.json')
+        #s.add_json_panel('Another panel', config, 'settings_test2.json')
+        s.add_json_panel('panel', config, data=json.dumps(data))
+        self.ids.grid_id.add_widget(s)
 
 class OpenFolder(Screen, BlackHole):
     pass
@@ -628,9 +652,9 @@ class MainScreen(GridLayout,BlackHole):
 
         if menu == "main":
             self.manager.current = 'main'
-        if menu == "pref":
-            sm.add_widget(ListParam(name = "param"))
-            sm.current = 'param'
+        if menu == "param":
+            self.manager.add_widget(ListParam(name = "param"))
+            self.manager.current = 'param'
 
         self.ids.nav_layout.toggle_nav_drawer()
 
