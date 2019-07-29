@@ -606,6 +606,15 @@ class ListParam(Screen, BlackHole):
         s.add_json_panel('Theme', config, data=json.dumps(conf_theme))
         self.ids.grid_id.add_widget(s)
 
+class ListTmdb(Screen, BlackHole):
+
+    grid_id = ObjectProperty(None)
+
+    def __init__(self, **kwargs):
+        super(ListTmdb, self).__init__(**kwargs)
+
+        #self.ids.grid_id.add_widget(s)
+
 class OpenFolder(Screen, BlackHole):
     pass
 
@@ -665,6 +674,10 @@ class MainScreen(GridLayout,BlackHole):
         if menu == "param":
             self.manager.add_widget(ListParam(name = "param"))
             self.manager.current = 'param'
+
+        if menu == "tmdb":
+            self.manager.add_widget(ListTmdb(name = "tmdb"))
+            self.manager.current = 'tmdb'
 
         self.ids.nav_layout.toggle_nav_drawer()
 
