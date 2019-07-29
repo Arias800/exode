@@ -623,14 +623,12 @@
 	        #     text: "SEÇ"
 	        #     on_release: root.parent.get_screen("main").calistir(filechooser.path,filechooser.selection)
 
-
-
 <ImageButton>:
 	#id: box_share2	
 	background_normal: ''
 	#width: .100
 	#height: self.texture_size[1] * self.image_ratio
-	#size: root.size[0], root.size[0] / self.image_ratio
+	size: Window.size[0] * .50, Window.size[0] / self.image_ratio
 	size_hint_y: None
 	source: root.background_normal
 	keep_ratio: False
