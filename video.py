@@ -307,6 +307,12 @@ class VideoAlan(Screen, BlackHole):
         self.ses.pos_hint = {"left":2,"top":2}
 
     def hide_widget(self, hide, *largs):
+        #Conserve la couleurs d'origine
+        try:
+            trueColor = self.defaultColor
+        except AttributeError:
+            self.defaultColor = Window.clearcolor
+
         #Simule le fait de cacher les widget pendant le plein ecran
         #alors que je les mets juste en dehors de l'écran
         if hide:
@@ -314,25 +320,30 @@ class VideoAlan(Screen, BlackHole):
             Window.clearcolor = (0, 0, 0, 0)
             self.durumcubugu.pos_hint = {"x":-1,"y":-1}
             self.ses.pos_hint = {"x":-1,"y":-1}
-            self.progression.pos_hint = {"x":-1,"y":-1}
+            self.progression.pos_hint = {"x":-50000,"y":-50000}
             self.menu.pos_hint = {"x":-1,"y":-1} 
+            App.get_running_app().root.toolbar.pos_hint = {"x":-1,"y":-1}  
 
         else:
-            #Retour au blanc
-            Window.clearcolor = (1, 1, 1, 1)
+            #Retour a la couleurs choisit par l'utilisateur
+            Window.clearcolor = self.defaultColor
             self.durumcubugu.pos_hint = {"center_x":0.5,"y":0}
             self.ses.pos_hint = {"right":0.9,"top":0.9}
             self.progression.pos_hint = {"center_x":0.5,"y":0}
             self.menu.pos_hint = {"x":0,"top":1}
+            App.get_running_app().root.toolbar.pos_hint = {"x":0,"y":0} 
 
     def on_motion(self, reste, pos):
         app = App.get_running_app()
-        if app.root.manager.current == "main":
-            Clock.schedule_once(partial(self.hide_widget, False), 0.5)
+        if app.root.manager.current == "main" and self.video.state == "play":
+            self.hide_widget(False)
             Clock.schedule_once(partial(self.hide_widget, True), 5)
+        elif self.video.state == "pause" or self.video.state == "stop":
+            self.hide_widget(False)
+        elif app.root.manager.current != "main":
+            self.hide_widget(False)
         else:
-            return
-                       
+            return                       
 
 def onChange(self, text):
     EXlog('onchange',  text)
@@ -487,7 +498,6 @@ class ListInfo(Screen, BlackHole):
         bs = MDListBottomSheet()
         #sv.add_widget(bs)
 
-
         #json valider pas besoin de retest
         #main = re.findall('plugin": "(.+?)".+?{"title": "(.+?)", "url": "(.+?)", "qual": "(.+?)"}',str(_plugin))
         #for sub in main:
@@ -505,8 +515,6 @@ class ListInfo(Screen, BlackHole):
                 text = ("%s - Aucune réponse") % (main['plugin'])
                 bs.add_item(text, lambda x:x)
 
-
-
         bs.open()
 
         #loading stop en time mais a voir pour le mettre en vrais temp de chargement
@@ -518,14 +526,9 @@ class ListInfo(Screen, BlackHole):
     def plays(self, *args, **kwargs):
         EXlog (kwargs)
         #gstreamer n'accepter pas les m3u8 ni les connections securiser https
+        #ffpyplayer les support uniquement si il est compiler manuellement
 
-        try:
-            if os.environ['KIVY_VIDEO'] == 'gstplayer':
-                url = kwargs['url'].replace('https', 'http') 
-            else:
-                url = kwargs['url']
-        except KeyError:
-            url = kwargs['url'].replace('https', 'http') 
+        url = kwargs['url'].replace('https', 'http') 
 
         app = App.get_running_app()
         if app.root.manager.current == "discover":
@@ -647,6 +650,7 @@ class ScreenSwitcher(ScreenManager, BlackHole):
 
 class MainScreen(GridLayout,BlackHole):
     manager = ObjectProperty(None)
+    toolbar = ObjectProperty(None)
     nav_drawer = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
@@ -671,6 +675,7 @@ class MainScreen(GridLayout,BlackHole):
 
         if menu == "main":
             self.manager.current = 'main'
+            
         if menu == "param":
             self.manager.add_widget(ListParam(name = "param"))
             self.manager.current = 'param'
@@ -705,6 +710,9 @@ class Video(App):
         #self.theme_cls.theme_style = 'Light'
         #self.theme_cls.primary_palette = 'Blue'
         self.screen = MainScreen()
+
+        #Permets de definir le nom de la fenetre
+        self.title = 'eXode'
 
         return self.screen
 
