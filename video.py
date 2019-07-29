@@ -685,11 +685,12 @@ class Video(App):
         Config.get('graphics', 'resizable')
         Config.get('graphics', 'fullscreen')
 
-        print(Config.get('theme', 'style'), 'theme')
+        self.theme_cls.theme_style = Config.get('theme', 'style')
+        self.theme_cls.primary_palette = Config.get('theme', 'palette')
         Config.write()
 
-        self.theme_cls.theme_style = 'Light'
-        self.theme_cls.primary_palette = 'Blue'
+        #self.theme_cls.theme_style = 'Light'
+        #self.theme_cls.primary_palette = 'Blue'
         self.screen = MainScreen()
 
         return self.screen
