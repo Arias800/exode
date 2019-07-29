@@ -50,6 +50,7 @@ from kivymd.list import TwoLineListItem
 from kivymd.textfields import MDTextField
 from kivymd.bottomsheet import MDListBottomSheet
 from kivymd.toast import toast
+from kivymd.dialog import MDInputDialog, MDDialog
 
 #Custom Lib import
 from lib.comaddon import EXlog, ImageButton, BlackHole
@@ -616,7 +617,24 @@ class ListTmdb(Screen, BlackHole):
     def __init__(self, **kwargs):
         super(ListTmdb, self).__init__(**kwargs)
 
-        tmdb().getToken()
+
+    def connect(self):
+        dialog = MDDialog(
+            title='Title', size_hint=(.8, .3), text_button_ok='Yes',
+            text="Votre navigateur vas souvrir pour autoriser la connexion",
+            text_button_cancel='Cancel',
+            events_callback=self.callback)
+        dialog.open()
+
+    def callback(self, *args):
+        print(args[0])
+
+    def setconnect(self):
+        pass
+        #tmdb().getToken()
+
+    def deco(self):
+        pass
 
         #self.ids.grid_id.add_widget(s)
 
