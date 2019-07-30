@@ -127,7 +127,6 @@
 				md_bg_color: root.theme_cls.bg_normal
 				cols: 1
 
-
 <MainScreen>:
     manager: manager
     rows: 2
@@ -281,7 +280,6 @@
 				id: manager
 
 <VideoAlan>:
-
 	video: _video
 	progression: _progression
 	altyazi: _altyazi
@@ -317,19 +315,15 @@
 	# 				text: 'Tool4'
 
 	RelativeLayout:
-
 		size_hint: 1,1
 
 		Video:
-
 			size_hint: 0,0
 			id: _video
 			allow_stretch: True
-			play: True
 			state: "play"
 
 		Label:
-
 			id: _altyazi
 			markup: True
 			size_hint: 1,0.3
@@ -339,7 +333,6 @@
 
 		#boite d'info lecteur
 		BoxLayout:
-
 			id: _ses
 			size_hint:None,None
 			size: 30,150
@@ -362,7 +355,6 @@
 				cursor_size: 0,0
 				value_track: True
 				value_track_color: [0,0.6,0,1]
-
 
 		BoxLayout:
 			orientation:"vertical"
@@ -465,12 +457,10 @@
 					pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 					on_release: root.Stop()
 
-
 				#boite invisible espace
 				BoxLayout:
 					size_hint: 0.5, 1 
 					pos_hint: {'center_x': 0, 'center_y': 0.5}
-
 
 				BoxLayout: 
 					size_hint:None, 1
@@ -481,14 +471,12 @@
 						theme_text_color: 'Custom'
 						text_color: app.theme_cls.primary_color
 
-
 				# Slider pour le volume
 				BoxLayout:
 					size_hint:None, 1
 					pos_hint: {'center_x': 0.5, 'center_y': 0.62}
 					width:dp(150)
 			
-
 					VolumeSlider:
 						padding:0,0
 						id: _ses_ayari
@@ -496,7 +484,6 @@
 						max:1
 						value:0
 						on_touch_move: root.volume()
-
 
 				#boite invisible espace
 				BoxLayout:
@@ -543,7 +530,6 @@
 				on_text: root.onChange(self.text)
 				#option_cls: root.onChange(self.text)
 				size_hint: None, 1
-		
 
 			Button:
 				text: "VIDEO"
@@ -551,7 +537,7 @@
 				width: 60
 				on_press:
 					root.manager.transition.direction = 'right'
-					root.manager.current = 'main'
+					root.manager.current = "player"
 
 			Button:
 				text: "OPEN"
@@ -568,7 +554,7 @@
 				on_press:
 	                root.manager.transition.direction = 'left'
 	                root.manager.current = 'list'
-	                
+
 <OpenFolder>:
 	menu: _menu
 
@@ -577,7 +563,6 @@
         padding: dp(0), dp(0)
         spacing: dp(10)
 		pos_hint: {"x":0,"top":1}
-
 
 		BoxLayout:
 			size_hint_y: None
@@ -606,7 +591,7 @@
 				text: "Valider"
 				elevation_normal: 2
 				opposite_colors: True
-				on_release: root.parent.get_screen("main").calistir(filechooser.path,filechooser.selection)
+				on_release: root.openPlayer(filechooser.path)
 
 			MDRaisedButton:
 				text: "nop"
@@ -625,7 +610,6 @@
 				elevation_normal: 2
 				opposite_colors: True
 				#on_press: root.show_source()
-
 
 		BoxLayout:
 			id: _menu
