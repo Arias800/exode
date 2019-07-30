@@ -13,44 +13,31 @@ kivy.require("1.10.1")
 
 #Reste des import kivy
 from kivy.core.window import Window
-from kivy.properties import StringProperty, BooleanProperty, ObjectProperty, ListProperty
-from kivy.modules import inspector
+from kivy.properties import BooleanProperty, ObjectProperty
 from kivy.config import Config
 from kivy.clock import Clock
-from kivy.animation import Animation
 from kivy.graphics import *
-from kivy.metrics import dp, sp
+from kivy.metrics import sp
 from kivy.app import App
 
 #Uix import
-from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
+from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.widget import Widget
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.scrollview import ScrollView
-from kivy.uix.videoplayer import VideoPlayer
-from kivy.uix.dropdown import DropDown
-from kivy.uix.image import Image, AsyncImage
-from kivy.uix.behaviors import ButtonBehavior
 
 #Button import
 from kivy.uix.button import Button
-from kivymd.button import MDRaisedButton
 
 #Label import
 from kivy.uix.label import Label
-from kivymd.label import MDLabel
 
 #Reste des import kivymd
 from kivymd.theming import ThemeManager
-from kivymd.accordion import MDAccordionSubItem, MDAccordionItem
-from kivymd.button import MDRaisedButton
-from kivymd.list import TwoLineListItem
-from kivymd.textfields import MDTextField
 from kivymd.bottomsheet import MDListBottomSheet
 from kivymd.toast import toast
-from kivymd.dialog import MDInputDialog, MDDialog
+from kivymd.dialog import MDDialog
 
 #Custom Lib import
 from lib.comaddon import EXlog, ImageButton, BlackHole
@@ -60,8 +47,6 @@ from tmdb import tmdb
 #Autre import
 from functools import partial
 import json, importlib, re, os
-
-app = App.get_running_app()
 
 sous_menu = {
     "trending": {
@@ -210,7 +195,7 @@ class VideoAlan(Screen, BlackHole):
     def seek(self):
         toast(str(round(self.progression.value, 2)))
 
-    def calistir(self,window,path):
+    def calistir(self,path):
         self.sub_list = {}
         self.sub_list_e = []
         self.altyazi.text = ""
@@ -233,6 +218,7 @@ class VideoAlan(Screen, BlackHole):
         else:
             self.video.source = path
             print('lecture')
+        self.video.state == "play"
             # self.triggerUpdate = Clock.create_trigger(self.checkUpdate)
             # Clock.schedule_interval(self.triggerUpdate, 0.01)
 
@@ -308,6 +294,7 @@ class VideoAlan(Screen, BlackHole):
         self.ses.pos_hint = {"left":2,"top":2}
 
     def hide_widget(self, hide, *largs):
+        app = App.get_running_app()
         #Conserve la couleurs d'origine
         try:
             trueColor = self.defaultColor
@@ -323,7 +310,7 @@ class VideoAlan(Screen, BlackHole):
             self.ses.pos_hint = {"x":-1,"y":-1}
             self.progression.pos_hint = {"x":-50000,"y":-50000}
             self.menu.pos_hint = {"x":-1,"y":-1} 
-            App.get_running_app().root.toolbar.pos_hint = {"x":-1,"y":-1}  
+            app.root.toolbar.pos_hint = {"x":-1,"y":-1}  
 
         else:
             #Retour a la couleurs choisit par l'utilisateur
@@ -332,31 +319,19 @@ class VideoAlan(Screen, BlackHole):
             self.ses.pos_hint = {"right":0.9,"top":0.9}
             self.progression.pos_hint = {"center_x":0.5,"y":0}
             self.menu.pos_hint = {"x":0,"top":1}
-            App.get_running_app().root.toolbar.pos_hint = {"x":0,"y":0} 
+            app.root.toolbar.pos_hint = {"x":0,"y":0} 
 
     def on_motion(self, reste, pos):
         app = App.get_running_app()
-        if app.root.manager.current == "main" and self.video.state == "play":
+        if app.root.manager.current == "player" and self.video.state == "play":
             self.hide_widget(False)
             Clock.schedule_once(partial(self.hide_widget, True), 5)
         elif self.video.state == "pause" or self.video.state == "stop":
             self.hide_widget(False)
-        elif app.root.manager.current != "main":
+        elif app.root.manager.current != "player":
             self.hide_widget(False)
         else:
             return                       
-
-def onChange(self, text):
-    EXlog('onchange',  text)
-    if text == "movie" or text =="tv":
-        sm.clear_widgets(screens=[self])
-        sm.add_widget(ListDiscover(name = "discover", menu=text))
-        sm.current = 'discover'
-    if text == "main":
-        sm.current = 'main'
-    if text == "pref":
-        sm.add_widget(ListParam(name = "param"))
-        sm.current = 'param'
 
 class ListDiscover(Screen, BlackHole):
     #init les object du fichier KV
@@ -401,15 +376,6 @@ class ListDiscover(Screen, BlackHole):
             self.pageNumber = self.pageNumber + 1
             self.add()
             self.ids.scroll_id.scroll_y = float(1) / (self.pageNumber)
-
-    def onChange(self, text):
-        discover = menu.get(text)
-        onChange(self, discover)
-
-    def on_sub_Change(self, text=None):
-        menu = sous_menu.get(self.menu).get(text)
-        sm.add_widget(ListDiscover(name ="list", types=self.menu, menu=menu))
-        sm.current = "list"
 
 class discover_layout(BoxLayout):
     bar_l = ObjectProperty(None)
@@ -470,25 +436,13 @@ class ListInfo(Screen, BlackHole):
         self.rect.pos = self.pos
         self.rect.size = self.size
 
-    def onChange(self):
-        app = App.get_running_app()
-        if app.root.manager.current == "source":
-            EXlog("paseeeeeeeeeee")
-            app.root.manager.current = 'info'
-            app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('source')])
-        elif app.root.manager.current == "info":
-            app.root.manager.current = app.root.manager.previous()
-            app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('info')])
-
     def show_source(self):
-        app = App.get_running_app()
         app.root.manager.add_widget(ListSource(name = "source", title=self.title))
         app.root.manager.current =  "source"
 
     def show_bottom(self):
         self.ids.spinner.active = True
 
-        from kivymd.bottomsheet import MDListBottomSheet
         from iplugin import plugin
 
         print(self.title, 'getfoldr')
@@ -525,17 +479,18 @@ class ListInfo(Screen, BlackHole):
         self.ids.spinner.active = False
 
     def plays(self, *args, **kwargs):
+        app = App.get_running_app()
         EXlog (kwargs)
         #gstreamer n'accepter pas les m3u8 ni les connections securiser https
         #ffpyplayer les support uniquement si il est compiler manuellement
 
         url = kwargs['url'].replace('https', 'http') 
 
-        app = App.get_running_app()
         if app.root.manager.current == "discover":
             app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('discover')])
-        app.root.manager.get_screen("main").calistir(url,url)
-        app.root.manager.current =  "main"
+        app.root.manager.add_widget(VideoAlan(name = "player"))
+        app.root.manager.get_screen("player").calistir(url)
+        app.root.manager.current =  "player"
 
 class ListSource(Screen, BlackHole):
 
@@ -559,7 +514,6 @@ class ListSource(Screen, BlackHole):
         module = importlib.import_module("plugin."+str(kwargs['sName']), package=None)
         content = module.ShowPlugin()
 
-        app = App.get_running_app()
         if app.root.manager.current == "discover":
             app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('source')])
 
@@ -617,7 +571,6 @@ class ListTmdb(Screen, BlackHole):
     def __init__(self, **kwargs):
         super(ListTmdb, self).__init__(**kwargs)
 
-
     def connect(self):
         dialog = MDDialog(
             title='Connexion', size_hint=(.8, .3), text_button_ok='Yes',
@@ -634,14 +587,22 @@ class ListTmdb(Screen, BlackHole):
     def setconnect(self):
         pass
         
-
     def deco(self):
         pass
 
         #self.ids.grid_id.add_widget(s)
 
 class OpenFolder(Screen, BlackHole):
-    pass
+    def __init__(self, **kwargs):
+        super(OpenFolder, self).__init__(**kwargs)
+
+    def openPlayer(self,path):
+        app = App.get_running_app()
+        if app.root.manager.current == "discover":
+            app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('discover')])
+        app.root.manager.add_widget(VideoAlan(name = "player"))
+        app.root.manager.get_screen("player").calistir(path)
+        app.root.manager.current =  "player"
 
 def _jsonload(types, menu,NextPage):
 
@@ -656,13 +617,12 @@ class ScreenSwitcher(ScreenManager, BlackHole):
             self.add_widget(ListDiscover(name = "discover", types=types, menu=text))
         except NameError:
             self.add_widget(ListDiscover(name = "discover", types="movie", menu='trending'))
-        self.add_widget(VideoAlan(name = "main"))
 
     #Fonction pour retourner a l'ecran precedent
     def set_previous_screen(self):
         app = App.get_running_app()
         previousName = app.root.manager.previous()
-        EXlog(app.root.manager.current)
+
         if app.root.manager.current == "source":
             app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('source')])
         elif app.root.manager.current == "info":
@@ -689,20 +649,33 @@ class MainScreen(GridLayout,BlackHole):
             self.manager.add_widget(ListDiscover(name = "discover", types=types, menu=text))
             self.manager.current = 'discover'
 
+        if menu == "info":
+            if "info" in self.manager.screen_names:
+                self.manager.clear_widgets(screens=[self.manager.get_screen('info')])
+            self.manager.add_widget(ListInfo(name = "info"))
+            self.manager.current = 'info'
+
         if menu == "list":
             if "list" in self.manager.screen_names:
                 self.manager.clear_widgets(screens=[self.manager.get_screen('list')])
             self.manager.add_widget(ListDiscover(name ="list", types=types, menu=text))
             self.manager.current = "list"
 
-        if menu == "main":
-            self.manager.current = 'main'
+        if menu == "player":
+            if "player" in self.manager.screen_names:
+                self.manager.clear_widgets(screens=[self.manager.get_screen('player')])
+            self.manager.add_widget(VideoAlan(name = "player", path=url))
+            self.manager.current = "player"
             
         if menu == "param":
+            if "param" in self.manager.screen_names:
+                self.manager.clear_widgets(screens=[self.manager.get_screen('param')])
             self.manager.add_widget(ListParam(name = "param"))
             self.manager.current = 'param'
 
         if menu == "tmdb":
+            if "tmdb" in self.manager.screen_names:
+                self.manager.clear_widgets(screens=[self.manager.get_screen('tmdb')])
             self.manager.add_widget(ListTmdb(name = "tmdb"))
             self.manager.current = 'tmdb'
 
@@ -739,5 +712,4 @@ class Video(App):
         return self.screen
 
 if __name__ in ('__main__', '__android__'):
-    Window.clearcolor = (0,0,0,0)
     Video().run()
