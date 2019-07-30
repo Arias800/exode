@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 from lib.comaddon import EXlog
-
+from lib.utils import CleanName
 import os, sys, importlib, json
 
 class plugin(object):
@@ -121,8 +121,8 @@ class iplugin(object):
     #     print json.dumps(self.getParams())
 
     def similar(self, w1, w2):
-        w1 = w1 + ' ' * (len(w2) - len(w1))
-        w2 = w2 + ' ' * (len(w1) - len(w2))
+        w1 = w1.replace('+',' ').lower() + ' ' * (len(w2) - len(w1))
+        w2 = CleanName(w2).lower() + ' ' * (len(w1) - len(w2))
         cal = sum(1 if i == j else 0 for i, j in zip(w1, w2)) / float(len(w1))
         #similaire a 70%
         if cal > 0.70 : 
@@ -132,7 +132,6 @@ class iplugin(object):
 
 #La fonction json.dumps() permet de transformer mon dictionnaire (type dict) en une chaine de caractères (type str):
 #La fonction json.loads() permet de reconvertir ma str en dict:
-
 
 # playlist = {}
 # playlist["nom"] = "MeshowRandom"
