@@ -363,7 +363,7 @@ class ListDiscover(Screen, BlackHole):
         for data in json:
             btn = ImageButton(types=self.types,
             tmdbid=data['tmdbid'],
-            img=data['backdrop_path_780'],
+            img=data['backdrop_path'],
             size=(Window.width , Window.width / 1.777),
             functionName = ListInfo)
 
