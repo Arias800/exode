@@ -1,12 +1,9 @@
 #-*- coding: utf-8 -*-
 # https://github.com/Kodi-vStream/venom-xbmc-addons
-import os
-import sys
-import unicodedata
 from lib.xbmcvfs import translatePath
-
 from lib.comaddon import EXlog
 
+import sys, unicodedata, os
 #-----------------------
 #     Cookies gestion
 #------------------------
@@ -67,5 +64,5 @@ def CleanName(name):
     except:
         pass
     name = unicodedata.normalize('NFD', name).encode('ascii', 'ignore').decode("unicode_escape")
-    name = ''.join([i for i in name if i.isalpha() or i == '+' or i == ' ']) #<- Supprime tout les caractere non alphanumeric sauf les +
+    name = ''.join([i for i in name if i.isalpha() or i == '+' or i == ' ']).replace('  ',' ') #<- Supprime tout les caractere non alphanumeric sauf les +
     return name
