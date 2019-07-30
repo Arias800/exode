@@ -793,20 +793,23 @@
 						font_size:'25sp'
 						pos_hint: {'x': 0, 'y': .6}
 
+					#Pour le moment il est fixer en largeur mais pas en hauteur et je n'arrive pas a convertir vote_average en float
 					AnchorLayout:
 						anchor_x: 'right'
 						anchor_y: 'top'
 						padding: dp(20),dp(0)
+					    canvas:
+					        Color:
+					            rgba: 1, 1, 1, 1
+					        Line:
+					            width: 2.
+					            circle:
+					                ((Window.width-72), (Window.height/4), min(80, 80) / 2, 0, (round(float(7.5) * 36, 2)))
 						Label:
+							id: vote_label
 							font_size:'40sp'
 							text: root.vote_average
 							size_hint: None, None
-				
-
-					#fait chier a regler
-					#GridLayout:
-					#	cols: 1			
-					#	id : cicle_l
 
 					AnchorLayout:
 						padding: dp(40),dp(0)
