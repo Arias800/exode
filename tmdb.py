@@ -19,13 +19,14 @@
 #   "original"
 # ],
 
+from kivy.config import Config
+from kivymd.dialog import MDInputDialog, MDDialog
+from kivymd.toast import toast
+
 import json
 import requests
 
-from kivy.uix.widget import Widget
-from kivy.network.urlrequest import UrlRequest
-
-class tmdb(Widget):
+class tmdb:
     URL = "http://api.themoviedb.org/3/"
     CACHE = "special://userdata/addon_data/plugin.video.vstream/video_cache.db"
 
@@ -38,33 +39,58 @@ class tmdb(Widget):
         self.poster = 'https://image.tmdb.org/t/p/w342'
         self.fanart = 'https://image.tmdb.org/t/p/original'
         self.fanart_780 = 'https://image.tmdb.org/t/p/w780'
+        self.request_token = ''
+        self.session_id = ''
+        self.username = ''
+        self.id = ''
 
-
-    def getUser(self, req, result):
-        print('paseeeeeeeeeeeeeeeee')
-        print(result, "pasesssssssss")
-
-    def getSession(self, req, result):
-        import webbrowser
-        
-        print(result['request_token'], "ouiiiiiiiiiiiiiiiiiiiii")
-
-        url = 'https://www.themoviedb.org/authenticate/'+result['request_token']
-        webbrowser.open(url)
-
-        header = {'request_token': result['request_token']}
-
-        req_body=json.dumps({"request_token": result['request_token']})
-    
-        url2 = 'https://api.themoviedb.org/3/authentication/session/new?api_key=%s' % (self.api_key)
-
-        req = UrlRequest(url2, on_success=self.getUser, req_body=header)
-        return
 
     def getToken(self):
-        url2 = 'https://api.themoviedb.org/3/authentication/token/new?api_key=%s' % (self.api_key)
+        import webbrowser
 
-        req = UrlRequest(url2, on_success=self.getSession)
+        url = 'https://api.themoviedb.org/3/authentication/token/new?api_key=%s' % (self.api_key)
+
+        req = requests.get(url)
+        results = req.json()
+        if results['request_token']:
+            self.request_token = results['request_token']
+            url = 'https://www.themoviedb.org/authenticate/'+self.request_token
+            webbrowser.open(url)
+
+            dialog = MDDialog(
+            title='Connexion', size_hint=(.8, .3), text_button_ok='Yes',
+            text="Ete vous connecter ?",
+            text_button_cancel='Cancel',
+            events_callback=self.callback)
+            dialog.open()
+
+    def callback(self, *args):
+        if args[0] == 'Yes':
+            data = {"request_token": self.request_token}
+            url = 'https://api.themoviedb.org/3/authentication/session/new?api_key=%s' % (self.api_key)
+            req = requests.post(url, data = data)
+            results = req.json()
+            #sauv results['session_id']
+            if results['session_id']:
+                self.session_id = results['session_id']
+
+                url = 'https://api.themoviedb.org/3/account?api_key=%s&session_id=%s' % (self.api_key, self.session_id)
+                req = requests.get(url)
+                results = req.json()
+                if results['username']:
+                    self.username = results['username']
+                    self.id = results['id']
+                    toast('Connexion Reussis %s' % self.username)
+                    #print(results)
+                    #sauv config
+                    Config.set('user', 'tmdb_id', self.id)
+                    Config.set('user', 'tmdb_username', self.username)
+                    Config.set('user', 'tmdb_session_id', self.session_id)
+                    Config.write()
+                    return
+
+
+
 
     #utilise un json pour le moment
     def getPopular(self,NextPage):

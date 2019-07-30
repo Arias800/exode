@@ -620,18 +620,20 @@ class ListTmdb(Screen, BlackHole):
 
     def connect(self):
         dialog = MDDialog(
-            title='Title', size_hint=(.8, .3), text_button_ok='Yes',
-            text="Votre navigateur vas souvrir pour autoriser la connexion",
+            title='Connexion', size_hint=(.8, .3), text_button_ok='Yes',
+            text="Votre navigateur va s'ouvrir pour autoriser la connexion",
             text_button_cancel='Cancel',
             events_callback=self.callback)
         dialog.open()
 
     def callback(self, *args):
-        print(args[0])
+        if args[0] == 'Yes':
+            tmdb_account = tmdb().getToken()
+            print(tmdb_account)
 
     def setconnect(self):
         pass
-        #tmdb().getToken()
+        
 
     def deco(self):
         pass
