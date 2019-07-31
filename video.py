@@ -38,6 +38,7 @@ from kivymd.theming import ThemeManager
 from kivymd.bottomsheet import MDListBottomSheet
 from kivymd.toast import toast
 from kivymd.dialog import MDDialog
+from kivymd.elevation import RectangularElevationBehavior, CircularElevationBehavior
 
 #Custom Lib import
 from lib.comaddon import EXlog, ImageButton, BlackHole
@@ -567,6 +568,12 @@ class ListParam(Screen, BlackHole):
         s.add_json_panel('Graphics', config, data=json.dumps(conf_graphics))
         s.add_json_panel('Theme', config, data=json.dumps(conf_theme))
         self.ids.grid_id.add_widget(s)
+
+class MyRectangularBox(BoxLayout, RectangularElevationBehavior):
+    pass
+
+class MyCircularBox(BoxLayout, CircularElevationBehavior):
+    pass
 
 class ListTmdb(Screen, BlackHole):
 

@@ -1153,3 +1153,14 @@
 						size_hint_x: None
                 		size: Window.width, Window.height
 						pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+					MyRectangularBox:
+						elevation: 6
+						size_hint: 0.5, 0.5
+						canvas: 
+							Color: 
+								rgb: app.theme_cls.primary_color
+							Rectangle: 
+								pos: self.pos 
+								size: self.size	
+
