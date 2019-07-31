@@ -650,6 +650,9 @@ class MainScreen(GridLayout,BlackHole):
         EXlog(menu.keys())
         self.picktypes = menu.keys()
         super(MainScreen, self).__init__(**kwargs)
+        #connecter ou pas
+        self.tmdb_username = Config.get('user', 'tmdb_username')
+        print(self.tmdb_username)
 
     def onChange(self, types, menu, text):
         EXlog('types %s / menu %s / Text %s'% (types, menu, text))

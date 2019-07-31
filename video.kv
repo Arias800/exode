@@ -134,6 +134,8 @@
     nav_drawer: nav_drawer
     toolbar: toolbar
 
+	tmdb_username:''
+
     NavigationLayout:
         id: nav_layout
 
@@ -210,7 +212,8 @@
 					title:'TMDB'
 					icon: 'account'
 					MDAccordionSubItem:
-						text: "Mon Compte"
+						#text: "Mon Compte" 
+						text: 'Bienvenue ' + root.tmdb_username  if root.tmdb_username else 'nopconnn'
 						on_press: root.onChange('tmdb', 'tmdb', 'account')
 					MDAccordionSubItem:
 						text: app._('movie')+ ' / '+ app._('favorite')
