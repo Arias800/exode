@@ -164,46 +164,46 @@
 					title: app._('movie')
 					icon: 'movie'
 					MDAccordionSubItem:
-						text: "Tendances"
+						text: app._('trending')
 						on_press: root.onChange('movie', 'discover', 'trending')
 						#on_press: root.onChange(self.text)
 					MDAccordionSubItem:
-						text: "Populaires"
+						text: app._('popular')
 						on_press: root.onChange('movie', 'list', 'popular')
 						#on_press: root.onChange(self.text)
 					MDAccordionSubItem:
-						text: "Mieux notes"
+						text: app._('top_rated')
 						on_press: root.onChange('movie',  'list', 'top_rated')
 					MDAccordionSubItem:
-						text: "En salles"
+						text: app._('now_playing')
 						on_press: root.onChange('movie', 'list', 'now_playing')
 					#MDAccordionSubItem:
 					#	text: "Recemment"
 					#	on_press: root.onChange('movie', 'list', 'latest')
 					MDAccordionSubItem:
-						text: "A venir"
+						text: app._('upcoming')
 						on_press: root.onChange('movie', 'list', 'upcoming')
 
 				MDAccordionItem:
-					title:'Series'
+					title: app._('tv')
 					icon: 'video'
 					MDAccordionSubItem:
-						text: "Tendances"
+						text: app._('trending')
 						on_press: root.onChange('tv', 'discover', 'trending')
 					MDAccordionSubItem:
-						text: "Populaires"
+						text: app._('popular')
 						on_press: root.onChange('tv', 'list', 'popular')
 					MDAccordionSubItem:
-						text: "Mieux notes"
+						text: app._('top_rated')
 						on_press: root.onChange('tv', 'list', 'top_rated')
 					MDAccordionSubItem:
-						text: "Diffusees 7 jours"
+						text: app._('on_the_air')
 						on_press: root.onChange('tv', 'list', 'on_the_air')
+					#MDAccordionSubItem:
+					#	text: "Recemment"
+					#	on_press: root.onChange('tv', 'list', 'latest')
 					MDAccordionSubItem:
-						text: "Recemment"
-						on_press: root.onChange('tv', 'list', 'latest')
-					MDAccordionSubItem:
-						text: "Diffusees ce jour"
+						text: app._('airing_today')
 						on_press: root.onChange('tv', 'list', 'airing_today')
 
 				MDAccordionItem:
@@ -213,25 +213,25 @@
 						text: "Mon Compte"
 						on_press: root.onChange('tmdb', 'tmdb', 'account')
 					MDAccordionSubItem:
-						text: "favorite/movies"
+						text: app._('movie')+ ' / '+ app._('favorite')
 						on_press: root.onChange('movies', 'tmdb', 'favorite')
 					MDAccordionSubItem:
-						text: "favorite/tv"
+						text: app._('tv')+ ' / '+ app._('favorite')
 						on_press: root.onChange('tv', 'tmdb', 'favorite')
 					MDAccordionSubItem:
-						text: "rated/movies"
+						text: app._('movie')+ ' / '+ app._('rated')
 						on_press: root.onChange('movies', 'tmdb', 'rated')
 					MDAccordionSubItem:
-						text: "rated/tv"
+						text: app._('tv')+ ' / '+ app._('rated')
 						on_press: root.onChange('tv', 'tmdb', 'rated')
+					# MDAccordionSubItem:
+					# 	text: "rated/tv/episodes"
+					# 	on_press: root.onChange('tv/episodes', 'tmdb', 'rated')
 					MDAccordionSubItem:
-						text: "rated/tv/episodes"
-						on_press: root.onChange('tv/episodes', 'tmdb', 'rated')
-					MDAccordionSubItem:
-						text: "watchlist/movies"
+						text: app._('movie')+ ' / '+ app._('watchlist')
 						on_press: root.onChange('movies', 'tmdb', 'watchlist')
 					MDAccordionSubItem:
-						text: "watchlist/tv"
+						text: app._('tv')+ ' / '+ app._('watchlist')
 						on_press: root.onChange('tv', 'tmdb', 'watchlist')
 
 				MDAccordionItem:
