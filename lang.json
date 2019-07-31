@@ -1,10 +1,78 @@
 {
   "movie": {
-    "fr": "Film",
+    "fr": "Films",
     "us": "Movie"
   },
-  "02": {
-    "fr": "bonjour",
-    "us": "hello"
+  "tv": {
+    "fr": "Séries",
+    "us": "Tv"
+  },
+  "trending": {
+    "fr": "Tendances",
+    "us": "Trending"
+  },
+  "player": {
+    "fr": "Lecteur",
+    "us": "Player"
+  },
+  "pref": {
+    "fr": "Paramètres",
+    "us": "parameter"
+  },
+  "day": {
+    "fr": "Quotidien",
+    "us": "Day"
+  },
+  "week": {
+    "fr": "Hebdomadaire",
+    "us": "Week"
+  },
+  "popular": {
+    "fr": "Populaires",
+    "us": "Popular"
+  },
+  "top_rated": {
+    "fr": "Mieux notés",
+    "us": "Top Rated"
+  },
+  "now_playing": {
+    "fr": "En salles",
+    "us": "Now Playing"
+  },
+  "upcoming": {
+    "fr": "A venir",
+    "us": "Upcoming"
+  },
+  "on_the_air": {
+    "fr": "Diffusées 7 jours",
+    "us": "On The Air"
+  },
+  "airing_today": {
+    "fr": "Diffusées ce jour",
+    "us": "Airing Today"
+  },
+  "latest": {
+    "fr": "Récemment",
+    "us": "Latest"
+  },
+  "browse": {
+    "fr": "Parcourir",
+    "us": "Browse"
+  },
+  "Application": {
+    "fr": "Application",
+    "us": "Application"
+  },
+  "favorite": {
+    "fr": "Favoris",
+    "us": "Favorite"
+  },
+  "rated": {
+    "fr": "Note",
+    "us": "Rated"
+  },
+  "watchlist": {
+    "fr": "Suivi",
+    "us": "Watchlist"
   }
 }
