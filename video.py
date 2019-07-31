@@ -2,16 +2,7 @@
 #! -*- coding:utf-8 -*-
 
 #Au cas ou la personne ait mit la lib dans le meme dossier au lieu de l'installer.
-import sys, os
-
-#Utilisation de ffpyplayer si disponible
-try:
-    from ffpyplayer.player import MediaPlayer
-except ImportError:
-    os.environ['KIVY_VIDEO'] = 'gstplayer'
-else:
-    os.environ['KIVY_VIDEO'] = 'ffpyplayer'
-
+import sys
 try:
     sys.path.append('kivymd')
 except:
@@ -55,7 +46,7 @@ from tmdb import tmdb
 
 #Autre import
 from functools import partial
-import json, importlib, re
+import json, importlib, re, os
 
 sous_menu = {
     "trending": {
@@ -89,6 +80,10 @@ menu = {
 
 #pk ça utiliser les nom anglais pour apelle au function
 #pouvoir modifier quand y a auras un fichier lang.
+
+#test lang
+in_file = open("lang.json","r",encoding="utf-8")
+lang = json.load(in_file)
 
 class VideoAlan(Screen, BlackHole):
     fullscreen = BooleanProperty(False)
@@ -491,14 +486,9 @@ class ListInfo(Screen, BlackHole):
         app = App.get_running_app()
         EXlog (kwargs)
         #gstreamer n'accepter pas les m3u8 ni les connections securiser https
+        #ffpyplayer les support uniquement si il est compiler manuellement
 
-        try:
-            if os.environ['KIVY_VIDEO'] == 'gstplayer':
-                url = kwargs['url'].replace('https', 'http') 
-            else:
-                url = kwargs['url']
-        except KeyError:
-            url = kwargs['url'].replace('https', 'http') 
+        url = kwargs['url'].replace('https', 'http') 
 
         if app.root.manager.current == "discover":
             app.root.manager.clear_widgets(screens=[app.root.manager.get_screen('discover')])
@@ -724,6 +714,13 @@ class Video(App):
         self.title = 'eXode'
 
         return self.screen
+
+    def _(self, text):
+        #print(lang[text]['fr'], 'iciiiiiiiiii')
+        if lang[text]['fr']:
+            return str(lang[text]['fr'])
+        else : return 'Erreur'
+
 
 if __name__ in ('__main__', '__android__'):
     Video().run()

@@ -1,0 +1,10 @@
+{
+  "movie": {
+    "fr": "Film",
+    "us": "Movie"
+  },
+  "02": {
+    "fr": "bonjour",
+    "us": "hello"
+  }
+}
