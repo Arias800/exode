@@ -44,25 +44,33 @@ class tmdb:
         self.username = ''
         self.id = ''
 
-
-    def getToken(self):
-        import webbrowser
-
-        url = 'https://api.themoviedb.org/3/authentication/token/new?api_key=%s' % (self.api_key)
-
-        req = requests.get(url)
-        results = req.json()
-        if results['request_token']:
-            self.request_token = results['request_token']
-            url = 'https://www.themoviedb.org/authenticate/'+self.request_token
-            webbrowser.open(url)
-
+    def connect(self):
             dialog = MDDialog(
-            title='Connexion', size_hint=(.8, .3), text_button_ok='Yes',
-            text="Ete vous connecter ?",
-            text_button_cancel='Cancel',
-            events_callback=self.callback)
+                title='Connexion', size_hint=(.8, .3), text_button_ok='Yes',
+                text="Votre navigateur va s'ouvrir pour autoriser la connexion",
+                text_button_cancel='Cancel',
+                events_callback=self.getToken)
             dialog.open()
+
+    def getToken(self, *args):
+        if args[0] == 'Yes':
+            import webbrowser
+
+            url = 'https://api.themoviedb.org/3/authentication/token/new?api_key=%s' % (self.api_key)
+
+            req = requests.get(url)
+            results = req.json()
+            if results['request_token']:
+                self.request_token = results['request_token']
+                url = 'https://www.themoviedb.org/authenticate/'+self.request_token
+                webbrowser.open(url)
+
+                dialog = MDDialog(
+                title='Connexion', size_hint=(.8, .3), text_button_ok='Yes',
+                text="Ete vous connecter ?",
+                text_button_cancel='Cancel',
+                events_callback=self.callback)
+                dialog.open()
 
     def callback(self, *args):
         if args[0] == 'Yes':
@@ -122,6 +130,8 @@ class tmdb:
     def getTmdb(self, types, menu, page):
         #types movie/tv
         #menu discover, top_rated
+        tmdb_id = Config.get('user', 'tmdb_id')
+        tmdb_session_id = Config.get('user', 'tmdb_session_id')
 
         #touts faire avec discovers et c'est tris
         #popularity.asc, popularity.desc, release_date.asc, release_date.desc, revenue.asc, revenue.desc, 
@@ -136,14 +146,17 @@ class tmdb:
         if menu == "trending":
             #url = "discover/"+types
             url = "trending/"+types+"/week"
-            print("paseeee")
+            rqst = requests.get('https://api.themoviedb.org/3/%s?api_key=%s&language=fr-FR&page=%s' % (url, self.api_key, page))
+        elif menu == "favorite" or menu == "rated" or menu == "watchlist":
+            url = "account/%s/%s/%s" % (tmdb_id, menu, types)
+            rqst = requests.get('https://api.themoviedb.org/3/%s?api_key=%s&session_id=%s&language=fr-FR&page=%s' % (url, self.api_key, tmdb_session_id, page))
         else :
             url = types+"/"+menu
+            rqst = requests.get('https://api.themoviedb.org/3/%s?api_key=%s&language=fr-FR&page=%s' % (url, self.api_key, page))
 
-        print(("get id", types , id))
-        #news code
-        rqst = requests.get('https://api.themoviedb.org/3/%s?api_key=%s&language=fr-FR&page=%s' % (url, self.api_key, page))
+        
         self.results = rqst.json()
+        
 
         if self.results:
             #self.results = {"results" : [results]}

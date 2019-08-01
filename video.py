@@ -346,7 +346,7 @@ class ListDiscover(Screen, BlackHole):
     def __init__(self, **kwargs):
         self.pageNumber = 1
         self.picktypes = menu.keys()
-        self.soustypes = sous_menu.get(kwargs['types']).keys()
+        #self.soustypes = sous_menu.get(kwargs['types']).keys()
 
         super(ListDiscover, self).__init__(**kwargs)
 
@@ -688,10 +688,17 @@ class MainScreen(GridLayout,BlackHole):
             self.manager.current = 'param'
 
         if menu == "tmdb":
-            if "tmdb" in self.manager.screen_names:
-                self.manager.clear_widgets(screens=[self.manager.get_screen('tmdb')])
-            self.manager.add_widget(ListTmdb(name = "tmdb"))
-            self.manager.current = 'tmdb'
+            if text == 'account':
+                return tmdb().connect()
+            if text == 'decount':
+                return tmdb().deconnect()
+
+            if self.tmdb_username:
+                if "list" in self.manager.screen_names:
+                    self.manager.clear_widgets(screens=[self.manager.get_screen('list')])
+                self.manager.add_widget(ListDiscover(name = "list", types=types, menu=text))
+                self.manager.current = 'list'
+            else: return tmdb().connect()
 
         self.ids.nav_layout.toggle_nav_drawer()
 

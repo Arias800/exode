@@ -214,7 +214,7 @@
 					MDAccordionSubItem:
 						#text: "Mon Compte" 
 						text: 'Bienvenue ' + root.tmdb_username  if root.tmdb_username else 'nopconnn'
-						on_press: root.onChange('tmdb', 'tmdb', 'account')
+						on_press: root.onChange('tmdb', 'tmdb', 'decount') if root.tmdb_username else root.onChange('tmdb', 'tmdb', 'account')
 					MDAccordionSubItem:
 						text: app._('movie')+ ' / '+ app._('favorite')
 						on_press: root.onChange('movies', 'tmdb', 'favorite')
