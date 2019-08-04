@@ -19,10 +19,10 @@ source.include_exts =
 #source.include_patterns = assets/*,images/*.png
 
 # (list) Source files to exclude (let empty to not exclude anything)
-source.exclude_exts = spec
+#source.exclude_exts = spec
 
 # (list) List of directory to exclude (let empty to not exclude anything)
-source.exclude_dirs = tests, bin
+#source.exclude_dirs = tests, bin
 
 # (list) List of exclusions using pattern matching
 #source.exclude_patterns = license,images/*/*.jpg
@@ -31,19 +31,19 @@ source.exclude_dirs = tests, bin
 version = 0.1
 
 # (str) Application versioning (method 2)
-#version.regex = __version__ = ['"](.*)['"]
-#version.filename = %(source.dir)s/main.py
+# version.regex = __version__ = ['"](.*)['"]
+# version.filename = %(source.dir)s/main.py
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,openssl, hostpython3, kivy==1.11.0, git+https://github.com/Arias800/KivyMD.git, requests, urllib3, chardet, certifi, idna
+requirements = python3, openssl, hostpython3, kivy, git+https://github.com/Arias800/KivyMD.git, requests, urllib3, chardet, certifi, idna
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
-requirements.source.kivy = ../../kivy
+# requirements.source.kivy = ../../kivy
 
 # (list) Garden requirements
-garden_requirements =
+#garden_requirements =
 
 # (str) Presplash of the application
 #presplash.filename = %(source.dir)s/data/presplash.png
@@ -55,7 +55,7 @@ icon.filename = %(source.dir)s/play-icon.png
 orientation = landscape
 
 # (list) List of service to declare
-services = NAME:ENTRYPOINT_TO_PY,NAME2:ENTRYPOINT2_TO_PY
+#services = NAME:ENTRYPOINT_TO_PY,NAME2:ENTRYPOINT2_TO_PY
 
 #
 # OSX Specific
@@ -85,10 +85,10 @@ fullscreen = 1
 #android.presplash_color = #FFFFFF
 
 # (list) Permissions
-android.permissions = INTERNET
+android.permissions = INTERNET, WAKE_LOCK
 
 # (int) Target Android API, should be as high as possible.
-android.api = 27
+#android.api = 27
 
 # (int) Minimum API your APK will support.
 #android.minapi = 21
@@ -123,7 +123,7 @@ android.api = 27
 # agreements. This is intended for automation only. If set to False,
 # the default, you will be shown the license when first running
 # buildozer.
-# android.accept_sdk_license = False
+android.accept_sdk_license = True
 
 # (str) Android entry point, default is ok for Kivy-based app
 #android.entrypoint = org.renpy.android.PythonActivity
@@ -158,9 +158,6 @@ android.api = 27
 # (list) Java classes to add as activities to the manifest.
 #android.add_activites = com.example.ExampleActivity
 
-# (str) python-for-android branch to use, defaults to master
-#p4a.branch = master
-
 # (str) OUYA Console category. Should be one of GAME or APP
 # If you leave this blank, OUYA support will not be enabled
 #android.ouya.category = GAME
@@ -177,12 +174,13 @@ android.api = 27
 # (list) Android additional libraries to copy into libs/armeabi
 #android.add_libs_armeabi = libs/android/*.so
 #android.add_libs_armeabi_v7a = libs/android-v7/*.so
+#android.add_libs_arm64_v8a = libs/android-v8/*.so
 #android.add_libs_x86 = libs/android-x86/*.so
 #android.add_libs_mips = libs/android-mips/*.so
 
 # (bool) Indicate whether the screen should stay on
 # Don't forget to add the WAKE_LOCK permission if you set this to True
-#android.wakelock = False
+android.wakelock = True
 
 # (list) Android application meta-data to set (key=value format)
 #android.meta_data =
@@ -191,24 +189,33 @@ android.api = 27
 # project.properties automatically.)
 #android.library_references =
 
+# (list) Android shared libraries which will be added to AndroidManifest.xml using <uses-library> tag
+#android.uses_library =
+
 # (str) Android logcat filters to use
 #android.logcat_filters = *:S python:D
 
 # (bool) Copy library instead of making a libpymodules.so
 #android.copy_libs = 1
 
-# (str) The Android arch to build for, choices: armeabi-v7a, arm64-v8a, x86
+# (str) The Android arch to build for, choices: armeabi-v7a, arm64-v8a, x86, x86_64
 android.arch = armeabi-v7a
 
 #
 # Python for android (p4a) specific
 #
 
+# (str) python-for-android fork to use, defaults to upstream (kivy)
+#p4a.fork = kivy
+
+# (str) python-for-android branch to use, defaults to master
+#p4a.branch = master
+
 # (str) python-for-android git clone directory (if empty, it will be automatically cloned from github)
 #p4a.source_dir =
 
 # (str) The directory in which python-for-android should look for your own build recipes (if any)
-p4a.local_recipes = ~/exode/.buildozer/android/platform/python-for-android/pythonforandroid/recipes
+#p4a.local_recipes =
 
 # (str) Filename to the hook for p4a
 #p4a.hook =
