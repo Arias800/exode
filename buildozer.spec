@@ -36,7 +36,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3, openssl, hostpython3, kivy, git+https://github.com/Arias800/KivyMD.git, requests, urllib3, chardet, certifi, idna
+requirements = python3, openssl, kivy, git+https://github.com/Arias800/KivyMD.git, requests, urllib3, chardet, certifi, idna
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -88,7 +88,7 @@ fullscreen = 1
 android.permissions = INTERNET, WAKE_LOCK
 
 # (int) Target Android API, should be as high as possible.
-#android.api = 27
+android.api = 27
 
 # (int) Minimum API your APK will support.
 #android.minapi = 21
