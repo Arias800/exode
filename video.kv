@@ -845,22 +845,37 @@
 
 	background_normal: ''
     subtext: ''
-	label_title: ''
 
 	BoxLayout:
 		orientation: 'vertical'
         #padding: dp(0), dp(0)
         spacing: dp(10)
 
-		Label:
-			id:discover_label
-            size_hint: None, None
-            height: dp(20)
-            width: self.texture_size[0]
-            halign: 'left'
-            color: app.theme_cls.primary_color
-            font_size: '18sp'
-            text: 
+		BoxLayout:
+			size_hint_y: None
+			height: dp(20)
+			padding: dp(20), dp(10), dp(0), dp(0)
+			orientation: 'vertical'
+
+			#center en y le text a voir
+			Label:
+				id:discover_label
+				size_hint: None, None
+				pos_hint: {'top': .2}
+				height: dp(10)
+				width: self.texture_size[0]
+				halign: 'left'
+				valign: 'bottom'
+				color: app.theme_cls.primary_color
+				font_size: '18sp'
+				text: 
+
+			MDIconButton:
+				size_hint: None, None
+				pos_hint: {'right': 1}
+				height:dp(10)
+                icon: 'view-module'
+				#on_press: root.show_view()
 		
 		MDSeparator:
 
