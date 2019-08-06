@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 from lib.comaddon import EXlog
 from lib.utils import CleanName
+from kivy.utils import platform
 import os, sys, importlib, json
 
 class plugin(object):
@@ -13,15 +14,20 @@ class plugin(object):
 
         app_path = os.path.dirname(os.path.abspath(__file__))
         plugin_path = os.path.join(app_path, 'plugin')
+        EXlog(os.listdir(plugin_path))
 
         for name in os.listdir(plugin_path):
             if name.startswith('__init__.'):
                 continue
-            if not name.endswith(".py"):
-                continue
-
-            name = name.replace('.py', '')
-
+            if platform == 'android':
+                if not name.endswith(".pyc"):
+                    continue
+                name = name.replace('.pyc', '')
+            else:
+                if not name.endswith(".py"):
+                    continue
+                name = name.replace('.py', '')
+                
             module = importlib.import_module("plugin."+name, package=None)
             _class = getattr(module, name)
             module = _class()
@@ -43,7 +49,6 @@ class iplugin(object):
         self.__Thumb = ''
         self.__Json = {}
         self.__Source = []
-            
 
 # {
 #     "plugin" : "disney",
@@ -121,14 +126,13 @@ class iplugin(object):
     #     print json.dumps(self.getParams())
 
     def similar(self, w1, w2):
-        w1 = w1.replace('+',' ').lower() + ' ' * (len(w2) - len(w1))
+        w1 = CleanName(w1.replace('+',' ')).lower() + ' ' * (len(w2) - len(w1))
         w2 = CleanName(w2).lower() + ' ' * (len(w1) - len(w2))
         cal = sum(1 if i == j else 0 for i, j in zip(w1, w2)) / float(len(w1))
         #similaire a 70%
         if cal > 0.70 : 
             return True 
         else : return False
-
 
 #La fonction json.dumps() permet de transformer mon dictionnaire (type dict) en une chaine de caractères (type str):
 #La fonction json.loads() permet de reconvertir ma str en dict:
