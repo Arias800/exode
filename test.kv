@@ -1,2 +1,59 @@
-Button:
-    text: 'Hello from test.kv'
+#:import MDIconButton kivymd.button.MDIconButton
+
+# FloatLayout:
+#     Button:
+#         text:"Je suis en haut"
+#         size_hint:.5, .25
+#         pos_hint:{'x':.25, 'y':.75}
+
+#     Button:
+#         text:"Je suis gauche"
+#         size_hint:.25, .5
+#         pos_hint:{'x':0, 'y':.25}
+
+#     Button:
+#         text:"Je suis droite"
+#         size_hint:.25, .5
+#         pos_hint:{'x':.75, 'y':.25}
+
+#     Button:
+#         text:"Je suis en bas"
+#         size_hint:.5, .25
+#         pos_hint:{'x':.25, 'y':0}  
+
+BoxLayout:
+    size_hint_y: None
+    height: dp(50)
+    padding: dp(20), dp(10), dp(0), dp(0)
+    orientation: 'vertical'
+
+
+    GridLayout:
+        cols:2
+
+        #col_default_width:.5
+
+        #center en y le text a voir
+        Label:
+
+            id:discover_label
+
+            size_hint: 1, 1
+            #pos_hint:{'x':0, 'y':.5}
+            text_size:self.size
+            #width: self.texture_size[0]
+            halign: 'left'
+            valign:'middle'
+            color: app.theme_cls.primary_color
+            font_size: '18sp'
+            text: "testtt"
+
+
+
+
+
+        MDIconButton:
+            size_hint:None, 1
+            size:40,40
+            icon: 'view-module'
+            #on_press: root.show_view()

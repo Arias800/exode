@@ -352,12 +352,13 @@ class ListDiscover(Screen, BlackHole):
 
         #grille de poster
         #self.grid = self.grid_l
-        print(kwargs)
-
         self.menu = kwargs['menu']
         self.types = kwargs['types']
 
-        self.ids.discover_label.text = kwargs['menu']
+        app = App.get_running_app()
+
+        self.ids.discover_label.text = app._(kwargs['menu'])
+
 
         EXlog((self.menu, self.types))
 
