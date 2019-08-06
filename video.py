@@ -39,6 +39,7 @@ from kivymd.bottomsheet import MDListBottomSheet
 from kivymd.toast import toast
 from kivymd.dialog import MDDialog
 from kivymd.elevation import RectangularElevationBehavior, CircularElevationBehavior
+from kivymd.cards import MDCardPost
 
 #Custom Lib import
 from lib.comaddon import EXlog, ImageButton, BlackHole
@@ -385,6 +386,12 @@ class ListDiscover(Screen, BlackHole):
             self.pageNumber = self.pageNumber + 1
             self.add()
             self.ids.scroll_id.scroll_y = float(1) / (self.pageNumber)
+
+    #changement de vue grid or list
+    def show_view(self):
+        self.ids.grid_id.clear_widgets()
+        self.ids.grid_id.cols = 3
+        self.add()
 
 class discover_layout(BoxLayout):
     bar_l = ObjectProperty(None)
