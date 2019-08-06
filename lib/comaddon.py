@@ -19,15 +19,20 @@ def EXlog(message):
 class ImageButton(ButtonBehavior, AsyncImage, BlackHole):
     def __init__(self, **kwargs):
         super(ImageButton, self).__init__(**kwargs)
-        self.source = kwargs['img']
-
-        ##alert : normal que quand ont agrandit la genetre ça bug il faut recharger les images pour prendre en compte Window.size
-        ##en passant les size par .kv le refrech et automatique ça m'arrange pas mais bon.
+        self.source = kwargs['img']        
+        
         #calcul backdrop
         #Backdrops should have an aspect ratio of 1.78:1 (16x9).
+        #Width ÷ 1.78 = Height
+        #Height × 1.78 = Width
+        
         #calcul poster
         #An aspect ratio of 1:1.5 (2:3) is usually preferred.
+        #Width × 1.5 = Height
+        #Height ÷ 1.5 = Width
         #Window.size (width, height)
+        
+        #en passant les size par .kv le refrech et automatique ça m'arrange pas mais bon.
         #self.size = Window.size[0] , Window.size[0] / 1.78
         self.types = kwargs['types']
         self.tmdb = kwargs['tmdbid']
