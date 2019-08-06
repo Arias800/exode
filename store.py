@@ -31,7 +31,7 @@ class MainScreen(GridLayout):
 
     def onChange(self):
         self.manager.add_widget(ScreenTest(name='test'))
-        print vars(self.manager)
+        #print vars(self.manager)
         self.manager.current = "test"
 
 
