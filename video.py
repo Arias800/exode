@@ -348,6 +348,7 @@ class ListDiscover(Screen, BlackHole):
         self.pageNumber = 1
         self.picktypes = menu.keys()
         #self.soustypes = sous_menu.get(kwargs['types']).keys()
+        self.view = Config.get('user', 'view')
 
         super(ListDiscover, self).__init__(**kwargs)
 
@@ -370,11 +371,15 @@ class ListDiscover(Screen, BlackHole):
     def add(self):
         json = _jsonload(self.types, self.menu,NextPage=self.pageNumber)
 
+        if self.view == 'grid':
+            self.ids.grid_id.cols = 3
+        else : 
+            self.ids.grid_id.cols = 1
+
         for data in json:
             btn = ImageButton(types=self.types,
             tmdbid=data['tmdbid'],
             img=data['backdrop_path'],
-            size=(Window.width , Window.width / 1.777),
             functionName = ListInfo)
 
             self.ids.grid_id.add_widget(btn)
@@ -390,7 +395,12 @@ class ListDiscover(Screen, BlackHole):
     #changement de vue grid or list
     def show_view(self):
         self.ids.grid_id.clear_widgets()
-        self.ids.grid_id.cols = 3
+        if Config.get('user', 'view') == 'grid':
+            Config.set('user', 'view', 'list')
+            self.view = 'list'
+        else:
+            Config.set('user', 'view', 'grid')
+            self.view = 'grid'
         self.add()
 
 class discover_layout(BoxLayout):
