@@ -22,12 +22,13 @@ class ImageButton(ButtonBehavior, AsyncImage, BlackHole):
         self.source = kwargs['img']
 
         ##alert : normal que quand ont agrandit la genetre ça bug il faut recharger les images pour prendre en compte Window.size
+        ##en passant les size par .kv le refrech et automatique ça m'arrange pas mais bon.
         #calcul backdrop
         #Backdrops should have an aspect ratio of 1.78:1 (16x9).
         #calcul poster
         #An aspect ratio of 1:1.5 (2:3) is usually preferred.
         #Window.size (width, height)
-        self.size = Window.size[0] , Window.size[0] / 1.78
+        #self.size = Window.size[0] , Window.size[0] / 1.78
         self.types = kwargs['types']
         self.tmdb = kwargs['tmdbid']
         self.function = kwargs['functionName']
