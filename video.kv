@@ -674,17 +674,19 @@
         padding: dp(0), dp(0)
         spacing: dp(10)
 
-		BoxLayout:
+		GridLayout:
+			cols:1
 			size_hint_y: None
-			height: dp(20)
+			height: dp(30)
 			padding: dp(20), dp(10), dp(0), dp(0)
+			orientation: 'vertical'
 
 			Label:
 				id:list_label
-				size_hint: None, None
-				height: dp(10)
-				width: self.texture_size[0]
+				size_hint: 1, 1
+				text_size: self.size
 				halign: 'left'
+				valign: 'middle'
 				color: app.theme_cls.primary_color
 				font_size: '18sp'
 				text:
@@ -1041,20 +1043,22 @@
         #padding: dp(10), dp(10)
         spacing: dp(10)
 
-		BoxLayout:
+		GridLayout:
+			cols:1
 			size_hint_y: None
-			height: dp(20)
+			height: dp(30)
 			padding: dp(20), dp(10), dp(0), dp(0)
+			orientation: 'vertical'
 
 			Label:
 				id:bar_label
-				size_hint: None, None
-				height: dp(10)
-				width: self.texture_size[0]
+				size_hint: 1, 1
+				text_size: self.size
 				halign: 'left'
+				valign: 'middle'
 				color: app.theme_cls.primary_color
 				font_size: '18sp'
-				text:
+				text: app._('pref')
 
         MDSeparator:	
 
